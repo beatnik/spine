@@ -24,22 +24,6 @@ CREATE TABLE "attribute" (
 );
 
 --
--- Table: calevent
---
-
-CREATE TABLE "calevent" (
-  "id" serial NOT NULL,
-  "name" character varying(255) DEFAULT '' NOT NULL,
-  "description" text NOT NULL,
-  "eventstamp" timestamp,
-  "owner" character varying(255) DEFAULT NULL,
-  "usergroup" character varying(255) DEFAULT NULL,
-  "permissions" character varying(6) DEFAULT NULL,
-  "public_" smallint DEFAULT '1',
-  PRIMARY KEY ("id")
-);
-
---
 -- Table: content
 --
 
@@ -59,8 +43,7 @@ CREATE TABLE "content" (
   "body" text,
   "icomment" text,
   "type" character varying(255) DEFAULT NULL,
-  PRIMARY KEY ("id"),
-  Constraint "name" UNIQUE ("name")
+  PRIMARY KEY ("id")
 );
 
 --
@@ -206,8 +189,7 @@ CREATE TABLE "style" (
   "permissions" character varying(6) DEFAULT NULL,
   "body" text,
   "icomment" text,
-  PRIMARY KEY ("id"),
-  Constraint "name3" UNIQUE ("name")
+  PRIMARY KEY ("id")
 );
 
 --
@@ -247,41 +229,6 @@ CREATE TABLE "wiki" (
   "usergroup" character varying(255) DEFAULT NULL,
   "permissions" character varying(6) DEFAULT NULL,
   "body" text,
-  PRIMARY KEY ("id"),
-  Constraint "name4" UNIQUE ("name")
+  PRIMARY KEY ("id")
 );
 
-
-GRANT ALL ON adminaccess TO beatnik;
-GRANT ALL ON attribute TO beatnik;
-GRANT ALL ON calevent TO beatnik;
-GRANT ALL ON content TO beatnik;
-GRANT ALL ON macro TO beatnik;
-GRANT ALL ON message TO beatnik;
-GRANT ALL ON messagegroup TO beatnik;
-GRANT ALL ON navbarbuttons TO beatnik;
-GRANT ALL ON navbars TO beatnik;
-GRANT ALL ON revision TO beatnik;
-GRANT ALL ON session TO beatnik;
-GRANT ALL ON statistics TO beatnik;
-GRANT ALL ON style TO beatnik;
-GRANT ALL ON usergroup TO beatnik;
-GRANT ALL ON users TO beatnik;
-GRANT ALL ON wiki TO beatnik;
-
-GRANT ALL ON adminaccess_id_seq TO beatnik;
-GRANT ALL ON attribute_id_seq TO beatnik;
-GRANT ALL ON calevent_id_seq TO beatnik;
-GRANT ALL ON content_id_seq TO beatnik;
-GRANT ALL ON macro_id_seq TO beatnik;
-GRANT ALL ON message_id_seq TO beatnik;
-GRANT ALL ON messagegroup_id_seq TO beatnik;
-GRANT ALL ON navbarbuttons_id_seq TO beatnik;
-GRANT ALL ON navbars_id_seq TO beatnik;
-GRANT ALL ON revision_id_seq TO beatnik;
-GRANT ALL ON session_id_seq TO beatnik;
-GRANT ALL ON statistics_id_seq TO beatnik;
-GRANT ALL ON style_id_seq TO beatnik;
-GRANT ALL ON usergroup_id_seq TO beatnik;
-GRANT ALL ON users_id_seq TO beatnik;
-GRANT ALL ON wiki_id_seq TO beatnik;
