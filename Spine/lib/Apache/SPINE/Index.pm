@@ -64,12 +64,10 @@ sub handler
   my $page = $r->uri;
   my $location = $r->location;
   $page =~ s/$location//;
-  my $file = $r->filename;
-  my $uri = $r->uri;
+  my $file = $r->filename; 
+  my $uri = $r->uri; 
   my $dbh = undef;
-  $file =~ s/^(.*)$uri.*$/$1$uri/;
-  $r->filename($file);
-  if ($r->uri && -e $r->filename && $page ne '/') { return DECLINED; }
+  if ($r->uri && -e $r->document_root.$uri && $page ne '/') { return DECLINED; }
   #We pretend to know how to handle files that actually exist!!
   if (!$dbh) { $dbh = &initialise($r); }
   my $cookie = undef;
