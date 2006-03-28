@@ -144,15 +144,15 @@ sub handler
     else { copy("$chroot$path/$filename","$chroot$path/$target") ||  set_error("Unable to copy file. Does the document root directory have correct permissions? ($!)"); }
   }
   
-  if ($action eq "copy" && $filename && $path && $target && $writeperms)
+  if ($action eq "copy" && $filename && $path && $target && !$writeperms)
   { set_error("You do not have valid permissions for this operation : Copy File"); }
   
   if ($action eq "delete" && $filename && $path && $writeperms)
   { if (!-e "$chroot$path/$filename") { set_error("You're trying to delete a file that doesn't exist!"); }
-     else { unlink("$chroot$path/$filename") || set_error("Unable to copy file. Does the document root directory have correct permissions? ($!)"); }
+     else { unlink("$chroot$path/$filename") || set_error("Unable to delete file. Does the document root directory have correct permissions? ($!)"); }
   }
 
-  if ($action eq "delete" && $filename && $path && $writeperms)  
+  if ($action eq "delete" && $filename && $path && !$writeperms)  
   { set_error("You do not have valid permissions for this operation : Delete File"); }
       
   if ($action eq "rename" && $filename && $path && $target && $writeperms)
