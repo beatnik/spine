@@ -99,6 +99,9 @@ sub handler
   $filename =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//g; 
   $error = "";
   
+  $filename =~ /^.*[\/\\](.*)$/;
+  $filename = $1 if $1;
+
   my @params = $request->param;
   my @checkboxes = grep { /^check\d*$/ } sort { $a <=> $b } @params;
 
