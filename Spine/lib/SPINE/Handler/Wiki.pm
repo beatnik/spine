@@ -28,6 +28,9 @@ use strict;
 use vars qw($VERSION);
 use SPINE::DBI::Wiki;
 use SPINE::DBI::Revision;
+use SPINE::DBI::User;
+use SPINE::DBI::Usergroup;
+use SPINE::DBI::Session;
 use SPINE::Constant;
 use Data::Dumper;
 
@@ -42,21 +45,69 @@ sub handler
   my $page = $ENV{PATH_INFO};
   $page =~ s/^\\+//g;
   $page =~ s/^\/+//g;
+  my %cookies = Apache::Cookie->fetch;
   my @params = split(/,/,$params);
   my $body = "";
   my $wiki_dbi = SPINE::DBI::Wiki->new($dbh);
+  my $wiki_owner = undef;
   my $revision_dbi = SPINE::DBI::Revision->new($dbh);
+  my $user_dbi = SPINE::DBI::User->new($dbh);  
+  my $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
+  my $session_dbi = SPINE::DBI::Session->new($dbh);    
   my $wiki = shift @{$wiki_dbi->get({name=>$page, count=>1})};
+  
+  # ----------------------
+  my $readwiki = undef;
+  my $writewiki = undef;
+  if ($wiki)
+  { my $user = shift @{$user_dbi->get({login=>$wiki->owner})};
+  
+    my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+    # if (($session && !$session->username) || !$session)
+    #{ $session = $s if ($s && $s->username); }
+    my $writewperms = $wiki->permissions & WRITEWPERMISSIONS;
+    $writewperms =~ s/0//g;
+    my $readwperms = $wiki->permissions & READWPERMISSIONS;
+    $readwperms =~ s/0//g;
+    $readwiki = $readwperms;
+    $writewiki = $writewperms; 
+    warn $readwiki;
+  
+    if ($session && $user && $session->username eq $user->login && $session->host eq $request->get_remote_host && !$writewiki)
+    { my @usergroups =  @{ $usergroup_dbi->get({username=>$session->username}) };
+      @usergroups = map { $_ = $_->usergroup } @usergroups;
+      my $writegperms = $wiki->permissions & WRITEGPERMISSIONS;
+      my $readperms = $wiki->permissions & READACCESS;
+      $readperms =~ s/0//g;
+      my $writeperms = $wiki->permissions & WRITEACCESS;
+      $writeperms =~ s/0//g;
+      my $execperms = $wiki->permissions & EXECACCESS;
+      $writewiki = 
+      ($session->username eq 'admin') ||
+      ($wiki->owner eq $session->username) ||
+      (@usergroups && $writeperms);
+      $readwiki = ($session->username eq 'admin') ||
+      ($wiki->owner eq $session->username) ||
+      (@usergroups && $readperms);
+      $wiki_owner = $session->username if $writewiki;
+    }
+    # -------------------------  
+  }else 
+  { $writewiki = 1; $readwiki = 1; $wiki_owner = "Anonymous"; }
+  
   if ($action eq "Create" && $page) #Add Wiki here - Saving
   { $action = ""; 
     my $new_wiki = SPINE::Base::Wiki::default;
     my $body = $request->param("body");
     $new_wiki->name($page);
+    my $owner = $wiki_owner || "Anonymous";
     $new_wiki->body($body);  
+    $new_wiki->owner($owner);
     $wiki_dbi->add($new_wiki);
     $wiki = $new_wiki;
-  }
-  if ($action eq "Save" && $page) #Update Wiki
+  } 
+  
+  if ($action eq "Save" && $page && $writewiki) #Update Wiki
   { $action = ""; 
     my $body = $request->param("body");
     my $old_body = $wiki->body;
@@ -64,33 +115,39 @@ sub handler
     $revision ||= SPINE::Base::Revision::default;
     $revision->body($old_body);
     $revision->name($page);
+    my $owner = $wiki_owner || "Anonymous";
+    $wiki->owner($owner);
     $revision->changetype("update");
     $revision->revise;
+    $revision->owner($owner);
     $revision_dbi->add($revision);
     $wiki->body($body);
     $wiki_dbi->update($wiki);
   }
-  if ($action eq "Delete" && $page) #Delete Wiki
+  
+  if ($action eq "Delete" && $page && $writewiki) #Delete Wiki
   { $action = ""; 
     my $revision = shift @{$revision_dbi->get({name=>$page, count=>1})};
     my $old_body = $request->param("body");
     $revision ||= SPINE::Base::Revision::default;
     $revision->body($old_body);
     $revision->name($page);
+    my $owner = $wiki_owner || "Anonymous";
+    $revision->owner($owner);
     $revision->changetype("delete");
     $revision->revise;
     $revision_dbi->add($revision);
     $wiki_dbi->delete($wiki);
   }
   if (!$wiki && $page) #New Wiki
-  { $body = qq(<form method="post"">
+  { $body = qq(<form method="post">
 <textarea cols="60" rows="20" name="body"></textarea><input type="submit" name="action" value="Create"></form>);
   }
-  if ($action eq "Edit" && $page && $wiki) #Edit Wiki
+  if ($action eq "Edit" && $page && $wiki && $writewiki) #Edit Wiki
   { my $wiki_body = $wiki->body;
     $body = qq(<form method="post"><textarea cols="60" rows="20" name="body">$wiki_body</textarea><input type="submit" name="action" value="Save"></form>);
   }
-  if (!$action && $page && $wiki) #Plain View
+  if (!$action && $page && $wiki && $readwiki) #Plain View
   { my $wiki_body = $wiki->body;
     $body = $wiki_body.qq(<form method="post"><input type="submit" name="action" value="Delete"><input type="submit" name="action" value="Edit"></form>); 
   }
