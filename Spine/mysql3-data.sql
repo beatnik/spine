@@ -22,7 +22,15 @@ insert into attribute (attr,id,name,section,value) values ('welcome.html','214',
 insert into attribute (attr,id,name,section,value) values ('spine.css','213','counter','stats','111');
 insert into attribute (attr,id,name,section,value) values ('_admin.css','212','counter','stats','58');
 insert into attribute (attr,id,name,section,value) values ('admin','211','counter','stats','58');
-
+insert into attribute (attr,id,name,section,value) values ('en','0','valid_perms','i18n','You do not have valid permissions for this operation : ');
+insert into attribute (attr,id,name,section,value) values ('en','0','enter_name','i18n','Enter name');
+insert into attribute (attr,id,name,section,value) values ('en','0','create_content','i18n','Creating new content<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','remove_content','i18n','Remove content<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','edit_content','i18n','Edit content<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','save_content','i18n','Save content<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','copy_content','i18n','Copy content<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','content_exists','i18n','This Content already exists!<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','content_not_exists','i18n','This Content does not exist!<br>');
 
 --
 -- mysql v3 dump for SPINE 1.1 : Table adminaccess
