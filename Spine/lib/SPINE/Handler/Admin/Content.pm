@@ -29,6 +29,7 @@ use SPINE::DBI::Content;
 use SPINE::DBI::Macro;
 use SPINE::DBI::Session;
 use SPINE::DBI::Adminaccess;
+use SPINE::DBI::Attribute;
 use SPINE::Constant;
 
 use strict;
@@ -38,7 +39,8 @@ use Apache::Cookie;
 #Apache::Request Handler
 #DB Handler
 
-use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $macro_dbi $adminaccess_dbi $session_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms);
+use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $macro_dbi $adminaccess_dbi $session_dbi $attribute_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms %i18n);
+use vars qw($valid_perms_string $enter_name_string $create_content_string $remove_content_string $edit_content_string $save_content_string $copy_content_string $content_exists_string $content_notexists_string);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -64,11 +66,27 @@ sub handler
   $macro_dbi = SPINE::DBI::Macro->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
+  my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
   my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>"en")};
+  for(@i18n_hash)
+  { my %hash = %{$_} if $_;
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  $create_content_string = $i18n{'create_content'} || "Creating new content<br>";
+  $remove_content_string = $i18n{'remove_content'} || "Remove content<br>";
+  $edit_content_string = $i18n{'edit_content'} || "Edit content<br>";
+  $save_content_string = $i18n{'save_content'} || "Save content<br>";
+  $copy_content_string = $i18n{'copy_content'} || "Copy content<br>";
+  $content_exists_string = $i18n{'content_exists'} || "This Content already exists!<br>";
+  $content_notexists_string = $i18n{'content_not_exists'} || "This Content does not exist!<br>";
+  
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user, count=>1}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
   my @adminaccess = ();
@@ -87,42 +105,42 @@ sub handler
   shift @params;
   #@params is something like qw(content new);
   #And we already know it's in content so discard first element
-  if (!$params[0] || !$page || $page eq 'Enter name')
+  if (!$params[0] || !$page || $page eq $enter_name_string)
   { $url = '.admin-general'; @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Creating new content<br>'; 
+  { $error = $valid_perms_string.$create_content_string;
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Remove content<br>'; 
+  { $error = $valid_perms_string.$remove_content_string; 
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
-  { $error = 'You do not have valid permissions for this operation : Edit content<br>'; 
+  { $error = $valid_perms_string.$edit_content_string; 
     $url = '.admin-general'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Save content<br>'; 
+  { $error = $valid_perms_string.$save_content_string;
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
-  { $error = 'You do not have valid permissions for this operation : Copying content<br>'; 
+  { $error = $valid_perms_string.$copy_content_string; 
     $url = '.admin-general'; 
   }
 
   my $edit_content = shift @{$content_dbi->get({name=>$page}, count=>1)};
   if ($edit_content && $params[0] eq 'new' && !$error)
-  { $error = 'This Content already exists!<br>'; 
+  { $error = $content_exists_string; 
     $url = '.admin-general'; 
   }
 
   if (!$edit_content && ($params[0] eq 'save' || $params[0] eq 'edit' || $params[0] eq 'copy' || $params[0] eq 'remove')&& !$error)
-  { $error = 'This Content does not exist!<br>'; 
+  { $error = $content_notexists_string; 
     $url = '.admin-general'; 
   }
  
@@ -303,7 +321,7 @@ sub save
     $content_dbi->update($content);
   }
   else
-  { $ierror = 'You do not have valid permissions for this operation : Save content<br>'; }
+  { $ierror = $valid_perms_string.$save_content_string; }
 }
 
 sub copy
