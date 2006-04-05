@@ -54,7 +54,8 @@ sub handler
   my $location = $request->location;
   $error = '';
   $ierror = '';
-  
+  %default = ();
+  %i18n = ();
   $url =~ s/^$location\/?//;
 
   ($url,@params) = split("/",$url);
