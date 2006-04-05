@@ -31,6 +31,7 @@ insert into attribute (attr,id,name,section,value) values ('en','0','save_conten
 insert into attribute (attr,id,name,section,value) values ('en','0','copy_content','i18n','Copy content<br>');
 insert into attribute (attr,id,name,section,value) values ('en','0','content_exists','i18n','This Content already exists!<br>');
 insert into attribute (attr,id,name,section,value) values ('en','0','content_not_exists','i18n','This Content does not exist!<br>');
+insert into attribute (attr,id,name,section,value) values ('admin','0','lang','default','en');
 
 --
 -- mysql v3 dump for SPINE 1.1 : Table adminaccess
