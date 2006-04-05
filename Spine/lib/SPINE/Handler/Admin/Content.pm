@@ -39,7 +39,7 @@ use Apache::Cookie;
 #Apache::Request Handler
 #DB Handler
 
-use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $macro_dbi $adminaccess_dbi $session_dbi $attribute_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms %i18n);
+use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $macro_dbi $adminaccess_dbi $session_dbi $attribute_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms %i18n %default);
 use vars qw($valid_perms_string $enter_name_string $create_content_string $remove_content_string $edit_content_string $save_content_string $copy_content_string $content_exists_string $content_notexists_string);
 
 $VERSION = $SPINE::Constant::VERSION;
@@ -77,6 +77,7 @@ sub handler
   { my %hash = %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
+  
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
   $create_content_string = $i18n{'create_content'} || "Creating new content<br>";
@@ -86,6 +87,12 @@ sub handler
   $copy_content_string = $i18n{'copy_content'} || "Copy content<br>";
   $content_exists_string = $i18n{'content_exists'} || "This Content already exists!<br>";
   $content_notexists_string = $i18n{'content_not_exists'} || "This Content does not exist!<br>";
+  
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user, count=>1}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -151,14 +158,21 @@ sub handler
     $mon++; $year += 1900;
     $c->modified("$year-$mon-$day $hour:$min:$sec") if ref $c;
     $content_dbi->add($c);
-    $url = '.admin-content'; 
+    my $lang = $default{'lang'} || "";
+    $lang = ".$lang" if $lang;
+    $url = '.admin-content'.$lang; 
   }
 
   if ($params[0] eq 'edit' && !$error)
-  { $url = '.admin-content'; }
+  { my $lang = $default{'lang'} || "";
+    $lang = ".$lang" if $lang;
+    $url = '.admin-content'.$lang; 
+  }
   
   if ($params[0] eq 'save' && !$error)
-  { $url = '.admin-content'; 
+  { my $lang = $default{'lang'} || "";
+    $lang = ".$lang" if $lang;
+    $url = '.admin-content'.$lang; 
     save();
   }
 
