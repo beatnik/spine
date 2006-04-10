@@ -117,8 +117,8 @@ sub handler
       #Ofcourse, we should delete the cookie as well
   }
   #Only header is required???
-  #my ($type,$body) = SPINE::Handler::Content::handler($req,$dbh,$session);
   my $content = SPINE::Handler::Content::handler($req,$dbh,$session);
+  if (ref($content) ne "SPINE::Base::Content") { return $content; }
   my $type = $content->type || 'text/html';
   my $body = $content->body;
   my $location = $req->location;

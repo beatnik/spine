@@ -32,6 +32,7 @@ use SPINE::DBI::Session;
 use SPINE::Constant;
 
 use Data::Dumper;
+use Apache::Constants qw(NOT_FOUND FORBIDDEN);
 use Apache::Cookie;
 use Apache::Log;
 
@@ -72,26 +73,12 @@ sub handler
     { $content = SPINE::Base::Content::default(body=>"Something is terribly wrong");
     }
     if (!ref $content)
-    { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
-      my $body = $content->body;
-      $body =~ s/\$page/$url/g;
-      my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
-      $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-      $body =~ s/\$serversig/$serversig/g;
-      $content->body($body);
-    }
+    { return NOT_FOUND; }
   }
   else
   { $content = shift @{$content_dbi->get({name=>$url, count=>1})};
     if (!ref $content)
-    { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
-      my $body = $content->body;
-      $body =~ s/\$page/$url/g;
-      my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
-      $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-      $body =~ s/\$serversig/$serversig/g;
-      $content->body($body);
-    }
+    { return NOT_FOUND; }
 
     my $user = shift @{$user_dbi->get({login=>$content->owner})};
   
@@ -119,7 +106,9 @@ sub handler
     }
     $loadpage = 0 if $page->name =~ /^admin/;
 
-    $content = $page if $loadpage;
+    if ($loadpage)
+    { $content = $page }
+    else { return FORBIDDEN; }
 
     $username = $session->username if $session;
 
