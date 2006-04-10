@@ -56,11 +56,11 @@ sub handler
   my $message_dbi = SPINE::DBI::Message->new($dbh);
   ($dir) = $dir =~ /\"?([^\"]*)\"?/;
   $dir = $request->param("dir") || $dir;
-  $dir =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//g;
+  $dir =~ s/[;\`'!\?\@\|\"\*~<>\^\[\]\{\}\$\n\f\a\r\0\t\s]+//g;
   my $pic = shift @params;
   ($pic) = $pic =~ /\"?([^\"]*)\"?/;
   $pic ||= $request->param("pic");
-  $pic =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//g; 
+  $pic =~ s/[;\`'!\?\@\|\"\*~<>\^\[\]\{\}\$\n\f\a\r\0\t\s]+//g; 
   if ($request->param('name') && $request->param('comment') && $request->param('pic') && $request->param('dir'))
   { my ($sec,$min,$hour,$mday,$mon,$year) = localtime;
     $year += 1900;
