@@ -31,6 +31,7 @@ use SPINE::DBI::Navbar;
 use SPINE::DBI::Button;
 use SPINE::DBI::Session;
 use SPINE::DBI::Adminaccess;
+use SPINE::DBI::Attribute;
 use SPINE::Constant;
 
 use strict;
@@ -40,7 +41,8 @@ use Apache::Cookie;
 #Apache::Request Handler
 #DB Handler
 
-use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $navbar_dbi $navbarbutton_dbi $adminaccess_dbi $session_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms);
+use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $navbar_dbi $navbarbutton_dbi $adminaccess_dbi $attribute_dbi $session_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms %i18n %default);
+use vars qw($valid_perms_string $enter_name_string $create_navbar_string $remove_navbar_string $edit_navbar_string $save_navbar_string $copy_navbar_string $navbar_exists_string $navbar_notexists_string);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -67,10 +69,33 @@ sub handler
   $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
+  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
   my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>"en")};
+  for(@i18n_hash)
+  { my %hash = %{$_} if $_;
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  $create_navbar_string = $i18n{'create_navbar'} || "Creating new navigation bar<br>";
+  $remove_navbar_string = $i18n{'remove_navbar'} || "Remove navigation bar<br>";
+  $edit_navbar_string = $i18n{'edit_navbar'} || "Edit navigation bar<br>";
+  $save_navbar_string = $i18n{'save_navbar'} || "Save navigation bar<br>";
+  $copy_navbar_string = $i18n{'copy_navbar'} || "Copy navigation bar<br>";
+  $navbar_exists_string = $i18n{'navbar_exists'} || "This navigation bar already exists!<br>";
+  $navbar_notexists_string = $i18n{'navbar_not_exists'} || "This navigation bar does not exist!<br>";
+  
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
 
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -88,11 +113,11 @@ sub handler
   $execperms =~ s/0//g;
 
   shift @params;
-  if (!$params[0] || !$page || $page eq 'Enter name')
+  if (!$params[0] || !$page || $page eq $enter_name_string)
   { $url = '.admin-general'; @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Creating new navigation bar<br>'; 
+  { $error = $valid_perms_string.$create_navbar_string; 
     $url = '.admin-general'; 
   }
 
