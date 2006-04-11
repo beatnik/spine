@@ -29,13 +29,15 @@ use SPINE::DBI::Content;
 use SPINE::DBI::Macro;
 use SPINE::DBI::Session;
 use SPINE::DBI::Adminaccess;
+use SPINE::DBI::Attribute;
 use SPINE::Constant;
 
 use strict;
 
 use Apache::Cookie;
 
-use vars qw($VERSION $content_dbi $style_dbi $user_dbi $macro_dbi $request $user $error $ierror $readperms $writeperms $execperms $adminaccess);
+use vars qw($VERSION $content_dbi $style_dbi $user_dbi $macro_dbi $attribute_dbi $request $user $error $ierror $readperms $writeperms $execperms $adminaccess %i18n %default);
+use vars qw($valid_perms_string $enter_name_string $create_style_string $remove_style_string $edit_style_string $save_style_string $copy_style_string $style_exists_string $style_notexists_string);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -64,10 +66,33 @@ sub handler
   my $session_dbi = SPINE::DBI::Session->new($dbh);
   my $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   my $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
+  my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
   my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>"en")};
+  for(@i18n_hash)
+  { my %hash = %{$_} if $_;
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  $create_style_string = $i18n{'create_style'} || "Creating new style<br>";
+  $remove_style_string = $i18n{'remove_style'} || "Remove style<br>";
+  $edit_style_string = $i18n{'edit_style'} || "Edit style<br>";
+  $save_style_string = $i18n{'save_style'} || "Save style<br>";
+  $copy_style_string = $i18n{'copy_style'} || "Copy style<br>";
+  $style_exists_string = $i18n{'style_exists'} || "This Style already exists!<br>";
+  $style_notexists_string = $i18n{'style_not_exists'} || "This Style does not exist!<br>";
+  
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
 
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -85,43 +110,42 @@ sub handler
   $execperms =~ s/0//g;
 
   shift @params;
-  if (!$params[0] || !$page || $page eq 'Enter name')
+  if (!$params[0] || !$page || $page eq $enter_name_string)
   { $url = '.admin-general'; @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Creating new style<br>'; 
+  { $error = $valid_perms_string.$create_style_string;
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Remove style<br>'; 
+  { $error = $valid_perms_string.$remove_style_string; 
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
-  { $error = 'You do not have valid permissions for this operation : Edit style<br>'; 
+  { $error = $valid_perms_string.$edit_style_string;
     $url = '.admin-general'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Save style<br>'; 
+  { $error = $valid_perms_string.$save_style_string;
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
-  { $error = 'You do not have valid permissions for this operation : Copying style<br>'; 
+  { $error = $valid_perms_string.$copy_style_string;
     $url = '.admin-general'; 
   }
 
-
   my $edit_style = shift @{$style_dbi->get({name=>$page}, count=>1)};
   if ($edit_style && $params[0] eq 'new' && !$error)
-  { $error = 'This Style already exists!<br>'; 
+  { $error = $style_exists_string; 
     $url = '.admin-general'; 
   }
 
   if (!$edit_style && ($params[0] eq 'edit' || $params[0] eq 'copy' || $params[0] eq 'remove')&& !$error)
-  { $error = 'This Style does not exist!<br>'; 
+  { $error = $style_exists_string; 
     $url = '.admin-general'; 
   }
  
