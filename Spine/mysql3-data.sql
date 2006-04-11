@@ -29,8 +29,33 @@ insert into attribute (attr,id,name,section,value) values ('en','0','remove_cont
 insert into attribute (attr,id,name,section,value) values ('en','0','edit_content','i18n','Edit content<br>');
 insert into attribute (attr,id,name,section,value) values ('en','0','save_content','i18n','Save content<br>');
 insert into attribute (attr,id,name,section,value) values ('en','0','copy_content','i18n','Copy content<br>');
-insert into attribute (attr,id,name,section,value) values ('en','0','content_exists','i18n','This Content already exists!<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','content_exists','i18n','This content already exists!<br>');
 insert into attribute (attr,id,name,section,value) values ('en','0','content_not_exists','i18n','This Content does not exist!<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','create_style','i18n','Creating new style<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','remove_style','i18n','Remove style<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','edit_style','i18n','Edit style<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','save_style','i18n','Save style<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','copy_style','i18n','Copy style<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','style_exists','i18n','This style already exists!<br>');
+insert into attribute (attr,id,name,section,value) values ('en','0','style_not_exists','i18n','This style does not exist!<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','valid_perms','i18n','U beschikt niet over voldoende rechten om deze actie uit te voeren : ');
+insert into attribute (attr,id,name,section,value) values ('nl','0','enter_name','i18n','Naam invoeren');
+insert into attribute (attr,id,name,section,value) values ('nl','0','create_content','i18n','nieuwe content aanmaken<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','remove_content','i18n','content verwijderen<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','edit_content','i18n','content wijzigen<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','save_content','i18n','content opslagen<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','copy_content','i18n','content kopi&euml;ren<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','content_exists','i18n','Deze content bestaat reeds!<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','content_not_exists','i18n','Deze content bestaat niet!<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','create_style','i18n','nieuwe style aanmaken<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','remove_style','i18n','style verwijderen<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','edit_style','i18n','style wijzigen<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','save_style','i18n','style opslagen<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','copy_style','i18n','style kopi&euml;ren<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','style_exists','i18n','Deze style bestaat reeds!<br>');
+insert into attribute (attr,id,name,section,value) values ('nl','0','style_not_exists','i18n','Deze style bestaat niet!<br>');
+
+
 insert into attribute (attr,id,name,section,value) values ('admin','0','lang','default','en');
 
 --
