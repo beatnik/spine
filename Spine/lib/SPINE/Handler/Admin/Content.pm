@@ -68,7 +68,7 @@ sub handler
   $macro_dbi = SPINE::DBI::Macro->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
-  my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
+  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
   my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
