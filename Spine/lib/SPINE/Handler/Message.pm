@@ -27,6 +27,7 @@ use SPINE::Base::Message;
 use SPINE::DBI::Content;
 use SPINE::DBI::Message;
 use SPINE::DBI::Messagegroup;
+use SPINE::DBI::Attribute;
 use SPINE::Constant;
 
 use Data::Dumper;
@@ -49,6 +50,7 @@ sub handler
   my $message_dbi = SPINE::DBI::Message->new($dbh);
   my $messagegroup_dbi = SPINE::DBI::Messagegroup->new($dbh);
   my $content_dbi = SPINE::DBI::Content->new($dbh);
+  my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   my $message = undef;
   my $group = shift @params;
   my $url = $r->uri;
@@ -85,6 +87,8 @@ sub handler
   my $limit = $r->param('limit');
   ($limit) = $limit =~ /^(\d*)$/;
   my $offset = $r->param('offset');
+  my ($order_hash) = shift @{$attribute_dbi->get(section=>"message",attr=>"order",name=>"$group")};
+  my %order_hash = %{ $order_hash} if $order_hash;
   ($offset) = $offset =~ /^(\d*)$/;  
   #Ugh.. I really need to comment this code
   my @narrow = ();
@@ -93,6 +97,7 @@ sub handler
   push(@narrow,"subject",$subject) if $subject ne '';
   push(@narrow,"limit",$limit) if $limit ne '';
   push(@narrow,"offset",$offset) if $offset ne '';
+  push(@narrow,"sort","mdate $order_hash{VALUE}") if $order_hash{VALUE};
   my @messages = ();
   if (!$id && !$group) { return ""; }
   if (!$id) { $id = $r->param('id'); }
