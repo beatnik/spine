@@ -35,6 +35,7 @@ use SPINE::Constant;
 use strict;
 
 use Apache::Cookie;
+use Apache::Constants qw(NOT_FOUND);
 
 use vars qw($VERSION $content_dbi $style_dbi $user_dbi $macro_dbi $attribute_dbi $request $user $error $ierror $readperms $writeperms $execperms $adminaccess %i18n %default);
 use vars qw($valid_perms_string $enter_name_string $create_style_string $remove_style_string $edit_style_string $save_style_string $copy_style_string $style_exists_string $style_notexists_string);
@@ -176,14 +177,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
-    my $body = $content->body;
-    $body =~ s/\$page/$url/g;
-    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
-    $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-    $body =~ s/\$serversig/$serversig/g;
-    $content->body($body);
-  }
+  { return NOT_FOUND; }
 
   my $style = shift @{$style_dbi->get({name=>$content->style, count=>1})};
   if (!ref $style)
