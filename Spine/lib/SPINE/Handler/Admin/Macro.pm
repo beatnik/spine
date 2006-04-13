@@ -33,7 +33,7 @@ use SPINE::Constant;
 use strict;
 
 use Apache::Cookie;
-
+use Apache::Constants qw(NOT_FOUND);
 use vars qw($VERSION $content_dbi $user_dbi $macro_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms);
 
 $VERSION = $SPINE::Constant::VERSION;
@@ -134,14 +134,7 @@ sub handler
  
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
-    my $body = $content->body;
-    $body =~ s/\$page/$url/g;
-    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
-    $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-    $body =~ s/\$serversig/$serversig/g;
-    $content->body($body);
-  }
+  { return NOT_FOUND; }
   
   if ($params[0] eq 'new' && $request->param("key") && $request->param("name") && !$error)
   { $macro_dbi->add(SPINE::Base::Macro->new({name=>$request->param('name'), macrokey=>$request->param('key'), macrovalue=>$request->param('value')})); }

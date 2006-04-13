@@ -32,6 +32,7 @@ use SPINE::Constant;
 use strict;
 
 use Apache::Cookie;
+use Apache::Constants qw(NOT_FOUND);
 use Digest::MD5 qw(md5_hex);
 
 use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $adminaccess_dbi $session_dbi $request $readperms $writeperms $execperms $user $adminaccess $error);
@@ -129,14 +130,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
-    my $body = $content->body;
-    $body =~ s/\$page/$url/g;
-    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
-    $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-    $body =~ s/\$serversig/$serversig/g;
-    $content->body($body);
-  }
+  { return NOT_FOUND; }
 
   my $body = $content->body if ref $content;
   

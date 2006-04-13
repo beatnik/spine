@@ -36,6 +36,7 @@ use SPINE::Constant;
 use strict;
 
 use Apache::Cookie;
+use Apache::Constants qw(NOT_FOUND);
 
 #Apache::Request Handler
 #DB Handler
@@ -158,14 +159,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
-    my $body = $content->body;
-    $body =~ s/\$page/$url/g;
-    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
-    $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-    $body =~ s/\$serversig/$serversig/g;
-    $content->body($body);
-  }
+  { return NOT_FOUND; }
   my $style = shift @{$style_dbi->get({name=>$content->style, count=>1})};
   if (!ref $style)
   { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
