@@ -1,0 +1,22 @@
+Features
+--------
+- Template based editing
+- Database backend
+- Simple Webbased administration
+- Unix style access control restrictions
+- Usergroup based adminstrative permissions
+- Short and search engine friendly URLs
+- No data files
+- Simultaneous unique setups (define database settings per subdirectory)
+- Fast (mod_perl based)
+- Native access logging (advanced details)
+- Basic content serving (including style)
+- Basic message serving (detail and list)
+- No output requirements (generate anything you want how you want it)
+- Extended easily through perl modules (tag and administration)
+- Preview Content
+- Straightforward installation (Once per webserver)
+- Short learning process & No programming required
+- Very few external library dependencies
+- Web based file manager
+- Transparently mix static and dynamic content

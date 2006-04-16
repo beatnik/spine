@@ -1,0 +1,132 @@
+Developing for SPINE
+--------------------
+
+There are currently two ways to interact with SPINE. Both use perl packages so we pressume you have sufficient skills.
+
+Tag Handlers
+------------
+While parsing the content data, certain tags will specific handlers. You can pass parameters to the packages. You will find an Env.pm file in lib/SPINE/Handler.
+This package is SPINE::Handler::Env (see the first line). The code in this file can be triggered by using a tag in your content.
+
+<?SPINE_Env?>
+
+The string after the SPINE_ is handled as a module name so this will call SPINE::Handler::Env.
+SPINE will pass everything between SPINE_ and ?> as a parameter to the module so you can handle the parameters yourself.
+
+The SPINE::Handler::Env file is constructed as follows.
+
+package SPINE::Handler::Env;
+
+use strict;
+use vars qw($VERSION);
+
+$VERSION = 1.0_2;
+
+sub handler 
+{ my $request = shift; #Apache::Request
+  my $dbh = shift; #DB Handler
+  my $tag = shift; #The entire bit between SPINE_ and ?>
+  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my @params = split(/,/,$params);
+  my $body = undef;
+  #If there are parameters, they're stored in @params
+  for(keys(%ENV) )
+  { $body .= "$_ => $ENV{$_}\n<br>"; }
+  return $body;
+}
+
+1;
+__END__
+
+Besides the package declaration and using some extra modules, the package contains one subroutine:
+handler. This subroutine is called with 3 parameters. The first one is an instance of Apache::Request. 
+You can use it to parse or manipulate the HTTP header. It also can be used to read form parameters with the param function.
+
+my $foo = $request->param("foo");
+
+The Second parameter is an instance of the DBI Database Handler. The database handler is connected to the 
+database specified for this setup. You can pass direct SQL queries to it. Consult the DBI documentation on how to achieve this.
+SPINE itself passes the database handler as a parameter to an abstract DBI layer that handles calls between handlers and the database with objects.
+The third parameter is the actual string used to call the package. In the case of 
+
+<?SPINE_Env?> 
+
+this is 
+
+Env
+
+but in other cases it might contain the parameters too. For instance
+
+<?SPINE_Env("foo","bar")?>
+
+will still call the package SPINE::Handler::Env but the third parameter will be
+
+Env("foo","bar")
+
+You will have to extract those parameters yourself. The provided Env package has some basic code for this purpose.
+SPINE will expect SPINE::Handler::Env to return a string as a result of the package call.
+
+Administration Handlers
+-----------------------
+Developing Administration Handlers is a bit harder.
+
+You will find an Env.pm file in lib/SPINE/Handler/Admin. 
+This package is SPINE::Handler::Admin::Env (see the first line). The only way this module is triggered is by directly calling it (preferably through a link in the administration section).
+For instance, you can call the Env package by using http://www.yoursite.com/admin/env/ as an address.
+
+The SPINE::Handler::Admin::Env file is constructed as follows.
+
+package SPINE::Handler::Admin::Env;
+
+use strict;
+use SPINE::Base::Content;
+use SPINE::Constant;
+
+use vars qw($VERSION);
+
+$VERSION = $SPINE::Constant::VERSION;
+
+sub handler 
+{ my $request = shift; #Apache::Request
+  my $dbh = shift; #DB Handler
+  my $body = undef;
+  for(keys(%ENV) )
+  { $body .= "$_ => $ENV{$_}\n<br>"; }
+  my $c = SPINE::Base::Content->new({body=>$body,style=>'admin'});
+  return $c;
+}
+
+1;
+__END__
+
+The admininstration handler does not expect a plain string but an instance of SPINE::Base::Content.
+You can set several of the content attributes. Two of the most important ones are body and style.
+In body, you'll need to set the actual text you wish to display. In this case, this is where the listing of environment variables comes.
+In style, you define which style to use.
+
+Besides the package declaration and using some extra modules and SPINE::Base::Content, the package contains one subroutine:
+handler. This subroutine is called with 2 parameters. The first one is an instance of Apache::Request. 
+You can use it to parse or manipulate the HTTP header. It also can be used to read form parameters with the param function.
+
+my $foo = $request->param("foo");
+
+The Second parameter is an instance of the DBI Database Handler. The database handler is connected to the 
+database specified for this setup. You can pass direct SQL queries to it. Consult the DBI documentation on how to achieve this.
+SPINE itself passes the database handler as a parameter to an abstract DBI layer that handles calls between handlers and the database with objects.
+
+Configuration & Installation
+----------------------------
+Both these handler types can be dropped in the specific Perl directories and they will work. It is highly recommended that you restart Apache.
+There is no specific configuration besides the one your package requires. You can access the Apache configuration settings 
+(similar to the settings needed for SPINE itself) through the Apache::Request instance.
+
+For instance
+
+$request->dir_config("webmaster")
+
+will access the setting defined in the Apache configuration file as
+
+    PerlSetVar webmaster 'John Doe'
+
+If you need certain configuration settings, it might be handy to make it accessible like this. 
+This way there is no unnecessary file I/O.
