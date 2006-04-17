@@ -84,7 +84,7 @@ sub new {
      if (!(@_ % 2)) 
      { %params = @_; }
    }
-   for (keys %params) { $params{$_} =~ s/\s+$//; $self->{uc $_} = $params{$_} if defined $params{$_}; } 
+   for (keys %params) { next if !$params{$_};  $params{$_} =~ s/\s+$//; $self->{uc $_} = $params{$_} if defined $params{$_}; } 
  }
  return $self;
 } 
