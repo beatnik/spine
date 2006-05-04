@@ -33,7 +33,9 @@ use SPINE::DBI::Session;
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
 use SPINE::Base::Content;
-use Apache::Cookie;
+
+use SPINE::Transparent::Request;
+use SPINE::Transparent::Constant;
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -44,7 +46,11 @@ sub handler
   my ($params) = $tag =~ m,\(([^\)]*)\),g;
   my @params = split(/,/,$params);
   my $body = undef;
-  my %cookies = Apache::Cookie->fetch;  
+
+  my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
+  my %cookies = $th_req->cookies;
+
   my $keyword = $request->param("keyword");
   return "Please define a search keyword" if !$keyword;
   my $content_dbi = SPINE::DBI::Content->new($dbh);

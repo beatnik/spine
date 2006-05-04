@@ -27,7 +27,7 @@ use Data::Dumper;
 
 use SPINE::Constant;
 
-use Apache::Cookie;
+use SPINE::Transparent::Request;
 
 use strict;
 use vars qw($VERSION);
@@ -42,7 +42,9 @@ sub handler
   my $dbh = shift; #DB Handler
   my @params = ();
   my $main = $request->dir_config("main") || "index.html";
-  my %cookies = Apache::Cookie->fetch;
+
+  my $th_req = SPINE::Transparent::Request->new($request);
+  my %cookies = $th_req->cookies;
 
   my $url = $request->uri;
   my $location = $request->location;
@@ -57,9 +59,11 @@ sub handler
   my $session_dbi = SPINE::DBI::Session->new($dbh);
 
   my $content = undef;
+
   my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   my $user = shift @{$user_dbi->get({login=>$session->username, count=>1})} if $session;
-  unless($session && $user && $session->username eq $user->login && $session->host eq $request->get_remote_host)
+
+  unless($session && $user && $session->username eq $user->login && $session->host eq $th_req->remote_host)
   { $content = shift @{$content_dbi->get({name=>$main, count=>1})};
     if (!ref $content)
     { $content = SPINE::Base::Content::default(); }

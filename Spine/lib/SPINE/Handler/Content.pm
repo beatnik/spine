@@ -31,10 +31,10 @@ use SPINE::Handler::Admin;
 use SPINE::DBI::Session;
 use SPINE::Constant;
 
+use SPINE::Transparent::Constant;
+use SPINE::Transparent::Request;
+
 use Data::Dumper;
-use Apache::Constants qw(NOT_FOUND FORBIDDEN);
-use Apache::Cookie;
-use Apache::Log;
 
 use strict;
 use vars qw($VERSION);
@@ -45,13 +45,15 @@ sub handler
 { my $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my $s = shift; #Session
+  my $tr_req = SPINE::Transparent::Request->new($request);
+  my $tr_const = SPINE::Transparent::Constant->new($request);
   my $main = $request->dir_config("main") || "main";
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $style_dbi = SPINE::DBI::Style->new($dbh);
   my $user_dbi = SPINE::DBI::User->new($dbh);
   my $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   my $session_dbi = SPINE::DBI::Session->new($dbh);
-  my %cookies = Apache::Cookie->fetch;
+  my %cookies = $tr_req->cookies;
   my $login_info = shift @{$content_dbi->get({name=>".login", count=>1})}; 
   if (!ref $login_info) { $login_info = SPINE::Base::Content::default(); }
   my $username = undef;
@@ -59,8 +61,8 @@ sub handler
   my @params = ();
   my $content = undef;
   my $style = undef;
-  my $url = $request->uri;
-  my $location = $request->location;
+  my $url = $tr_req->request->uri;
+  my $location = $tr_req->request->location;
   $url =~ s/^$location\/?//g;
   ($url,@params) = split("/",$url);
   if (!$url)
@@ -73,12 +75,12 @@ sub handler
     { $content = SPINE::Base::Content::default(body=>"Something is terribly wrong");
     }
     if (!ref $content)
-    { return NOT_FOUND; }
+    { return $SPINE::Transparent::Constant::NOT_FOUND; }
   }
   else
   { $content = shift @{$content_dbi->get({name=>$url, count=>1})};
     if (!ref $content)
-    { return NOT_FOUND; }
+    { return $SPINE::Transparent::Constant::NOT_FOUND; }
 
     my $user = shift @{$user_dbi->get({login=>$content->owner})};
   
@@ -87,14 +89,14 @@ sub handler
     my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
     if (($session && !$session->username) || !$session)
     { $session = $s if ($s && $s->username); }
-    if ($session && $session->host eq $request->get_remote_host && $session->username)
+    if ($session && $session->host eq scalar($tr_req->remote_host()) && $session->username)
     { $login_info = shift @{$content_dbi->get({name=>".login_info", count=>1})} || SPINE::Base::Content::default(); }
     my $loadpage = 0;
     my $readwperms = $page->permissions & READWPERMISSIONS;
     $readwperms =~ s/0//g;
     $loadpage = $readwperms; 
     
-    if ($session && $user && $session->username eq $user->login && $session->host eq $request->get_remote_host && !$loadpage)
+    if ($session && $user && $session->username eq $user->login && $session->host eq scalar($tr_req->remote_host()) && !$loadpage)
     { my @usergroups =  @{ $usergroup_dbi->get({username=>$session->username}) };
       @usergroups = map { $_ = $_->usergroup } @usergroups;
       my $readgperms = $page->permissions & READGPERMISSIONS;
@@ -108,7 +110,7 @@ sub handler
 
     if ($loadpage)
     { $content = $page }
-    else { return FORBIDDEN; }
+    else { return $SPINE::Transparent::Constant::FORBIDDEN; }
 
     $username = $session->username if $session;
 

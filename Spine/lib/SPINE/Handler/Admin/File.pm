@@ -31,10 +31,11 @@ use SPINE::DBI::Adminaccess;
 use SPINE::DBI::Session;
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
-use Apache::Constants qw(:common);
+
 use File::Copy qw(copy);
 
-use Apache::Cookie;
+use SPINE::Transparent::Request;
+use SPINE::Transparent::Constant;
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -50,7 +51,9 @@ sub handler
   my $foldername = $request->param("foldername"); # Folder name used with create folder
   my $path = $request->param("path") || "/"; # Current virtual working directory (based on chroot)
   my $target = $request->param("target"); # used with copy as target filename
-  my %cookies = Apache::Cookie->fetch;
+  my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
+  my %cookies = $th_req->cookies;
   my $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   my $session_dbi = SPINE::DBI::Session->new($dbh);
   my $user_dbi = SPINE::DBI::User->new($dbh);
@@ -104,10 +107,6 @@ sub handler
 
   my @params = $request->param;
   my @checkboxes = grep { /^check\d*$/ } sort { $a <=> $b } @params;
-
-  my $status = $request->parse;
-  unless ($status == OK)
-  { warn ($status, $request->notes('error-notes')); }
 
   if ($action eq "upload" && $filename && defined($path) && $writeperms)
   { my $upload = $request->upload("filename");

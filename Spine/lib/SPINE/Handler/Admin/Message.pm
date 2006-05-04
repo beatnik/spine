@@ -33,8 +33,8 @@ use SPINE::Constant;
 
 use strict;
 
-use Apache::Cookie;
-use Apache::Constants qw(NOT_FOUND);
+use SPINE::Transparent::Request;
+use SPINE::Transparent::Constant;
 
 use vars qw($VERSION $content_dbi $message_dbi $request $messagegroup_dbi $user_dbi $usergroup_dbi $session_dbi $adminaccess_dbi $user $adminaccess $error $readperms $writeperms $execperms);
 
@@ -47,7 +47,10 @@ sub handler
 { $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
-  my %cookies = Apache::Cookie->fetch;
+  my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
+  my %cookies = $th_req->cookies;
+
   my $page = $request->param('name');
   $error = '';
 

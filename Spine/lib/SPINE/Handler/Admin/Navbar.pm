@@ -36,8 +36,8 @@ use SPINE::Constant;
 
 use strict;
 
-use Apache::Constants qw(NOT_FOUND);
-use Apache::Cookie;
+use SPINE::Transparent::Request;
+use SPINE::Transparent::Constant;
 
 #Apache::Request Handler
 #DB Handler
@@ -51,7 +51,9 @@ sub handler
 { $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
-  my %cookies = Apache::Cookie->fetch;
+  my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
+  my %cookies = $th_req->cookies;
   my $page = $request->param('name');
   my $url = $request->uri;
   my $location = $request->location;

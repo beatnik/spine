@@ -34,8 +34,8 @@ use SPINE::Constant;
 
 use strict;
 
-use Apache::Cookie;
-use Apache::Constants qw(NOT_FOUND);
+use SPINE::Transparent::Request;
+use SPINE::Transparent::Constant;
 
 use vars qw($VERSION $content_dbi $style_dbi $user_dbi $macro_dbi $attribute_dbi $request $user $error $ierror $readperms $writeperms $execperms $adminaccess %i18n %default);
 use vars qw($valid_perms_string $enter_name_string $create_style_string $remove_style_string $edit_style_string $save_style_string $copy_style_string $style_exists_string $style_notexists_string);
@@ -49,7 +49,11 @@ sub handler
 { $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
-  my %cookies = Apache::Cookie->fetch;
+
+  my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
+  my %cookies = $th_req->cookies;
+
   my $page = $request->param('name');
   $error = '';
   $ierror = '';
@@ -177,7 +181,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { return NOT_FOUND; }
+  { return $SPINE::Transparent::Constant::NOT_FOUND; }
 
   my $style = shift @{$style_dbi->get({name=>$content->style, count=>1})};
   if (!ref $style)

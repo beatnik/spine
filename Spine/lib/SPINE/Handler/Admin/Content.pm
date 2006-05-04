@@ -34,8 +34,8 @@ use SPINE::Constant;
 
 use strict;
 
-use Apache::Constants qw(FORBIDDEN NOT_FOUND);
-use Apache::Cookie;
+use SPINE::Transparent::Request;
+use SPINE::Transparent::Constant;
 
 #Apache::Request Handler
 #DB Handler
@@ -49,7 +49,9 @@ sub handler
 { $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
-  my %cookies = Apache::Cookie->fetch;
+  my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Request->new($request);
+  my %cookies = $th_req->cookies;
   my $page = $request->param('name');
   my $url = $request->uri;
   my $location = $request->location;
@@ -190,7 +192,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { return NOT_FOUND; }
+  { return $SPINE::Transparent::Constant::NOT_FOUND; }
 
   my $style = shift @{$style_dbi->get({name=>$content->style, count=>1})};
   if (!ref $style)

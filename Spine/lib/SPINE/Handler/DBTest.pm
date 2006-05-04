@@ -24,7 +24,7 @@ package SPINE::Handler::DBTest;
 #DB Handler
 
 use SPINE::DBI::Attribute;
-
+use SPINE::Transparent::Request;
 use strict;
 
 use vars qw($VERSION);

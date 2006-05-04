@@ -31,8 +31,8 @@ use SPINE::Constant;
 
 use strict;
 
-use Apache::Cookie;
-use Apache::Constants qw(NOT_FOUND);
+use SPINE::Transparent::Constant;
+use SPINE::Transparent::Request;
 use Digest::MD5 qw(md5_hex);
 
 use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $adminaccess_dbi $session_dbi $request $readperms $writeperms $execperms $user $adminaccess $error);
@@ -46,7 +46,10 @@ sub handler
 { $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
-  my %cookies = Apache::Cookie->fetch;
+
+  my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
+  my %cookies = $th_req->cookies;
   
   my $url = $request->uri;
   my $location = $request->location;
@@ -130,7 +133,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { return NOT_FOUND; }
+  { return $SPINE::Transparent::Constant::NOT_FOUND; }
 
   my $body = $content->body if ref $content;
   

@@ -34,8 +34,8 @@ use Data::Dumper;
 
 use strict;
 
-use Apache::Cookie;
-use Apache::Constants qw(NOT_FOUND);
+use SPINE::Transparent::Constant;
+use SPINE::Transparent::Request;
 
 use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $macro_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms);
 
@@ -48,7 +48,9 @@ sub handler
 { $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
-  my %cookies = Apache::Cookie->fetch;
+  my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
+  my %cookies = $th_req->cookies;
   my $url = $request->uri;
   my $location = $request->location;
   
@@ -118,7 +120,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { return NOT_FOUND; }
+  { return $SPINE::Transparent::Constant::NOT_FOUND; }
 
   if ($params[0] eq 'new' && $request->param("section") && $request->param("usergroup"))
   { my $read = defined($request->param('read')) ? $request->param('read') : 0;

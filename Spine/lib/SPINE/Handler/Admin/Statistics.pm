@@ -32,8 +32,8 @@ use SPINE::Constant;
 
 use strict;
 
-use Apache::Cookie;
-use Apache::Constants qw(NOT_FOUND);
+use SPINE::Transparent::Request;
+use SPINE::Transparent::Constant;
 
 #Apache::Request Handler
 #DB Handler
@@ -49,7 +49,10 @@ sub handler
 
   my $url = $request->uri;
   my $location = $request->location;
-  my %cookies = Apache::Cookie->fetch;
+
+  my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
+  my %cookies = $th_req->cookies;
     
   $url =~ s/^$location\/?//;
 
@@ -108,7 +111,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { return NOT_FOUND; }
+  { return $SPINE::Transparent::Constant::NOT_FOUND; }
   my $body = $content->body if ref $content;
 
   if ($params[0] eq 'view')
