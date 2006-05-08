@@ -50,7 +50,7 @@ sub request
 
 sub cookies
 { my $self = shift;
-  return % { $self->{COOKIES} };
+  return % { $self->{COOKIES} } if $self->{COOKIES};
 }
 
 sub remote_host
