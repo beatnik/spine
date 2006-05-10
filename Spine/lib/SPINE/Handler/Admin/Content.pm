@@ -154,7 +154,11 @@ sub handler
   { $error = $content_notexists_string; 
     $url = '.admin-general'; 
   }
- 
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
   if ($params[0] eq 'new' && !$error)
   { my $c = SPINE::Base::Content::default(); 
     $c->name($page); $c->owner($user);
@@ -162,14 +166,8 @@ sub handler
     $mon++; $year += 1900;
     $c->modified("$year-$mon-$day $hour:$min:$sec") if ref $c;
     $content_dbi->add($c);
-    my $lang = $default{'lang'} || "";
-    $lang = ".$lang" if $lang;
     $url = '.admin-content'.$lang; 
   }
-
-  my $lang = $default{'lang'} || "";
-  $lang = ".$lang" if $lang;
-  $lang = "" if $lang eq ".en";
 
   if ($params[0] eq 'edit' && !$error)
   { $url = '.admin-content'.$lang; }
