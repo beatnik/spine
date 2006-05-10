@@ -37,6 +37,7 @@ sub handler
 { my $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my $body = undef;
+
   #If there are parameters, they're stored in @params
   for(keys(%ENV) )
   { $body .= "$_ => $ENV{$_}\n<br>"; }
