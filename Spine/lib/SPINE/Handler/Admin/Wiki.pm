@@ -163,7 +163,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { return NOT_FOUND; }
+  { return $SPINE::Transparent::Constant::NOT_FOUND; }
   my $style = shift @{$style_dbi->get({name=>$content->style, count=>1})};
   if (!ref $style)
   { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
