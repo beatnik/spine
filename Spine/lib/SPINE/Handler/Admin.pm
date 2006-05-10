@@ -28,6 +28,7 @@ use Data::Dumper;
 use SPINE::Constant;
 
 use SPINE::Transparent::Request;
+use SPINE::Transparent::Constant;
 
 use strict;
 use vars qw($VERSION);
@@ -44,6 +45,7 @@ sub handler
   my $main = $request->dir_config("main") || "index.html";
 
   my $th_req = SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
   my %cookies = $th_req->cookies;
 
   my $url = $request->uri;
@@ -75,13 +77,15 @@ sub handler
   if ($url eq 'admin' && $params[0])
   { my $module = ucfirst $params[0];
     my $value;
+    my $status;
     $module =~ s/^(\w*).*/$1/g; #Just make sure it's all aboot letters..
     eval qq{
       use SPINE::Handler::Admin::$module;
-      \$value = SPINE::Handler::Admin::${module}::handler(\$request,\$dbh);  #Call the handler method in that uhm handler
+      (\$value,\$status) = SPINE::Handler::Admin::${module}::handler(\$request,\$dbh);  #Call the handler method in that uhm handler
     };
     warn $@ if $@; #Warn if necessary
-    return $value;
+    $status ||= $SPINE::Transparent::Constant::NOT_FOUND;
+    return ($status,$value);
   }
 }
 1;
