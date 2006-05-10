@@ -46,7 +46,7 @@ sub handler
   my $dbh = shift; #DB Handler
   my $s = shift; #Session
   my $tr_req = SPINE::Transparent::Request->new($request);
-  my $tr_const = SPINE::Transparent::Constant->new($request);
+  SPINE::Transparent::Constant->new($request);
   my $main = $request->dir_config("main") || "main";
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $style_dbi = SPINE::DBI::Style->new($dbh);
