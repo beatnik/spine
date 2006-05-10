@@ -285,13 +285,18 @@ sub handler
       $stylelist .= qq(<option value="$_"$sel>$_\n); 
     }
 
+    my $separator = $edit_navbar->sep if ref $edit_navbar;
+    $separator =~ s/</&lt;/g;
+    $separator =~ s/>/&gt;/g;
+    $separator =~ s/\"/&quot;/g;
+
     $body =~ s/\$positioning/$poslist/g if ref $edit_navbar;
     $body =~ s/\$alignment/$alignlist/g if ref $edit_navbar;
     $body =~ s/\$font/$edit_navbar->font/ge if ref $edit_navbar;
     $body =~ s/\$color/$edit_navbar->color/ge if ref $edit_navbar;
     $body =~ s/\$size/$edit_navbar->size/ge if ref $edit_navbar;
     $body =~ s/\$style/$stylelist/g if ref $edit_navbar;
-    $body =~ s/\$separator/$edit_navbar->sep/ge if ref $edit_navbar;
+    $body =~ s/\$separator/$separator/g;
     $body =~ s/\$position/$lastposition/g;
     $body =~ s/\$error/$ierror/g;
     my $buttons = "";
