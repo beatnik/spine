@@ -120,7 +120,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { return $SPINE::Transparent::Constant::NOT_FOUND; }
+  { return (SPINE::Base::Content::default(),$SPINE::Transparent::Constant::NOT_FOUND); }
 
   if ($params[0] eq 'new' && $request->param("section") && $request->param("usergroup"))
   { my $read = defined($request->param('read')) ? $request->param('read') : 0;
