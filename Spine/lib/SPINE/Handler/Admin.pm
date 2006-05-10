@@ -69,7 +69,7 @@ sub handler
   { $content = shift @{$content_dbi->get({name=>$main, count=>1})};
     if (!ref $content)
     { $content = SPINE::Base::Content::default(); }
-    return $content;
+    return ($content,$SPINE::Transparent::Constant::NOT_FOUND);
   }
 
   $params[0] ||= 'content';
@@ -84,8 +84,8 @@ sub handler
       (\$value,\$status) = SPINE::Handler::Admin::${module}::handler(\$request,\$dbh);  #Call the handler method in that uhm handler
     };
     warn $@ if $@; #Warn if necessary
-    $status ||= $SPINE::Transparent::Constant::NOT_FOUND;
-    return ($status,$value);
+    $status ||= $SPINE::Transparent::Constant::OK;
+    return ($value,$status);
   }
 }
 1;

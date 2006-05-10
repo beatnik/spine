@@ -71,9 +71,9 @@ sub handler
   if ($url eq 'admin')
   { ($content,$status) = SPINE::Handler::Admin::handler($request,$dbh);
     if (!ref $content)
-    { $content = SPINE::Base::Content::default(body=>"Something is terribly wrong");
-   if ($status ne $SPINE::Transparent::Constant::OK)
-   { return $status; }
+    { $content = SPINE::Base::Content::default(body=>"Something is terribly wrong"); }
+    if ($status ne $SPINE::Transparent::Constant::OK)
+    { return $status; }
     my $_style = $content->style || ".admin";
     $style = shift @{$style_dbi->get({name=>$_style, count=>1})};
     if (!ref $style)
