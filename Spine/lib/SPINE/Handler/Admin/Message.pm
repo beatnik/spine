@@ -176,7 +176,7 @@ sub handler
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { return NOT_FOUND; }
+  { return $SPINE::Transparent::Constant::NOT_FOUND; }
   my $body = $content->body if ref $content;
 
   if (!$error && ($params[0] eq 'edit' || $params[0] eq 'new' || $params[0] eq 'savegroup' || $params[0] eq 'save' || $params[0] eq 'create' || ($params[0] eq 'remove' &&  $request->param('id') ) ) )
