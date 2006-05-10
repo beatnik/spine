@@ -50,7 +50,7 @@ sub handler
   my $dbh = shift; #DB Handler
   my @params = ();
   my $th_req = SPINE::Transparent::Request->new($request);
-  SPINE::Transparent::Request->new($request);
+  SPINE::Transparent::Constant->new($request);
   my %cookies = $th_req->cookies;
   my $page = $request->param('name');
   my $url = $request->uri;
@@ -167,32 +167,31 @@ sub handler
     $url = '.admin-content'.$lang; 
   }
 
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
   if ($params[0] eq 'edit' && !$error)
-  { my $lang = $default{'lang'} || "";
-    $lang = ".$lang" if $lang;
-    $url = '.admin-content'.$lang; 
-  }
+  { $url = '.admin-content'.$lang; }
   
   if ($params[0] eq 'save' && !$error)
-  { my $lang = $default{'lang'} || "";
-    $lang = ".$lang" if $lang;
-    $url = '.admin-content'.$lang; 
+  { $url = '.admin-content'.$lang; 
     save();
   }
 
   if ($params[0] eq 'copy' && !$error)
-  { $url = '.admin-general'; 
+  { $url = '.admin-general'.$lang;
     copy();
   }
 
   if ($params[0] eq 'remove' && !$error)
-  { $url = '.admin-general'; 
+  { $url = '.admin-general'.$lang; 
     remove();
   }
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
-  { return $SPINE::Transparent::Constant::NOT_FOUND; }
+  { return (SPINE::Base::Content::default(), $SPINE::Transparent::Constant::NOT_FOUND); }
 
   my $style = shift @{$style_dbi->get({name=>$content->style, count=>1})};
   if (!ref $style)
