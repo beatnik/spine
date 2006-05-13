@@ -4,7 +4,7 @@ use Test::Simple tests=>8;
 use LWP;
 use HTTP::Cookies;
 
-my $testhost = "http://layla/dev";
+my $testhost = "http://lua/spine";
 
 my $browser = LWP::UserAgent->new; #Instantiate
 my $cookies = HTTP::Cookies->new;

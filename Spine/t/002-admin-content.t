@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
-use Test::Simple tests=>11;
+use Test::More tests=>15;
 use LWP;
 use HTTP::Cookies;
 
-my $testhost = "http://layla/dev";
+my $testhost = "http://lua/spine";
 
 #Create test user?
 #Create content that is restricted
@@ -27,12 +27,13 @@ ok($ok, "Main content page #2");
 $response = $browser->post($testhost.'/admin/content/new/',
 ["name"=>"testcontent"]);
 $ok = $response->content =~ /Content Edit : testcontent/;
+
 ok($ok, "Create Content");
 
 #Test 4 - Create testcontent AGAIN.. see what happens
 $response = $browser->post($testhost.'/admin/content/new/',
 ["name"=>"testcontent"]);
-$ok = $response->content =~ /Content Edit : testcontent/;
+$ok = $response->content =~ /This Content already exists!/;
 ok($ok, "Create testcontent AGAIN.. see what happens");
 
 #Test 5 - Save
@@ -62,9 +63,6 @@ $ok = (
  $response->content =~ /<input .*?name="keywords" value="test testing/ &&
  $response->content =~ /<textarea .*?name="body" class="input">test testing/
 );
-open(DEBUG,">debug.html");
-print DEBUG $response->content;
-close(DEBUG);
 ok($ok, "Load Content");
 
 #Test 7 - Save unexisting content
@@ -79,7 +77,7 @@ $response = $browser->post($testhost.'/admin/content/save/',
  "keywords"=>"test testing",
  "body"=>"test testing", 
 ]);
-$ok = $response->content =~ /Content Edit : testcontent/;
+$ok = $response->content =~ /This Content does not exist!/;
 ok($ok, "Save unexisting content");
 
 #Test 8 - Save existing (but access restricted) content 
@@ -94,48 +92,53 @@ $response = $browser->post($testhost.'/admin/content/save/',
  "keywords"=>"test testing",
  "body"=>"test testing", 
 ]);
-$ok = $response->content =~ /Content Edit : testcontent/;
+$ok = $response->content =~ /does not exist/;
 ok($ok, "Save existing (but access restricted) content");
-
 
 #Test 9 - Copy
 $response = $browser->post($testhost.'/admin/content/copy/',
 ["name"=>"testcontent","target"=>"testcontent2"]);
-$ok = $response->content !~ /testcontent2/;
+$ok = $response->content =~ /testcontent2/;
 ok($ok, "Copy Content");
 
 #Test 10 - Copy unexisting file
 $response = $browser->post($testhost.'/admin/content/copy/',
 ["name"=>"makesurethiscontentdoesntexist","target"=>"testcontent3"]);
-$ok = $response->content !~ /testcontent2/;
+$ok = $response->content =~ /This Content does not exist!/;
 ok($ok, "Copy unexisting file");
 
 #Test 11 - Copy to existing file
 $response = $browser->post($testhost.'/admin/content/copy/',
 ["name"=>"testcontent","target"=>"testcontent4"]);
-$ok = $response->content !~ /testcontent2/;
+$ok = $response->content =~ /testcontent4/;
 ok($ok, "Copy to existing file");
 
+SKIP: {
+skip "Add restricted file", 1;
 #Test 12 - Copy restricted file
 $response = $browser->post($testhost.'/admin/content/copy/',
 ["name"=>"restrictedfile","target"=>"testcontent5"]);
-$ok = $response->content !~ /testcontent2/;
+$ok = $response->content !~ /testcontent4/;
 ok($ok, "Copy restricted file");
+}
 
 #Test 13 - Remove
 $response = $browser->post($testhost.'/admin/content/remove/',
-["name"=>"testcontent"]);
-$ok = $response->content !~ /testcontent/;
+["name"=>"testcontent2"]);
+$ok = $response->content !~ /testcontent2/;
 ok($ok, "Remove content");
 
 #Test 14 - Remove an unexisting file
 $response = $browser->post($testhost.'/admin/content/remove/',
 ["name"=>"makesurethiscontentdoesntexist"]);
-$ok = $response->content !~ /testcontent/;
+$ok = $response->content =~ /does not exist/;
 ok($ok, "Remove an unexisting file");
 
+SKIP: {
+skip "Add restricted file", 1;
 #Test 15 - Remove an restricted file
 $response = $browser->post($testhost.'/admin/content/remove/',
 ["name"=>"makesurethiscontentdoesntexist"]);
 $ok = $response->content !~ /testcontent/;
 ok($ok, "Remove an restricted file");
+}
