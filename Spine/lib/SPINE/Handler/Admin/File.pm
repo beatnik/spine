@@ -114,10 +114,10 @@ sub handler
     my $fh = $upload->fh;
     if ($fh)
     { if (-e "$chroot$path/$filename")
-      { set_error("You're trying to upload a file that already exists!"); }
+      { set_error("You\'re trying to upload a file that already exists!"); }
       else 
       { if (-W "$chroot$path/$filename")
-        { set_error("You're trying to upload a file that already exists!"); }
+        { set_error("You\'re trying to upload a file that already exists!"); }
         else
         { open(UPLOAD,">$chroot$path/$filename") || set_error("Error creating file: $!");
           binmode(UPLOAD);
@@ -141,28 +141,28 @@ sub handler
   if ($action eq "createfolder" && $foldername && $chroot.$path && !$execperms)
   { set_error("You do not have valid permissions for this operation : Create Folder"); }
       
-  if ($action eq "copy" && $filename && $path && $target && $writeperms)
+  if ($action eq "copy" && $filename && defined($path) && $target && $writeperms)
   { if (-e "$chroot$path/$target" && !-d "$chroot$path/$target") { set_error("You're trying to copy to a file that already exists!"); }
     else { copy("$chroot$path/$filename","$chroot$path/$target") ||  set_error("Unable to copy file. Does the document root directory have correct permissions? ($!)"); }
   }
-  
-  if ($action eq "copy" && $filename && $path && $target && !$writeperms)
+
+  if ($action eq "copy" && $filename && defined($path) && $target && !$writeperms)
   { set_error("You do not have valid permissions for this operation : Copy File"); }
   
-  if ($action eq "delete" && $filename && $path && $writeperms)
+  if ($action eq "delete" && $filename && defined($path) && $writeperms)
   { if (!-e "$chroot$path/$filename") { set_error("You're trying to delete a file that doesn't exist!"); }
      else { unlink("$chroot$path/$filename") || set_error("Unable to delete file. Does the document root directory have correct permissions? ($!)"); }
   }
 
-  if ($action eq "delete" && $filename && $path && !$writeperms)  
+  if ($action eq "delete" && $filename && defined($path) && !$writeperms)  
   { set_error("You do not have valid permissions for this operation : Delete File"); }
       
-  if ($action eq "rename" && $filename && $path && $target && $writeperms)
-  { if (-e "$chroot$path/$target" && !-d "$chroot$path/$target") { set_error("You're trying to rename to a filename that already exists!"); }
+  if ($action eq "rename" && $filename && defined($path) && defined($target) && $writeperms)
+  { if (-e "$chroot$path/$target" && !-d "$chroot$path/$target") { set_error("You\'re trying to rename to a filename that already exists!"); }
     else { rename("$chroot$path/$filename","$chroot$path/$target") || set_error("Unable to rename file. Does the document root directory have correct permissions? ($!)"); }
   }
 
-  if ($action eq "rename" && $filename && $path && $target && $writeperms)  
+  if ($action eq "rename" && $filename && defined($path) && $target && !$writeperms)  
   { set_error("You do not have valid permissions for this operation : Rename File"); }    
 
   my $list = "";  
@@ -259,7 +259,7 @@ EOF
 <<EOF;
 <tr class="unselected" disabled>
 <td>
-<input type="radio">
+<input type="radio" disabled>
 <a href="<?SPINE_Location?>admin/file/?path=$backdir"><img src="/images/folder.jpg" border="0"> ..</a></td>
 <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
 </tr>
@@ -269,14 +269,13 @@ EOF
 
   my $i = 0;
   for(@sorted)
-  { $i++;
-    if ($files{$_}{type} eq "file.jpg") 
+  { if ($files{$_}{type} eq "file.jpg") 
     { $list .= 
 <<EOF;
 <tr>
 <td>
 
-<input type="radio" name="" onClick='document.myform.filename.value = "$_";' value="$_">
+<input type="radio" name="radiobutton" onClick='document.myform.filename.value = "$_"; document.myform.radiobutton[$i].checked = true;' value="$_">
 <img src="/images/$files{$_}{type}" border="0"> $_</td>
 <td align="center">$files{$_}{size}</td><td align="center">$files{$_}{localtime}</td>
 <td>&nbsp;</td>
@@ -288,7 +287,7 @@ EOF
 <<EOF;
 <tr>
 <td>
-<input type="radio" name="check$i" disabled>
+<input type="radio" name="radiobutton" value="$i" disabled>
 <a href="<?SPINE_Location?>admin/file/?path=$path/$_"><img src="/images/$files{$_}{type}" border="0"> $_</a></td>
 <td align="center">-</td><td align="center">$files{$_}{localtime}</td>
 <td>&nbsp;</td>
@@ -296,6 +295,7 @@ EOF
 EOF
  
     }
+    $i++;
   }
 
   $list .= "</table></form>";
