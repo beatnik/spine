@@ -65,13 +65,12 @@ sub handler
 { my $r = shift;
   my $page = $r->uri;
   my $location = $r->location;
-  warn "$page - $location";
   $page =~ s/$location//;
   my $file = $r->filename; 
   my $uri = $r->uri; 
   my $dbh = undef;
 
-  ### check for file
+  ### check for file-on-disk
   return DECLINED if (length $uri > 1 and -e $file);
 
   #We pretend to know how to handle files that actually exist!!
