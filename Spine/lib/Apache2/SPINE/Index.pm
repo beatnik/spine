@@ -65,11 +65,15 @@ sub handler
 { my $r = shift;
   my $page = $r->uri;
   my $location = $r->location;
+  warn "$page - $location";
   $page =~ s/$location//;
   my $file = $r->filename; 
   my $uri = $r->uri; 
   my $dbh = undef;
-  if ($r->uri && -e $r->document_root.$uri && $page ne '/') { return DECLINED; }
+
+  ### check for file
+  return DECLINED if (length $uri > 1 and -e $file);
+
   #We pretend to know how to handle files that actually exist!!
   if (!$dbh) { $dbh = &initialise($r); }
   my $cookie = undef;
