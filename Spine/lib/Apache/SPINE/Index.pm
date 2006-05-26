@@ -67,10 +67,7 @@ sub handler
   my $file = $r->filename; 
   my $uri = $r->uri; 
   my $dbh = undef;
-
-  ### check for file-on-disk
-  return DECLINED if (length $uri > 1 and -e $file);
-
+  if ($r->uri && -e $r->document_root.$uri && $page ne '/') { return DECLINED; }
   #We pretend to know how to handle files that actually exist!!
   if (!$dbh) { $dbh = &initialise($r); }
   my $cookie = undef;
