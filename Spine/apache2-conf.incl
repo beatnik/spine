@@ -11,7 +11,7 @@
            PerlSetVar dbpwd spine
            PerlSetVar main index.html
            PerlSetVar webmaster 'John Doe'
-	   perlSetVar servername 'lua:8080'
+	   #perlSetVar servername 'servername:8080'
            PerlSetVar sitename 'SPINE Example site' 
            PerlSetVar chroot /var/www/
            PerlLogHandler Apache2::SPINE::Log
