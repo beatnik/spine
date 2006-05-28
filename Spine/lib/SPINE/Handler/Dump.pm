@@ -140,7 +140,7 @@ Parameters
 
 =head1 VERSION
 
-This is spine 1.1.
+This is spine 1.2 beta.
 
 =head1 AUTHOR
 

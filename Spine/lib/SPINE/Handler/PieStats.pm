@@ -105,7 +105,7 @@ This plugin requires the GD::Graph module. Fetch it from CPAN.
 
 =head1 VERSION
 
-This is spine 1.1.
+This is spine 1.2 beta.
 
 =head1 AUTHOR
 

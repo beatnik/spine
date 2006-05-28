@@ -348,7 +348,7 @@ Set $SPINE::DBI::Base::DEBUGTABLE to the table you wish to monitor during get st
 
 =head1 VERSION
 
-This is spine 1.1.
+This is spine 1.2 beta.
 
 =head1 AUTHOR
 

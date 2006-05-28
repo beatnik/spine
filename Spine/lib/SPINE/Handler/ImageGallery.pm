@@ -152,7 +152,7 @@ The directory is either passed as a parameter to the SPINE tag or as a parameter
 
 =head1 VERSION
 
-This is spine 1.1.
+This is spine 1.2 beta.
 
 =head1 AUTHOR
 

@@ -114,7 +114,7 @@ We assume the module will return all the valid data so we print it.
 
 =head1 VERSION
 
-This is spine 1.1.
+This is spine 1.2 beta.
 
 =head1 AUTHOR
 

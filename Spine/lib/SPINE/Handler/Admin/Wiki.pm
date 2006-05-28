@@ -324,7 +324,7 @@ How to set up Apache::SPINE::Index in your Apache config file...
 
 =head1 VERSION
 
-This is spine 1.1.
+This is spine 1.2 beta.
 
 =head1 AUTHOR
 

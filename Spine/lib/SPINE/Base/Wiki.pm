@@ -156,7 +156,7 @@ This method returns the default values for the page. This can be used to capture
 
 =head1 VERSION
 
-This is spine 1.1.
+This is spine 1.2 beta.
 
 =head1 AUTHOR
 

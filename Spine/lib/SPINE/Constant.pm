@@ -24,8 +24,8 @@ use strict;
 require Exporter;
 use vars qw($VERSION @ISA @EXPORT $CODENAME);
 
-$VERSION = "1.1";
-$CODENAME = "Burton";
+$VERSION = "1.2";
+$CODENAME = "Baldrick";
 @ISA = qw(Exporter);
 @EXPORT = qw(READACCESS WRITEACCESS EXECACCESS READGPERMISSIONS WRITEGPERMISSIONS READWPERMISSIONS WRITEWPERMISSIONS);
 
@@ -69,7 +69,7 @@ Perform a bitwise AND on these bitmasks and a variable to retrieve the flags.
 
 =head1 VERSION
 
-This is spine 1.1.
+This is spine 1.2 beta.
 
 =head1 AUTHOR
 
