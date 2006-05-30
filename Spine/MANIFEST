@@ -68,7 +68,6 @@ images/step3a.png
 images/step3b.png
 images/step4.png
 images/up.png
-import.pl
 lib/Apache/SPINE/Index.pm
 lib/Apache/SPINE/Log.pm
 lib/Apache2/SPINE/Index.pm
