@@ -1,0 +1,24 @@
+Features
+--------
+- Template based editing
+- Database backend (multiple platforms: mysql & postgresql)
+- Support for Apache 1 (mod_perl 1) and Apache 2 (mod_perl 2)
+- Simple Webbased administration
+- Unix style access control restrictions
+- Usergroup based adminstrative permissions
+- Short and search engine friendly URLs
+- No data files
+- Simultaneous unique setups (define database settings per subdirectory)
+- Fast (mod_perl based)
+- Native access logging (advanced details)
+- Basic content serving (including style)
+- Basic message serving (detail and list)
+- No output requirements (generate anything you want how you want it)
+- Extended easily through perl modules (tag and administration)
+- Straightforward installation (Once per webserver)
+- Short learning process & No programming required
+- Search engine plugin
+- Very few external library dependencies
+- File manager
+- Transparently mix static and dynamic content
+- Detailed access statistics
