@@ -336,15 +336,228 @@ This is the DBI base class for SPINE.
 SPINE is a perl based content management system. This release uses mod_perl. It should, in time, support all features of the
 CGI based version (but it will ofcourse add new things as well). This is a complete rewrite of the engine.
 
-=head1 SYNOPSIS
-
-Most of the installation process takes place in the Apache configuration file.
-
 =head1 DEBUGGING
 
 Set $SPINE::DBI::Base::DEBUGTABLE to the table you wish to monitor during get statements.
 
  $SPINE::DBI::Base::DEBUGTABLE = "message"; #To monitor get statements from the message table
+
+=head1 How this works
+
+This is the DBI base class. Most of the SPINE::DBI classes inherit from this module. The constructor method in each module redefines the object values needed for each object. 
+The SPINE::DBI::Base class is never loaded directly but is only used for inheritance.
+
+=head1 Object Attributes
+
+  $self->{TABLE} = "attribute";
+  $self->{MODULE} = "Attribute";
+  $self->{GROUP} = "name";
+  $self->{ORDER} = "name";
+  $self->{NUMERIC} = [@SPINE::Base::Attribute::NUMERIC];
+  $self->{NON_NUMERIC} = [@SPINE::Base::Attribute::NON_NUMERIC];
+  $self->{FIELDS} = [qw(id section name attr value)];
+
+=over 4
+
+=item _HANDLER
+
+The C<_HANDLER> attribute is considered for internal use and contains the Database handler as passed on constructor.
+
+=item TABLE
+
+The C<TABLE> attribute defines the table name in the database. This can be practically anything but common practice is to use the all lowercase version of the module. This attribute is a scalar.
+
+=item MODULE
+
+The C<MODULE> attribute defines the SPINE::Base::* module name. This can be practically anything but common practice is to use the same name as the table name, with the first letter in capital. This attribute is a scalar.
+
+=item GROUP
+
+The C<GROUP> attribute defines the SQL 'group by' variable. This attribute is a scalar.
+
+=item ORDER
+
+The C<ORDER> attribute defines the SQL 'order by' variable.  This attribute is a scalar.
+
+=item NUMERIC
+
+The C<NUMERIC> attributes contains the class fields that are considered numeric. This value is only important for the database. This attribute is an array reference. 
+
+=item NON_NUMERIC
+
+The C<NON_NUMERIC> attributes contains the class fields that are considered non-numeric. This value is only important for the database.  This attribute is an array reference.
+
+=item FIELDS
+
+The C<FIELDS> attributes contains all the class fields. This value is only important for the database.  This attribute is an array reference.
+
+=back
+
+=head1 Methods
+
+=over 4
+
+=item new
+
+This constructor method does nothing more than set the class attributes and return the object. As parameter, it takes the database handler as passed by the Handler.
+
+  my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
+
+=item get
+
+The C<get> method can take a number parameters. The C<get> method will commonly return an array reference of objects. The only exception is when passing a record ID. In that case, C<get> returns a single object scalar.
+
+=over 8
+
+=item By record ID
+
+Pass the element ID as a parameter.
+
+  my $attribute = $attribute_dbi->get( 5 );
+
+  my $attribute = $attribute_dbi->get( "id" => 5 );
+
+  my $attribute = $attribute_dbi->get( { "id" => 5 } );
+
+  my $attribute = $attribute_dbi->get( [ "id", 5 ] );
+
+C<get> returns a scalar here.
+
+=item Field names
+
+Pass any field you wish to look for as a parameter. These values are checked with the field list defined in the module constructor. When passing record fields, C<get> returns an array reference.
+
+  my $attributes_ref = $attribute_dbi->get( "name" => "foo" );
+
+  my $attributes_ref = $attribute_dbi->get( [ "name" => "foo", "section" => "stats" ] );
+
+  my $attributes_ref = $attribute_dbi->get( { "name" => "foo", "section" => "stats" } );
+
+=item Search Type
+
+  my $attributes_ref = $attribute_dbi->get( "name"=>"foo", "searchtype" => "or", "section" => "foo" );
+
+  my $attributes_ref = $attribute_dbi->get( "name"=>"foo", "searchtype" => "and", "section" => "foo" );
+
+  # Synonym
+
+  my $attributes_ref = $attribute_dbi->get( "name"=>"foo", "section" => "foo" );
+
+This parameter works in combination with the object attributes. This will return all records where name is either "foo" or "bar". Other option here is 'and'. The default search type is 'and'.
+
+=item Sorting
+
+ my $attributes_ref = $attribute_dbi->get( "name"=>"foo", "sort" => "section" );
+
+The default sorting attribute is defined in the class constructor attribute "ORDER".
+
+=item Limiting results
+
+  my $attributes_ref = $attribute_dbi->get( "name"=>"foo", "count" => 10 );
+
+This will return the first 10 elements
+
+=item Limiting result scope
+
+  my $attributes_ref = $attribute_dbi->get( "name"=>"foo", "limit" => 10, "offset" => 0 );
+
+  my $attributes_ref = $attribute_dbi->get( "name"=>"foo", "limit" => 10 );  
+
+This will return the first 10 elements
+
+  my $attributes_ref = $attribute_dbi->get( "name"=>"foo", "limit" => 10, "offset" => 10 );
+
+This will return elements 10 to 19.
+
+=item Get everything
+
+  my $attributes_ref = $attribute_dbi->get();
+
+  my $attributes_ref = $attribute_dbi->get( { "limit" => 10, "sort" => "name" } );
+
+=back
+
+=back
+
+=over 4
+
+=item getlist
+
+C<getlist> always returns an array reference with B<strings>.
+
+=over 8
+
+=item Defining the field
+
+Pass the fieldname in a parameter called C<field>. All regular parameters from C<get> apply.
+
+  my $content_list = $content_dbi->getlist( { "field" => "name"} );
+
+  my $content_list = $content_dbi->getlist( { "field" => "name", "style" => "main" } );
+
+  my $content_list = $content_dbi->getlist( { "field" => "name", "sort" => "style" } );
+
+  my $content_list = $content_dbi->getlist( { "field" => "name", "style" => "main", "searchtype" => "or", "style" => "main2"} );
+
+  my $content_list = $content_dbi->getlist( { "field" => "name", "style" => "main", "count" => 10 } );
+
+  my $content_list = $content_dbi->getlist( { "field" => "name", "style" => "main", "limit" => 10 } );
+
+  my $content_list = $content_dbi->getlist( { "field" => "name", "style" => "main", "offset" => "4", "limit" => 10 } );  
+
+=back
+
+=back
+
+=over 4
+
+=item update
+
+The C<update> method is used to update a certain object in the database. The method takes only parameter and has no return value. The ID field of a record is never updated. 
+
+  my $content = $content_dbi->get( 5 ); #Get content with ID = 5
+
+  $content->title( "Foo" );
+
+  $content_dbi->update( $content );
+
+=item add
+
+The C<add> method is used to add a new record to the database. Add returns the ID of the newly created object. The example below makes a copy of an existing object.
+
+  my $content = $content_dbi->get( 5 ); #Get content with ID = 5
+
+  $content->name( "index.new.html" );
+
+  my $new_id = $content_dbi->add( $content );
+
+Create one inplace:
+
+  my $new_id = $content_dbi->add( SPINE::Base::Content->new( { "name" => "foo" } ) );
+
+=item delete
+
+The C<delete> method is used to delete an existing record from the database.
+
+  $content_dbi->delete( 5 ); # Delete record with ID 5
+
+  my $content = $content_dbi->get( 5 ); #Get content with ID = 5
+
+  $content_dbi->delete( $content ); # Retrieve record ID from object and delete it
+
+=item fields
+
+The C<fields> method returns the fields as defined in the constructor method. See L<FIELDS>.
+
+=item numeric
+
+The C<numeric> method returns the numeric fields as defined in the constructor method. See L<NUMERIC>.
+
+=item non_numeric
+
+The C<non_numeric> method returns the non-numeric fields as defined in the constructor method. See L<NON_NUMERIC>.
+
+=back
 
 =head1 VERSION
 
