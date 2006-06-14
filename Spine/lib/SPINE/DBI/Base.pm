@@ -76,19 +76,12 @@ sub get
     $limit = $params{'limit'};
     delete($params{'limit'});
     $offset = $params{'offset'} || 0;
-    delete($params{'offset'});         
+    delete($params{'offset'});
+    $id ||= $params{'id'};
   }
   if($id) 
   { ($id) = $id =~ /(\d*)/;
     my $statement = "select * from $self->{TABLE} where id = ?";
-    if ($self->{_HANDLER}->{Driver}->{Name} eq "mysql")
-    { if (defined($limit) && defined($offset))
-      { $statement .= " limit $offset, $limit"; }
-    }
-    if ($self->{_HANDLER}->{Driver}->{Name} eq "Pg")
-    { $statement .= " limit $limit" if defined($limit);
-      $statement .= " offset $offset" if defined($offset);    
-    }
     my $sth = $self->{_HANDLER}->prepare($statement);
     $sth->execute($id);
     my $record; 
