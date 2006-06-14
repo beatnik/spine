@@ -69,7 +69,7 @@ sub handler
   { $content = shift @{$content_dbi->get({name=>$main, count=>1})};
     if (!ref $content)
     { $content = SPINE::Base::Content::default(); }
-    return ($content,$SPINE::Transparent::Constant::NOT_FOUND);
+    return ($content,$SPINE::Transparent::Constant::FORBIDDEN);
   }
 
   $params[0] ||= 'content';
