@@ -27,6 +27,7 @@ use SPINE::DBI::User;
 use SPINE::DBI::Macro;
 use SPINE::DBI::Usergroup;
 use SPINE::DBI::Adminaccess;
+use SPINE::DBI::Attribute;
 use SPINE::DBI::Content;
 use SPINE::Constant;
 
@@ -37,7 +38,8 @@ use strict;
 use SPINE::Transparent::Constant;
 use SPINE::Transparent::Request;
 
-use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $macro_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms);
+use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $macro_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms $attribute_dbi %i18n %default);
+use vars qw($valid_perms_string $enter_name_string $create_adminaccess_string $remove_adminaccess_string $save_adminaccess_string $adminaccess_exists_string $adminaccess_notexists_string);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -63,11 +65,32 @@ sub handler
   $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
+  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   $url = '.admin-access'; 
 
   my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>"en")};
+  for(@i18n_hash)
+  { my %hash = %{$_} if $_;
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  $create_adminaccess_string = $i18n{'create_adminaccess'} || "Add new admin access permissions<br>";
+  $remove_adminaccess_string = $i18n{'remove_adminaccess'} || "Remove admin access permissions<br>";
+  $save_adminaccess_string = $i18n{'save_adminaccess'} || "Save admin access permissions<br>";
+  $adminaccess_exists_string = $i18n{'adminaccess_exists'} || "These admin access permissions already exist!<br>";
+  $adminaccess_notexists_string = $i18n{'adminaccess_not_exists'} || "These admin access permissions does not exist!<br>";
+  
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -89,17 +112,17 @@ sub handler
   $error = "";
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Defining new Administration Access<br>'; 
+  { $error = $valid_perms_string.$create_adminaccess_string;    
     $url = '.admin-access'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Remove Administration Access<br>'; 
+  { $error = $valid_perms_string.$remove_adminaccess_string;
     $url = '.admin-access'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Save Administration Access<br>'; 
+  { $error = $valid_perms_string.$save_adminaccess_string;
     $url = '.admin-access'; 
   }
 
@@ -114,7 +137,7 @@ sub handler
 
   my $edit_adminaccess = shift @{$adminaccess_dbi->get({section=>$request->param('section'), usergroup=>$request->param('usergroup')}, count=>1)};
   if ($edit_adminaccess && $params[0] eq 'new' && !$error)
-  { $error = 'This Administration Access set already exists!<br>'; 
+  { $error = $adminaccess_exists_string;
     $url = '.admin-access'; 
   }
 
