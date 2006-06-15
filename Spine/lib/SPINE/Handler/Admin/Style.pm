@@ -287,7 +287,7 @@ sub save
     $style_dbi->update($style);
   }
   else
-  { $ierror = "You do not have valid permissions for this operation : Save style<br>"; }
+  { $ierror = $valid_perms_string.$save_style_string;; }
 }
 
 sub copy
