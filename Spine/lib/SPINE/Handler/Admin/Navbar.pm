@@ -86,11 +86,11 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_navbar_string = $i18n{'create_navbar'} || "Creating new navigation bar<br>";
-  $remove_navbar_string = $i18n{'remove_navbar'} || "Remove navigation bar<br>";
-  $edit_navbar_string = $i18n{'edit_navbar'} || "Edit navigation bar<br>";
-  $save_navbar_string = $i18n{'save_navbar'} || "Save navigation bar<br>";
-  $copy_navbar_string = $i18n{'copy_navbar'} || "Copy navigation bar<br>";
+  $create_navbar_string = $i18n{'create_navbar'} || "Create a new navigation bar<br>";
+  $remove_navbar_string = $i18n{'remove_navbar'} || "Remove a navigation bar<br>";
+  $edit_navbar_string = $i18n{'edit_navbar'} || "Edit a navigation bar<br>";
+  $save_navbar_string = $i18n{'save_navbar'} || "Save a navigation bar<br>";
+  $copy_navbar_string = $i18n{'copy_navbar'} || "Copy a navigation bar<br>";
   $navbar_exists_string = $i18n{'navbar_exists'} || "This navigation bar already exists!<br>";
   $navbar_notexists_string = $i18n{'navbar_not_exists'} || "This navigation bar does not exist!<br>";
   
