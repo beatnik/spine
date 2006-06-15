@@ -57,14 +57,45 @@ sub handler
   
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
+  # This part catches the image as button bug in IE.
+  my $save = $request->param('save.x') ? "save" : "";
+  my $delete = $request->param('delete.x') ? "delete" : "";    
+  my $action = $save || $delete; 
+  savelanguage() if $action eq "save";
+  deletebutton() if $action eq "delete";
+
   my @attributes = @{ $attribute_dbi->get( {section=>"i18n", attr => "en" }) };
   my $body = "";
   for(@attributes)
-  { my %hash = $_->tohash; $body .= "$hash{name} => $hash{value}\n<br>"; }
+  { my %hash = $_->tohash; 
+  $body .= <<EOF;
+<form action="<?SPINE_Location?>admin/language/" method="post">
+<input type="hidden" name="id" value="$hash{id}">
+<input type="hidden" name="attr" value="$hash{attr}">
+<input type="text" class="input" name="name" value="$hash{name}">
+<input type="text" class="input" name="value" value="$hash{value}" size="60">
+<input type="image" name="save" src="/images/save.png">
+<input type="image" name="delete" src="/images/delete.png">
+</form>\n
+
+EOF
+
+}
   my $content = SPINE::Base::Content::default;
   $content->style(".admin_plugin");
   $content->body($body);
   return $content;
+}
+
+sub savelanguage
+{ my $language = $attribute_dbi->get({id => $request->param('id')});
+  $language->value($request->param('value')) if ref $language;
+  $attribute_dbi->update($language) if $language;
+}
+
+sub deletelanguage
+{ my $language = $attribute_dbi->get({id => $request->param('id')});
+  $attribute_dbi->delete($language) if $language;
 }
 
 
