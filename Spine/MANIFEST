@@ -115,7 +115,7 @@ lib/SPINE/Handler/Admin/File.pm
 lib/SPINE/Handler/Admin/Macro.pm
 lib/SPINE/Handler/Admin/Message.pm
 lib/SPINE/Handler/Admin/Navbar.pm
-lib/SPINE/Handler/Admin/Plugin.pm
+lib/SPINE/Handler/Admin/Language.pm
 lib/SPINE/Handler/Admin/Statistics.pm
 lib/SPINE/Handler/Admin/Style.pm
 lib/SPINE/Handler/Admin/User.pm

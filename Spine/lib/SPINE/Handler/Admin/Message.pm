@@ -302,7 +302,6 @@ sub handler
    $body =~ s/\$wpermissions/$wpermissions/g;
    $body =~ s/\$owner/$owner/g;
    $body =~ s/\$group/$group/g;   
-   $body
   } 
 
   if ($error || !$params[0] || $params[0] eq 'copy' || $params[0] eq 'remove') 
