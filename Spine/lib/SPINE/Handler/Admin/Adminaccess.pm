@@ -39,7 +39,7 @@ use SPINE::Transparent::Constant;
 use SPINE::Transparent::Request;
 
 use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $macro_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms $attribute_dbi %i18n %default);
-use vars qw($valid_perms_string $enter_name_string $create_adminaccess_string $remove_adminaccess_string $save_adminaccess_string $adminaccess_exists_string $adminaccess_notexists_string);
+use vars qw($valid_perms_string $enter_name_string $create_adminaccess_string $remove_adminaccess_string $save_adminaccess_string $adminaccess_exists_string $adminaccess_notexists_string $ierror $lang);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -55,6 +55,10 @@ sub handler
   my %cookies = $th_req->cookies;
   my $url = $request->uri;
   my $location = $request->location;
+  $error = '';
+  $ierror = '';
+  %default = ();
+  %i18n = ();
   
   $url =~ s/^$location\/?//;
 
@@ -72,7 +76,13 @@ sub handler
   $user = "admin";
   $user = $session->username if $session;
 
-  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>"en")};
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
   { my %hash = %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
@@ -85,12 +95,6 @@ sub handler
   $save_adminaccess_string = $i18n{'save_adminaccess'} || "Save admin access permissions<br>";
   $adminaccess_exists_string = $i18n{'adminaccess_exists'} || "These admin access permissions already exist!<br>";
   $adminaccess_notexists_string = $i18n{'adminaccess_not_exists'} || "These admin access permissions does not exist!<br>";
-  
-  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
-  for(@default_hash)
-  { my %hash = %{$_} if $_;
-    $default{$hash{'NAME'}} = $hash{'VALUE'};
-  }
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;

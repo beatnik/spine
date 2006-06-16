@@ -57,6 +57,8 @@ sub handler
   my $page = $request->param('name');
   $error = '';
   $ierror = '';
+  %i18n = ();
+  %default = ();
 
   my $url = $request->uri;
   my $location = $request->location;
@@ -77,6 +79,16 @@ sub handler
   $user = "admin";
   $user = $session->username if $session;
 
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
   my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>"en")};
   for(@i18n_hash)
   { my %hash = %{$_} if $_;
@@ -85,20 +97,14 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_style_string = $i18n{'create_style'} || "Creating new style<br>";
-  $remove_style_string = $i18n{'remove_style'} || "Remove style<br>";
-  $edit_style_string = $i18n{'edit_style'} || "Edit style<br>";
-  $save_style_string = $i18n{'save_style'} || "Save style<br>";
-  $copy_style_string = $i18n{'copy_style'} || "Copy style<br>";
-  $style_exists_string = $i18n{'style_exists'} || "This Style already exists!<br>";
-  $style_notexists_string = $i18n{'style_not_exists'} || "This Style does not exist!<br>";
+  $create_style_string = $i18n{'create_style'} || "Create a new style<br>";
+  $remove_style_string = $i18n{'remove_style'} || "Remove a style<br>";
+  $edit_style_string = $i18n{'edit_style'} || "Edit a style<br>";
+  $save_style_string = $i18n{'save_style'} || "Save a style<br>";
+  $copy_style_string = $i18n{'copy_style'} || "Copy a style<br>";
+  $style_exists_string = $i18n{'style_exists'} || "This style already exists!<br>";
+  $style_notexists_string = $i18n{'style_not_exists'} || "This style does not exist!<br>";
   
-  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
-  for(@default_hash)
-  { my %hash = %{$_} if $_;
-    $default{$hash{'NAME'}} = $hash{'VALUE'};
-  }
-
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
   my @adminaccess = ();

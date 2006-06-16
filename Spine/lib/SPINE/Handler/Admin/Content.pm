@@ -76,7 +76,17 @@ sub handler
   $user = "admin";
   $user = $session->username if $session;
 
-  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>"en")};
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+ }
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
   { my %hash = %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
@@ -84,19 +94,13 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_content_string = $i18n{'create_content'} || "Creating new content<br>";
-  $remove_content_string = $i18n{'remove_content'} || "Remove content<br>";
-  $edit_content_string = $i18n{'edit_content'} || "Edit content<br>";
-  $save_content_string = $i18n{'save_content'} || "Save content<br>";
-  $copy_content_string = $i18n{'copy_content'} || "Copy content<br>";
-  $content_exists_string = $i18n{'content_exists'} || "This Content already exists!<br>";
-  $content_notexists_string = $i18n{'content_not_exists'} || "This Content does not exist!<br>";
-  
-  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
-  for(@default_hash)
-  { my %hash = %{$_} if $_;
-    $default{$hash{'NAME'}} = $hash{'VALUE'};
-  }
+  $create_content_string = $i18n{'create_content'} || "Create a new content<br>";
+  $remove_content_string = $i18n{'remove_content'} || "Remove a content<br>";
+  $edit_content_string = $i18n{'edit_content'} || "Edit a content<br>";
+  $save_content_string = $i18n{'save_content'} || "Save a content<br>";
+  $copy_content_string = $i18n{'copy_content'} || "Copy a content<br>";
+  $content_exists_string = $i18n{'content_exists'} || "This content already exists!<br>";
+  $content_notexists_string = $i18n{'content_not_exists'} || "This content does not exist!<br>";
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user, count=>1}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -154,10 +158,6 @@ sub handler
   { $error = $content_notexists_string; 
     $url = '.admin-general'; 
   }
-
-  my $lang = $default{'lang'} || "";
-  $lang = ".$lang" if $lang;
-  $lang = "" if $lang eq ".en";
 
   if ($params[0] eq 'new' && !$error)
   { my $c = SPINE::Base::Content::default(); 

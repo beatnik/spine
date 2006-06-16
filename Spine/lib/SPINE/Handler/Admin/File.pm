@@ -24,9 +24,12 @@ package SPINE::Handler::Admin::File;
 
 use strict;
 
-use vars qw($VERSION $error);
+use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $macro_dbi $adminaccess_dbi $session_dbi $attribute_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms %i18n %default);
+use vars qw($valid_perms_string $enter_name_string $new_upload_string $new_folder_string $copy_file_string $rename_file_string $read_folder_string $mkdir_failed_string $copy_failed_string $remove_failed_string $rename_failed_string $readdir_failed_string $docroot_permissions_string $upload_failed_string $upload_unknown_string $file_exists_string $file_notexists_string $folder_exists_string $folder_notexists_string );
+
 use SPINE::Constant;
 use SPINE::Base::Content;
+use SPINE::DBI::Attribute;
 use SPINE::DBI::Adminaccess;
 use SPINE::DBI::Session;
 use SPINE::DBI::User;
@@ -54,10 +57,10 @@ sub handler
   my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
   my %cookies = $th_req->cookies;
-  my $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
-  my $session_dbi = SPINE::DBI::Session->new($dbh);
-  my $user_dbi = SPINE::DBI::User->new($dbh);
-  my $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
+  $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
+  $session_dbi = SPINE::DBI::Session->new($dbh);
+  $user_dbi = SPINE::DBI::User->new($dbh);
+  $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   
   $chroot =~ s/\/+$//;
   $chroot =~ s/^\/+//;

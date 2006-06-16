@@ -27,6 +27,7 @@ use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
 use SPINE::DBI::Macro;
 use SPINE::DBI::Adminaccess;
+use SPINE::DBI::Attribute;
 use SPINE::DBI::Content;
 use SPINE::Constant;
 
@@ -35,7 +36,8 @@ use strict;
 use SPINE::Transparent::Request;
 use SPINE::Transparent::Constant;
 
-use vars qw($VERSION $content_dbi $user_dbi $macro_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms);
+use vars qw($VERSION $content_dbi $user_dbi $macro_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms %i18n %default $attribute_dbi);
+use vars qw($valid_perms_string $enter_name_string $create_macroset_string $create_macro_string $remove_macroset_string $remove_macro_string $edit_macroset_string $save_macro_string $copy_macroset_string $macroset_exists_string $macroset_notexists_string);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -51,6 +53,8 @@ sub handler
   my %cookies = $th_req->cookies;
   my $url = $request->uri;
   my $location = $request->location;
+  %default = ();
+  %i18n = ();
   
   $url =~ s/^$location\/?//;
 
@@ -62,12 +66,42 @@ sub handler
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $macro_dbi = SPINE::DBI::Macro->new($dbh);
+  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
+  
   $url = '.admin-general'; 
   $error = "";
   my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
+  for(@i18n_hash)
+  { my %hash = %{$_} if $_;
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  $create_macroset_string = $i18n{'create_macroset'} || "Add a new macroset<br>";
+  $create_macro_string = $i18n{'create_macro'} || "Add a new macro<br>";
+  $remove_macroset_string = $i18n{'remove_macroset'} || "Remove a macroset<br>";
+  $remove_macroset_string = $i18n{'remove_macro'} || "Remove a macro<br>";
+  $edit_macroset_string = $i18n{'edit_macroset'} || "Edit a macroset<br>";
+  $save_macro_string = $i18n{'save_macro'} || "Save a macro<br>";
+  $copy_macroset_string = $i18n{'copy_macroset'} || "Copy a macroset<br>";
+  $macroset_exists_string = $i18n{'macroset_exists'} || "This macroset already exists!<br>";
+  $macroset_notexists_string = $i18n{'macroset_not_exists'} || "This macroset does not exist!<br>";
+  
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
   my @adminaccess = ();
@@ -84,29 +118,33 @@ sub handler
   $execperms =~ s/0//g;
 
   shift @params;
+  #@params is something like qw(content new);
+  #And we already know it's in content so discard first element
+  if (!$params[0] || !$request->param('name') || $$request->param('name') eq $enter_name_string)
+  { $url = '.admin-general'; @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Creating new macros<br>'; 
+  { $error = $valid_perms_string.$create_macroset_string;
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Remove macros<br>'; 
+  { $error = $valid_perms_string.$remove_macroset_string;
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
-  { $error = 'You do not have valid permissions for this operation : Edit macros<br>'; 
+  { $error = $valid_perms_string.$edit_macroset_string;
     $url = '.admin-general'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Save macros<br>'; 
+  { $error = $valid_perms_string.$save_macro_string;
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
-  { $error = 'You do not have valid permissions for this operation : Copying macros<br>'; 
+  { $error = $valid_perms_string.$copy_macroset_string;
     $url = '.admin-general'; 
   }
 
@@ -131,7 +169,7 @@ sub handler
 
   my $edit_macro = shift @{$macro_dbi->get({name=>$request->param('name')}, count=>1)};
   if ($edit_macro && $params[0] eq 'new' && !$error)
-  { $error = 'This Macro set already exists!<br>'; 
+  { $error = $macroset_exists_string; 
     $url = '.admin-general'; 
   }
  

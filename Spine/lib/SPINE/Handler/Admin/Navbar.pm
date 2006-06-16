@@ -43,7 +43,7 @@ use SPINE::Transparent::Constant;
 #DB Handler
 
 use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $navbar_dbi $navbarbutton_dbi $adminaccess_dbi $attribute_dbi $session_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms %i18n %default);
-use vars qw($valid_perms_string $enter_name_string $create_navbar_string $remove_navbar_string $edit_navbar_string $save_navbar_string $copy_navbar_string $navbar_exists_string $navbar_notexists_string);
+use vars qw($valid_perms_string $enter_name_string $create_navbar_string $remove_navbar_string $edit_navbar_string $save_navbar_string $copy_navbar_string $navbar_exists_string $navbar_notexists_string $add_button_string $edit_button_string $delete_button_string);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -59,6 +59,8 @@ sub handler
   my $location = $request->location;
   $error = '';
   $ierror = '';
+  %default = ();
+  %i18n = ();
   
   $url =~ s/^$location\/?//;
 
@@ -78,7 +80,17 @@ sub handler
   $user = "admin";
   $user = $session->username if $session;
 
-  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>"en")};
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
   { my %hash = %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
@@ -91,15 +103,12 @@ sub handler
   $edit_navbar_string = $i18n{'edit_navbar'} || "Edit a navigation bar<br>";
   $save_navbar_string = $i18n{'save_navbar'} || "Save a navigation bar<br>";
   $copy_navbar_string = $i18n{'copy_navbar'} || "Copy a navigation bar<br>";
+  $add_button_string = $i18n{'add_button'} || "Add a button to the navigation bar<br>";
+  $edit_button_string = $i18n{'edit_button'} || "Edit a button in the navigation bar<br>";
+  $delete_button_string = $i18n{'delete_button'} || "Delete a button from the navigation bar<br>";
   $navbar_exists_string = $i18n{'navbar_exists'} || "This navigation bar already exists!<br>";
   $navbar_notexists_string = $i18n{'navbar_not_exists'} || "This navigation bar does not exist!<br>";
   
-  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
-  for(@default_hash)
-  { my %hash = %{$_} if $_;
-    $default{$hash{'NAME'}} = $hash{'VALUE'};
-  }
-
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
   my @adminaccess = ();
@@ -125,43 +134,43 @@ sub handler
   }
 
   if ($params[0] eq 'addbutton' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Adding buttons to a navigation bar<br>'; 
+  { $error = $valid_perms_string.$add_button_string; 
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'editbutton' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Editing a buttons from a navigation bar<br>'; 
+  { $error = $valid_perms_string.$edit_button_string; 
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Remove navigation bar<br>'; 
+  { $error = $valid_perms_string.$remove_navbar_string; 
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
-  { $error = 'You do not have valid permissions for this operation : Edit navigation bar<br>'; 
+  { $error = $valid_perms_string.$edit_navbar_string; 
     $url = '.admin-general'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Save navigation bar<br>'; 
+  { $error = $valid_perms_string.$save_navbar_string; 
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
-  { $error = 'You do not have valid permissions for this operation : Copying naviation bar<br>'; 
+  { $error = $valid_perms_string.$copy_navbar_string; 
     $url = '.admin-general'; 
   }
 
   my $edit_navbar = shift @{$navbar_dbi->get({name=>$page}, count=>1)};
   if ($edit_navbar && $params[0] eq 'new' && !$error)
-  { $error = 'This navbar already exists!<br>'; 
+  { $error = $navbar_exists_string; 
     $url = '.admin-general'; 
   }
 
   if (!$edit_navbar && ($params[0] eq 'edit' || $params[0] eq 'copy' || $params[0] eq 'remove')&& !$error)
-  { $error = 'This Navbar does not exist!<br>'; 
+  { $error = $navbar_notexists_string;
     $url = '.admin-general'; 
   }
  
@@ -413,7 +422,7 @@ sub savebutton
     $navbar_dbi->update($navbar);
     $navbarbutton_dbi->update($button);
   } else 
-  { $ierror = 'You do not have valid permissions for this operation : Save content<br>'; }
+  { $ierror = $valid_perms_string.$save_navbar_string; }
 }
 
 sub moveup

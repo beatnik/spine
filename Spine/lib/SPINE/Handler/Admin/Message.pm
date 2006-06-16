@@ -28,6 +28,7 @@ use SPINE::DBI::Usergroup;
 use SPINE::DBI::Session;
 use SPINE::DBI::Message;
 use SPINE::DBI::Messagegroup;
+use SPINE::DBI::Attribute;
 use SPINE::DBI::Adminaccess;
 use SPINE::Constant;
 
@@ -36,7 +37,8 @@ use strict;
 use SPINE::Transparent::Request;
 use SPINE::Transparent::Constant;
 
-use vars qw($VERSION $content_dbi $message_dbi $request $messagegroup_dbi $user_dbi $usergroup_dbi $session_dbi $adminaccess_dbi $user $adminaccess $error $readperms $writeperms $execperms);
+use vars qw($VERSION $content_dbi $message_dbi $request $messagegroup_dbi $user_dbi $usergroup_dbi $session_dbi $adminaccess_dbi $user $adminaccess $error $readperms $writeperms $execperms %i18n %default $attribute_dbi);
+use vars qw($valid_perms_string $enter_name_string $create_message_string $create_messagegroup_string $remove_message_string $remove_messagegroup_string $edit_message_string $save_message_string $copy_messagegroup_string $save_messagegroup_string $messagegroup_exists_string $messagegroup_notexists_string $ierror);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -50,9 +52,12 @@ sub handler
   my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
   my %cookies = $th_req->cookies;
+  %default = ();
+  %i18n = ();
 
   my $page = $request->param('name');
   $error = '';
+  $ierror = '';
 
   my $url = $request->uri;
   my $location = $request->location;
@@ -68,12 +73,41 @@ sub handler
   $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
+  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
   $url = '.admin-general'; 
 
   my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
+
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+ }
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
+  for(@i18n_hash)
+  { my %hash = %{$_} if $_;
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  $create_message_string = $i18n{'create_message'} || "Create a new message<br>";
+  $remove_message_string = $i18n{'remove_message'} || "Remove a message<br>";
+  $remove_messagegroup_string = $i18n{'remove_messagegroup'} || "Remove a messagegroup<br>";
+  $edit_message_string = $i18n{'edit_message'} || "Edit a message<br>";
+  $save_message_string = $i18n{'save_message'} || "Save a message<br>";
+  $save_messagegroup_string = $i18n{'save_messagegroup'} || "Save a messagegroup<br>";
+  $copy_messagegroup_string = $i18n{'copy_messagegroup'} || "Copy a messagegroup<br>";
+  $messagegroup_exists_string = $i18n{'messagegroup_exists'} || "This messagegroup already exists!<br>";
+  $messagegroup_notexists_string = $i18n{'messagegroup_not_exists'} || "This messagegroup does not exist!<br>";
 
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user, count=>1}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -91,41 +125,41 @@ sub handler
   $execperms =~ s/0//g;
 
   shift @params;
-  if (!$params[0] || (!$page && $params[0] ne "create") || $page eq 'Enter name')
+  if (!$params[0] || (!$page && $params[0] ne "create") || $page eq $enter_name_string)
   { @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Creating new messages<br>'; 
+  { $error = $valid_perms_string.$create_messagegroup_string;
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'create' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Creating new messages<br>'; 
+  { $error = $valid_perms_string.$create_message_string;
     $url = '.admin-general'; 
   }
   
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Remove messages<br>'; 
+  { $error = $valid_perms_string.$remove_message_string; # or should this be $remove_messagegroup_string???
     $url = '.admin-general'; 
   }
   
   if ($params[0] eq 'edit' && !$readperms)
-  { $error = 'You do not have valid permissions for this operation : Edit messages<br>'; 
+  { $error = $valid_perms_string.$edit_message_string; # or should this be $remove_messagegroup_string???
     $url = '.admin-general'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Save messages<br>'; 
+  { $error = $valid_perms_string.$save_message_string; # or should this be $save_messagegroup_string???
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'savegroup' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Save messagegroup<br>'; 
+  { $error = $valid_perms_string.$save_messagegroup_string;
     $url = '.admin-general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
-  { $error = 'You do not have valid permissions for this operation : Copying messages<br>'; 
+  { $error = $valid_perms_string.$copy_messagegroup_string;
     $url = '.admin-general'; 
   }
 
@@ -136,7 +170,7 @@ sub handler
 
   my $edit_messagegroup = shift @{$messagegroup_dbi->get({name=>$request->param('name')}, count=>1)};
   if ($edit_messagegroup && $params[0] eq 'create' && !$error)
-  { $error = 'This Messagegroup already exists!<br>'; 
+  { $error = $messagegroup_exists_string;
     $url = '.admin-general'; 
   }
   
