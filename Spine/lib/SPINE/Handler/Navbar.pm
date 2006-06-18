@@ -94,8 +94,8 @@ sub handler
     $body .= $buttonhash{label} if (!$buttonhash{image} && $buttonhash{label});
     $body .=  qq(</a>) if defined($buttonhash{link});
     $body .= "<br>" if lc($navbarhash{positioning}) eq "vertical";
-    $body .= "$navbarhash{sep}" if $i;
     $i--;
+    $body .= "$navbarhash{sep}" if $i;
     if ($navbarhash{style})
     { $body .= $navbarhash{style} =~ /bold/gi ? "</b>" : "";
       $body .= $navbarhash{style} =~ /italic/gi ? "</i>" : "";
