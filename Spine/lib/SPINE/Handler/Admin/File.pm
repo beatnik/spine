@@ -61,6 +61,7 @@ sub handler
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $user_dbi = SPINE::DBI::User->new($dbh);
   $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
+  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   
   $chroot =~ s/\/+$//;
   $chroot =~ s/^\/+//;
@@ -69,6 +70,42 @@ sub handler
   my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   my $user = "admin";
   $user = $session->username if $session;
+
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = %{$_} if $_;
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+ }
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
+  for(@i18n_hash)
+  { my %hash = %{$_} if $_;
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  $new_upload_string = $i18n{'create_content'} || "Create a new content<br>";
+  $new_folder_string = $i18n{'create_content'} || "Create a new content<br>";
+  $copy_file_string = $i18n{'create_content'} || "Create a new content<br>";
+  $rename_file_string = $i18n{'create_content'} || "Create a new content<br>";
+  $read_folder_string = $i18n{'create_content'} || "Create a new content<br>";
+  $mkdir_failed_string = $i18n{'create_content'} || "Create a new content<br>";
+  $copy_failed_string = $i18n{'create_content'} || "Create a new content<br>";
+  $remove_failed_string = $i18n{'create_content'} || "Create a new content<br>";
+  $rename_failed_string = $i18n{'create_content'} || "Create a new content<br>";
+  $readdir_failed_string = $i18n{'create_content'} || "Create a new content<br>";
+  $docroot_permissions_string = $i18n{'create_content'} || "Create a new content<br>";
+  $upload_failed_string = $i18n{'create_content'} || "Create a new content<br>";
+  $upload_unknown_string = $i18n{'create_content'} || "Create a new content<br>";
+  $file_exists_string = $i18n{'create_content'} || "Create a new content<br>";
+  $file_notexists_string = $i18n{'create_content'} || "Create a new content<br>";
+  $folder_exists_string = $i18n{'create_content'} || "Create a new content<br>";
+  $folder_notexists_string = $i18n{'create_content'} || "Create a new content<br>";
 
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
