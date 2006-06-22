@@ -55,6 +55,11 @@ sub handler
   $file =~ s/^$location\/?//;
   $file ||= $main;
   $file =~ s/^(.*?)\/.*$/$1/g;
+  my $content_dbi = SPINE::DBI::Content->new($dbh);
+  my $content = shift @ { $content_dbi->get({ name => $file }) };
+  if (!$content) { return DONE; }
+  warn $content->logging;
+  if (!$content->logging) { return DONE; }
   my (@data) =
   #$name,$date,$useragent,$remoteaddr,$referer,$query) = 
   ($file,$date,$r->header_in("User-Agent"),$r->get_remote_host,$r->header_in("Referer"),scalar($r->args));
