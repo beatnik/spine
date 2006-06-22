@@ -58,7 +58,6 @@ sub handler
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $content = shift @ { $content_dbi->get({ name => $file }) };
   if (!$content) { return DONE; }
-  warn $content->logging;
   if (!$content->logging) { return DONE; }
   my (@data) =
   #$name,$date,$useragent,$remoteaddr,$referer,$query) = 
