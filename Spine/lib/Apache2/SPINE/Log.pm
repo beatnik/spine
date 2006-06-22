@@ -59,6 +59,10 @@ sub handler
   $file ||= $main;
   $file =~ s/^(.*?)\/.*$/$1/g;
   my $in = $r->headers_in();
+  my $content_dbi = SPINE::DBI::Content->new($dbh);
+  my $content = shift @ { $content_dbi->get( { name => $file } ) };
+  if (!$content) { return DONE; }
+  if (!$content->logging) { return DONE; }
   my (@data) =
   #$name,$date,$useragent,$remoteaddr,$referer,$query) = 
   ($file,$date,$in->{'User-Agent'},$req->connection->remote_host,$in->{"Referer"},scalar($r->args));
