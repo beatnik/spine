@@ -63,7 +63,6 @@ sub handler
 { my $r = shift;
   my $page = $r->uri;
   my $location = $r->location;
-  my $main = $r->dir_config("main") || "index.html";
   $page =~ s/$location//;
   my $file = $r->filename; 
   my $uri = $r->uri; 
