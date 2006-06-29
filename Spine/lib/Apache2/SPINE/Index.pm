@@ -70,7 +70,7 @@ sub handler
   my $uri = $r->uri; 
   my $dbh = undef;
   if (length($uri) > 1 and -e $file and $location eq "/") { return DECLINED; }
-  if ($r->uri and -e $r->document_root.$uri and $page ne '/' and $location ne "/") { return DECLINED; }
+  if ($uri and -e $r->document_root.$uri and $page ne '/' and $location ne "/") { return DECLINED; }
   #We pretend to know how to handle files that actually exist!!
   if (!$dbh) { $dbh = &initialise($r); }
   my $cookie = undef;
