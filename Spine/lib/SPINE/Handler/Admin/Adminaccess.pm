@@ -181,7 +181,7 @@ sub handler
 }
 
 sub save
-{ my $adminaccess = shift @{$adminaccess_dbi->get({id=>$request->param('id'), count=>1})};
+{ my $adminaccess = $adminaccess_dbi->get({id=>$request->param('id'), count=>1});
   my $read = defined($request->param('read')) ? $request->param('read') : 0;
   my $write = defined($request->param('write')) ? $request->param('write') : 0;
   my $exec = defined($request->param('exec')) ? $request->param('exec') : 0;
@@ -193,7 +193,7 @@ sub save
 }
 
 sub remove
-{ my $adminaccess = shift @{$adminaccess_dbi->get({id=>$request->param('id'), count=>1})};
+{ my $adminaccess = $adminaccess_dbi->get({id=>$request->param('id'), count=>1});
   $adminaccess_dbi->delete($adminaccess) if $adminaccess;
 }
 
