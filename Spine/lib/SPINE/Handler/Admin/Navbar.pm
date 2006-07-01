@@ -364,7 +364,7 @@ sub handler
     for(@list) { $list .= qq(<option value="$_">$_\n); }
     $body =~ s/\$list/$list/g;
     $body =~ s/\$type/navbar/g;
-    $body =~ s/\$label/Navigation Bar/g;
+    $body =~ s/\$label/navigation bar/g;
   } 
   $body =~ s/\$error/$error/g;
   $content->body($body);
