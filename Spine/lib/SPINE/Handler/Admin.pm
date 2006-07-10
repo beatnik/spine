@@ -83,7 +83,11 @@ sub handler
       use SPINE::Handler::Admin::$module;
       (\$value,\$status) = SPINE::Handler::Admin::${module}::handler(\$request,\$dbh);  #Call the handler method in that uhm handler
     };
-    warn $@ if $@; #Warn if necessary
+    if ($@)
+    { $status = $SPINE::Transparent::Constant::OK;
+      my $c = SPINE::Base::Content->new({body=>"Something went wrong while loading $params[0]! Please contact your server administrator if the problem persists."});
+      return ($c,$status);
+    }
     $status ||= $SPINE::Transparent::Constant::OK;
     return ($value,$status);
   }
