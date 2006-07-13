@@ -71,7 +71,7 @@ sub handler
   my $dbh = undef;
   my $main = $r->dir_config("main");
   if (!$page) { $page = "/"; }
-  if ($page eq "/") { $page .= $main; $file .= $page; $uri .= $main; }
+  if ($page eq "/") { $page .= $main; $file .= $page; $uri .= $page; }
   if ($uri and -e $r->document_root.$uri and $page ne '/' and $location ne "/") { return DECLINED; }
   if (length($uri) > 1 and -e $file and $location eq "/") { return DECLINED; } # root directory fix
   #We pretend to know how to handle files that actually exist!!
