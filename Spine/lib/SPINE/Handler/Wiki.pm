@@ -71,7 +71,6 @@ sub handler
     $readwperms =~ s/0//g;
     $readwiki = $readwperms;
     $writewiki = $writewperms; 
-    warn $readwiki;
   
     if ($session && $user && $session->username eq $user->login && $session->host eq $request->get_remote_host && !$writewiki)
     { my @usergroups =  @{ $usergroup_dbi->get({username=>$session->username}) };
