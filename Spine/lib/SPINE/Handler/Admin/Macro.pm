@@ -120,7 +120,7 @@ sub handler
   shift @params;
   #@params is something like qw(content new);
   #And we already know it's in content so discard first element
-  if (!$params[0] || !$request->param('name') || $$request->param('name') eq $enter_name_string)
+  if (!$params[0] || !$request->param('name') || $request->param('name') eq $enter_name_string)
   { $url = '.admin-general'; @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
