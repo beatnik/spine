@@ -86,6 +86,7 @@ sub handler
     if ($@)
     { $status = $SPINE::Transparent::Constant::OK;
       my $c = SPINE::Base::Content->new({body=>"Something went wrong while loading $params[0]! Please contact your server administrator if the problem persists."});
+      warn $@;
       return ($c,$status);
     }
     $status ||= $SPINE::Transparent::Constant::OK;
