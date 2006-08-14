@@ -102,7 +102,6 @@ sub handler
       my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
       $year += 1900; $mon++;
       my $sdate = "$year-$mon-$mday $hour:$min:$sec";
-      warn $req->connection->remote_host;
       $session = SPINE::Base::Session->new({id=>$randid,username=>scalar($req->param('name')),expires=>'',sessiondate=>$sdate,host=>scalar($req->connection->get_remote_host)});
       $session_dbi->add($session);
       #User exists?? Generate session and set cookie
