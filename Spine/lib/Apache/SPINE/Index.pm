@@ -105,7 +105,7 @@ sub handler
       #User exists?? Generate session and set cookie
     }
   }
-  if ($req->param('button') eq 'logout')
+  if ($req->param('button') && $req->param('button') eq 'logout')
   #Log out??
   { my %cookies = Apache::Cookie->fetch;
     $session_dbi->remove($cookies{'key'}->value) if $cookies{'key'};
@@ -126,7 +126,7 @@ sub handler
   if (ref($content) ne "SPINE::Base::Content") { return $content; }
   my $type = $content->type || 'text/html';
   my $body = $content->body;
-  my $location = $req->location;
+  $location = $req->location;
   $req->no_cache(1);
   $req->content_type($type);
   $req->send_http_header;

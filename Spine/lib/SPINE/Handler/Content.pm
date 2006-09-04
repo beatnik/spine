@@ -147,7 +147,7 @@ sub handler
   if (ref $style && ref $content && $style->title && $content->title) { $title .= " - "; $title .= $content->title; }
   if (!$title && ref $content && $content->title) { $title = $content->title; }
 
-  my $location = $request->location;
+  $location = $request->location;
   if ($location !~ /\/$/) { $location .= "/"; }
   my $servername = $request->dir_config("servername") || $ENV{SERVER_NAME};
   

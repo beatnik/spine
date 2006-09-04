@@ -26,6 +26,8 @@ use DBI;
 use Data::Dumper;
 use vars qw($VERSION $DEBUGTABLE);
 
+$DEBUGTABLE = "";
+
 use SPINE::Constant;
 
 $VERSION = $SPINE::Constant::VERSION;
@@ -145,7 +147,7 @@ sub get
       warn join("_-_",caller).$@ if $@;
       push(@records,$record); 
       $i++;
-      last if $i == $count;
+      if ($i && $i == $count) { last; }
     }
     $sortfield = "";
     return \@records;
