@@ -163,7 +163,7 @@ sub handler
     $url = '.admin-general'; 
   }
 
-  if ($params[0] eq 'new' && !$error)
+  if ($params[0] eq 'new' && !$error && $request->method eq "POST")
   { $messagegroup_dbi->add(SPINE::Base::Messagegroup->new({id=>0,name=>scalar($request->param("name")), content=>'.message', owner=>$user, usergroup=>"admin", permissions=>'111111'}));
     $url = '.admin-message'; 
   }
@@ -174,7 +174,7 @@ sub handler
     $url = '.admin-general'; 
   }
   
-  if ($params[0] eq 'create' && !$error)
+  if ($params[0] eq 'create' && !$error && $request->method eq "POST")
   { my ($sec,$min,$hour,$day,$mon,$year) = localtime(time);
     $mon++; $year += 1900;
     my $mdate = "$year-$mon-$day $hour:$min:$sec";
@@ -185,7 +185,7 @@ sub handler
   if ($params[0] eq 'edit' && !$error)
   { $url = '.admin-message'; }
 
-  if ($params[0] eq 'save' && !$error)
+  if ($params[0] eq 'save' && !$error && $request->method eq "POST")
   { $url = '.admin-message'; 
     my $save = $request->param('save.x') ? "save" : "";
     my $delete = $request->param('delete.x') ? "delete" : "";    
@@ -194,15 +194,15 @@ sub handler
     remove() if $action eq "delete";
   }
 
-  if ($params[0] eq 'savegroup' && !$error)
+  if ($params[0] eq 'savegroup' && !$error && $request->method eq "POST")
   { $url = '.admin-message'; 
     savemessagegroup();
   }
 
-  if ($params[0] eq 'copy' && !$error)
+  if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
   { copy(); }
 
-  if ($params[0] eq 'remove' && !$error)
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { remove();  }
 
   if ($params[0] eq 'remove' && $request->param("id"))

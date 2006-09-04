@@ -148,7 +148,7 @@ sub handler
   my @params = $request->param;
   my @checkboxes = grep { /^check\d*$/ } sort { $a <=> $b } @params;
 
-  if ($action eq "upload" && $filename && defined($path) && $writeperms)
+  if ($action eq "upload" && $filename && defined($path) && $writeperms && $request->method() eq "POST")
   { my $upload = $request->upload("filename");
     set_$error("File could not be uploaded. If this problem persists, submit a bug report.") if !$upload;
     my $fh = $upload->fh;
@@ -173,7 +173,7 @@ sub handler
   if ($action eq "upload" && $filename && defined($path) && !$writeperms)
   { set_error("You do not have valid permissions for this operation : File Upload"); }
   
-  if ($action eq "createfolder" && $foldername && $chroot.$path && $execperms)
+  if ($action eq "createfolder" && $foldername && $chroot.$path && $execperms && $request->method eq "POST")
   { if (-e "$chroot$path/$foldername" && -d "$chroot$path/$foldername") { set_error("You're trying to create a folder that already exists!"); }
     else { mkdir ("$chroot$path/$foldername") || set_error("Unable to create folder. Does the document root directory have correct permissions? ($!)"); }
   }
@@ -181,7 +181,7 @@ sub handler
   if ($action eq "createfolder" && $foldername && $chroot.$path && !$execperms)
   { set_error("You do not have valid permissions for this operation : Create Folder"); }
       
-  if ($action eq "copy" && $filename && defined($path) && $target && $writeperms)
+  if ($action eq "copy" && $filename && defined($path) && $target && $writeperms && $request->method eq "POST")
   { if (-e "$chroot$path/$target" && !-d "$chroot$path/$target") { set_error("You're trying to copy to a file that already exists!"); }
     else { copy("$chroot$path/$filename","$chroot$path/$target") ||  set_error("Unable to copy file. Does the document root directory have correct permissions? ($!)"); }
   }
@@ -189,7 +189,7 @@ sub handler
   if ($action eq "copy" && $filename && defined($path) && $target && !$writeperms)
   { set_error("You do not have valid permissions for this operation : Copy File"); }
   
-  if ($action eq "delete" && $filename && defined($path) && $writeperms)
+  if ($action eq "delete" && $filename && defined($path) && $writeperms && $request->method eq "POST")
   { if (!-e "$chroot$path/$filename") { set_error("You're trying to delete a file that doesn't exist!"); }
      else { unlink("$chroot$path/$filename") || set_error("Unable to delete file. Does the document root directory have correct permissions? ($!)"); }
   }
@@ -197,7 +197,7 @@ sub handler
   if ($action eq "delete" && $filename && defined($path) && !$writeperms)  
   { set_error("You do not have valid permissions for this operation : Delete File"); }
       
-  if ($action eq "rename" && $filename && defined($path) && defined($target) && $writeperms)
+  if ($action eq "rename" && $filename && defined($path) && defined($target) && $writeperms && $request->method eq "POST")
   { if (-e "$chroot$path/$target" && !-d "$chroot$path/$target") { set_error("You\'re trying to rename to a filename that already exists!"); }
     else { rename("$chroot$path/$filename","$chroot$path/$target") || set_error("Unable to rename file. Does the document root directory have correct permissions? ($!)"); }
   }

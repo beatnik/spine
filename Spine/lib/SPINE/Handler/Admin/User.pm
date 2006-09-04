@@ -120,15 +120,15 @@ sub handler
     $url = '.admin-general'; 
   }
 
-  if ($params[0] eq 'new'  && !$error)
+  if ($params[0] eq 'new'  && !$error && $request->method eq "POST")
   { $user_dbi->add(SPINE::Base::User->new({usergroup=>"users",login=>$request->param('login'), fullname=>$request->param('fullname')})); 
     $usergroup_dbi->add(SPINE::Base::Usergroup->new({usergroup=>"users",username=>$request->param('login')})); 
   }
 
-  if ($params[0] eq 'save' && !$error)
+  if ($params[0] eq 'save' && !$error && $request->method eq "POST")
   { save(); }
 
-  if ($params[0] eq 'remove' && !$error)
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { remove(); }
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};

@@ -130,13 +130,13 @@ sub handler
     $url = '.admin-access'; 
   }
 
-  if (($params[0] eq 'save')  && !$error)
-  { save(); 
+  if (($params[0] eq 'save')  && !$error && $request->method eq "POST")
+  { save();
     $url = '.admin-access';
   }
 
-  if ($params[0] eq 'remove' && !$error)
-  { remove(); 
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
+  { remove();
   }
 
   my $edit_adminaccess = shift @{$adminaccess_dbi->get({section=>$request->param('section'), usergroup=>$request->param('usergroup')}, count=>1)};
@@ -149,12 +149,12 @@ sub handler
   if (!ref $content)
   { return (SPINE::Base::Content::default(),$SPINE::Transparent::Constant::NOT_FOUND); }
 
-  if ($params[0] eq 'new' && $request->param("section") && $request->param("usergroup"))
+  if ($params[0] eq 'new' && $request->param("section") && $request->param("usergroup") && $request->method eq "POST")
   { my $read = defined($request->param('read')) ? $request->param('read') : 0;
     my $write = defined($request->param('write')) ? $request->param('write') : 0;
     my $exec = defined($request->param('exec')) ? $request->param('exec') : 0;
     my $permissions = $read.$write.$exec;
-    $adminaccess_dbi->add(SPINE::Base::Adminaccess->new({section=>$request->param('section'), usergroup=>$request->param('usergroup'), permissions=>$permissions})); 
+    $adminaccess_dbi->add(SPINE::Base::Adminaccess->new({section=>$request->param('section'), usergroup=>$request->param('usergroup'), permissions=>$permissions}));
   }
 
   my $body = $content->body if ref $content;
@@ -196,7 +196,6 @@ sub remove
 { my $adminaccess = $adminaccess_dbi->get({id=>$request->param('id'), count=>1});
   $adminaccess_dbi->delete($adminaccess) if $adminaccess;
 }
-
 
 1;
 __END__

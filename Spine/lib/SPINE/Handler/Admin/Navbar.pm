@@ -174,7 +174,7 @@ sub handler
     $url = '.admin-general'; 
   }
  
-  if ($params[0] eq 'new' && !$error)
+  if ($params[0] eq 'new' && !$error && $request->method eq "POST")
   { my $n = SPINE::Base::Navbar->default(); 
     $n->name($page); $n->owner($user);
     my ($sec,$min,$hour,$day,$mon,$year) = localtime;
@@ -187,7 +187,7 @@ sub handler
   if ($params[0] eq 'edit' && !$error)
   { $url = '.admin-navbar'; }
 
-  if ($params[0] eq 'editbutton' && !$error)
+  if ($params[0] eq 'editbutton' && !$error && $request->method eq "POST")
   { $url = '.admin-navbar'; 
     # This part catches the image as button bug in IE.
     my $save = $request->param('save.x') ? "save" : "";
@@ -201,7 +201,7 @@ sub handler
     movedown() if $action eq "movedown";          
   }
 
-  if ($params[0] eq 'addbutton' && !$error)
+  if ($params[0] eq 'addbutton' && !$error && $request->method eq "POST")
   { my $edit_navbar = shift @{$navbar_dbi->get({name=>$page, count=>1})};
     my $n = SPINE::Base::Button->default(); 
     $url = '.admin-navbar'; 
@@ -217,17 +217,17 @@ sub handler
     $navbar_dbi->update($edit_navbar);
   }
   
-  if ($params[0] eq 'save' && !$error)
+  if ($params[0] eq 'save' && !$error && $request->method eq "POST")
   { $url = '.admin-navbar'; 
     save();
   }
 
-  if ($params[0] eq 'copy' && !$error)
+  if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
   { $url = '.admin-general'; 
     copy();
   }
 
-  if ($params[0] eq 'remove' && !$error)
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { $url = '.admin-general'; 
     remove();
   }

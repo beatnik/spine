@@ -101,7 +101,7 @@ sub handler
     $url = '.admin-usergroup'; 
   }
   
-  if ($params[0] eq 'remove' && !$error)
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { remove(); 
   }
 
@@ -115,7 +115,7 @@ sub handler
   if (!ref $content)
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
 
-  if ($params[0] eq 'new' && $request->param("usergroup") && $request->param("username"))
+  if ($params[0] eq 'new' && $request->param("usergroup") && $request->param("username") && $request->method eq "POST")
   { $usergroup_dbi->add(SPINE::Base::Usergroup->new({usergroup=>$request->param('usergroup'), username=>$request->param('username')})); }
 
   my $body = $content->body if ref $content;

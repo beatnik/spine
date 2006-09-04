@@ -160,7 +160,7 @@ sub handler
     $url = '.admin-general'; 
   }
  
-  if ($params[0] eq 'new' && !$error)
+  if ($params[0] eq 'new' && !$error && $request->method eq "POST")
   { my $s = SPINE::Base::Style::default();
     $s->name($page); $s->owner($user);
     $style_dbi->add($s); 
@@ -170,17 +170,17 @@ sub handler
   if ($params[0] eq 'edit' && !$error)
   { $url = '.admin-style'; }
   
-  if ($params[0] eq 'save' && !$error)
+  if ($params[0] eq 'save' && !$error && $request->method eq "POST")
   { $url = '.admin-style'; 
     save();
   }
 
-  if ($params[0] eq 'copy' && !$error)
+  if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
   { $url = '.admin-general'; 
     copy();
   }
 
-  if ($params[0] eq 'remove' && !$error)
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { $url = '.admin-general'; 
     remove();
   }

@@ -146,17 +146,17 @@ sub handler
   if ($params[0] eq 'edit' && !$error)
   { $url = '.admin-wiki'; }
   
-  if ($params[0] eq 'save' && !$error)
+  if ($params[0] eq 'save' && !$error && $request->method eq "POST")
   { $url = '.admin-wiki'; 
     save();
   }
 
-  if ($params[0] eq 'copy' && !$error)
+  if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
   { $url = '.admin-general'; 
     copy();
   }
 
-  if ($params[0] eq 'remove' && !$error)
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { $url = '.admin-general'; 
     remove();
   }

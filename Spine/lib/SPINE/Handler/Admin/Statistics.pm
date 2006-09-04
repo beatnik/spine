@@ -104,7 +104,7 @@ sub handler
   if ($params[0] eq 'view' && !$error)
   { $url = '.admin-stats'; }
   
-  if ($params[0] eq 'remove' && !$error)
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { $url = '.admin-stats-general'; 
     remove($request);
   }

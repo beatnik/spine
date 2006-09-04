@@ -159,7 +159,7 @@ sub handler
     $url = '.admin-general'; 
   }
 
-  if ($params[0] eq 'new' && !$error)
+  if ($params[0] eq 'new' && !$error && $request->method eq "POST")
   { my $c = SPINE::Base::Content::default(); 
     $c->name($page); $c->owner($user);
     my ($sec,$min,$hour,$day,$mon,$year) = localtime;
@@ -172,17 +172,17 @@ sub handler
   if ($params[0] eq 'edit' && !$error)
   { $url = '.admin-content'.$lang; }
   
-  if ($params[0] eq 'save' && !$error)
+  if ($params[0] eq 'save' && !$error && $request->method eq "POST")
   { $url = '.admin-content'.$lang; 
     save();
   }
 
-  if ($params[0] eq 'copy' && !$error)
+  if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
   { $url = '.admin-general'.$lang;
     copy();
   }
 
-  if ($params[0] eq 'remove' && !$error)
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { $url = '.admin-general'.$lang; 
     remove();
   }

@@ -148,8 +148,8 @@ sub handler
     $url = '.admin-general'; 
   }
 
-  if (($params[0] eq 'save')  && !$error)
-  { save(); 
+  if (($params[0] eq 'save')  && !$error && $request->method eq "POST")
+  { save();
     $url = '.admin-macro';
     $params[0] = "edit";
   }
@@ -157,14 +157,14 @@ sub handler
   if ($request->param('name') && ($params[0] eq 'edit' || $params[0] eq 'new' || ($params[0] eq 'remove' && $request->param('id') ) ) )
   { $url = '.admin-macro'; }
 
-  if ($params[0] eq 'remove' && !$error)
-  { remove(); 
+  if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
+  { remove();
     $url = '.admin-general' if (!$request->param('id'));
   }
 
-  if ($params[0] eq 'copy' && !$error)
+  if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
   { $url = '.admin-general'; 
-    copy(); 
+    copy();
   }
 
   my $edit_macro = shift @{$macro_dbi->get({name=>$request->param('name')}, count=>1)};
@@ -177,7 +177,7 @@ sub handler
   if (!ref $content)
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
   
-  if ($params[0] eq 'new' && $request->param("key") && $request->param("name") && !$error)
+  if ($params[0] eq 'new' && $request->param("key") && $request->param("name") && !$error && $request->method eq "POST")
   { $macro_dbi->add(SPINE::Base::Macro->new({name=>$request->param('name'), macrokey=>$request->param('key'), macrovalue=>$request->param('value')})); }
 
   my $body = $content->body if ref $content;

@@ -61,8 +61,10 @@ sub handler
   my $save = $request->param('save.x') ? "save" : "";
   my $delete = $request->param('delete.x') ? "delete" : "";    
   my $action = $save || $delete; 
-  savelanguage() if $action eq "save";
-  deletebutton() if $action eq "delete";
+  if ($request->method eq "POST" && $action eq "save")
+  { savelanguage(); }
+  if ($request->method eq "POST" && $action eq "delete")
+  { deletebutton(); }
 
   my @attributes = @{ $attribute_dbi->get( {section=>"i18n", attr => "en" }) };
   my $body = "";
