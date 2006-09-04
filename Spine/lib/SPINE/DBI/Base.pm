@@ -96,33 +96,45 @@ sub get
     my $narrow;
     my $field;
     my $found;
+    my @placeholders = ();
     while($field = shift @fields) 
     { $found = "";
       if( grep { $field eq $_ } @{$self->{NUMERIC}} ) 
       { ($params{$field}) = $params{$field} =~ /(\d*)/;
-        $narrow .= " $field = $params{$field}"; 
+        push(@placeholders,$params{$field});
+        $narrow .= " $field = ?"; 
         $found++;
       }
       if( grep { $field eq $_ } @{$self->{NON_NUMERIC}} )
-      { $narrow .= " $field = ".$self->{_HANDLER}->quote($params{$field}); 
+      { my $value = $self->{_HANDLER}->quote($params{$field});
+        $value =~ s/^'//; $value =~ s/'$//;
+        push(@placeholders,$value);
+        $narrow .= " $field = ?"; 
         $found++;
       } 
       if($fields[0] && $found) { $narrow .= " $searchtype "; }
     }
     $narrow = "where$narrow" if $narrow;
     #($sortfield) = $sortfield =~ /(\w*)/;
+    if (defined($limit))
+    { ($limit) = $limit =~ /(\d*)/;
+      $limit ||= 1;
+    }
+    if (defined($offset))
+    { ($offset) = $offset =~ /(\d*)/; }
+    
     my $statement = "select * from $self->{TABLE} $narrow order by $sortfield";
     if ($self->{_HANDLER}->{Driver}->{Name} eq "mysql")
     { if (defined($limit) && defined($offset))
-      { $statement .= " limit $offset, $limit"; }
+      { $statement .= " limit $offset,$limit"; }
     }
     if ($self->{_HANDLER}->{Driver}->{Name} eq "Pg")
-    { $statement .= " limit $limit" if defined($limit);
-      $statement .= " offset $offset" if defined($offset);    
+    { if (defined($limit)) { $statement .= " limit $limit"; }
+      if (defined($offset)) { $statement .= " offset $offset"; }
     }
     warn $statement if $SPINE::DBI::Base::DEBUGTABLE eq $self->{TABLE};
     my $sth = $self->{_HANDLER}->prepare($statement); 
-    $sth->execute();
+    $sth->execute(@placeholders);
     my $record = "";
     my $hashref = "";
     my @records = ();
@@ -194,17 +206,22 @@ sub getlist
   if (%params) 
   { my @fields = keys %params;
     my $narrow = '';
-    my $foo = '';
+    my $value = '';
     my $found = '';
-    while($foo = shift @fields) 
+    my @placeholders = ();
+    while($value = shift @fields) 
     { $found = "";
-      if( grep { $foo eq $_ } @{$self->{NUMERIC}} ) 
-      { ($params{$foo}) = $params{$foo} =~ /(\d*)/;
-        $narrow .= " $foo = $params{$foo}"; 
+      if( grep { $value eq $_ } @{$self->{NUMERIC}} ) 
+      { ($params{$value}) = $params{$value} =~ /(\d*)/;
+        $narrow .= " $value = ?"; 
+	push(@placeholders,$params{$value});
         $found++;
       }
-      if( grep { $foo eq $_ } @{$self->{NON_NUMERIC}} )
-      { $narrow .= " $foo = ".$self->{_HANDLER}->quote($params{$foo}); 
+      if( grep { $value eq $_ } @{$self->{NON_NUMERIC}} )
+      { $narrow .= " $value = ?";
+        my $qvalue = $self->{_HANDLER}->quote($params{$value});
+        $qvalue =~ s/^'//; $qvalue =~ s/'$//;
+        push(@placeholders,$qvalue);
         $found++;
       } 
       if($fields[0] && $found) { $narrow .= " $searchtype "; }
@@ -214,7 +231,7 @@ sub getlist
     ($sortfield) = $sortfield =~ /(\w*)/;
     my $statement = "select $field from $self->{TABLE} $narrow order by $sortfield";
     my $sth = $self->{_HANDLER}->prepare($statement); 
-    $sth->execute();
+    $sth->execute(@placeholders);
     my $f = "";
     my @records = ();
     while (($f)  = $sth->fetchrow_array()) 
@@ -241,19 +258,25 @@ sub update
   if(ref $record eq "SPINE::Base::$self->{MODULE}") 
   { my $update = '';
     my %record = $record->tohash;
+    my @placeholders = ();
     for(@{$self->{NUMERIC}}) 
     { if($_ eq 'id') { next; } 
       ($record{$_}) = $record{$_} =~ /(\d*)/;
-      $update .= "$_ = $record{$_}, ";
+      push(@placeholders,$record{$_});
+      $update .= "$_ = ?, ";
     }
     for(@{$self->{NON_NUMERIC}})  
     { if($_ eq 'name') { next; } 
-      $update .= "$_ = ".$self->{_HANDLER}->quote($record{$_}).", "; 
+      my $value = $self->{_HANDLER}->quote($record{$_});
+      $value =~ s/^'//; $value =~ s/'$//;
+      push(@placeholders,$value);
+      $update .= "$_ = ?, "; 
     }
     chop $update; chop $update; 
-    $update .= " where id = $record{id}"; 
+    $update .= " where id = ?"; 
+    push(@placeholders,$record{id});
     my $sth = $self->{_HANDLER}->prepare("update $self->{TABLE} set $update");
-    $sth->execute();
+    $sth->execute(@placeholders);
     $sth->finish;
   }
 }
@@ -267,16 +290,21 @@ sub add
     my $fields = join (",",@fields);
     my $add = "insert into $self->{TABLE} ($fields) values ("; 
     my (%record) = $record->tohash;
+    my @placeholders = ();
     for my $field (@fields) 
     { if (grep { $_ eq $field } @{$self->{NUMERIC}}) 
-      { ($record{$field}) = $record{$field} =~ /(\d*)/; $add .= "$record{$field}, "; }
+      { ($record{$field}) = $record{$field} =~ /(\d*)/; push(@placeholders, $record{$field}); $add .= "?, "; }
       if (grep { $_ eq $field } @{$self->{NON_NUMERIC}}) 
-      { $add .= $self->{_HANDLER}->quote($record{$field}).", "; } 
+      { my $value = $self->{_HANDLER}->quote($record{$field});
+        $value =~ s/^'//; $value =~ s/'$//;
+        push(@placeholders,$value);
+        $add .= "?, ";
+      } 
     }
     chop $add; chop $add;
     $add .= " )";
     my $sth = $self->{_HANDLER}->prepare($add);
-    $sth->execute();
+    $sth->execute(@placeholders);
     #Fix this!
     #Mysql uses select id from $self->{TABLE} where id = last_insert_id()
     #Postgres uses $sth->{pg_oid_status}
