@@ -57,7 +57,8 @@ sub handler
   my $session_dbi = SPINE::DBI::Session->new($dbh);  
   my $user_dbi = SPINE::DBI::User->new($dbh);  
   my $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);  
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   my $loadpage = 0;
 
   for my $content (@{$content_dbi->get("sort"=>"name")})

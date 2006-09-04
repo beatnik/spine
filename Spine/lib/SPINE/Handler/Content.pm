@@ -91,7 +91,8 @@ sub handler
   
     my $page = $content;
     $content = shift @{$content_dbi->get({name=>$main, count=>1})} || SPINE::Base::Content::default(); 
-    my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+    my $session = undef;
+    $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
     if (($session && !$session->username) || !$session)
     { $session = $s if ($s && $s->username); }
     if ($session && $session->host eq scalar($tr_req->remote_host()) && $session->username)
@@ -122,12 +123,14 @@ sub handler
     $style = shift @{$style_dbi->get({name=>$content->style, count=>1})} || SPINE::Base::Style::default(); 
   }
 
-  my $body = $style->body if ref $style;
+  my $body = undef;
+  $body = $style->body if ref $style;
   while ($body =~ s/(<\?SPINE_(Macro[^\?]*)\?>)/process_handler($1,$2,$dbh,$request,$style)/ge) 
   { #
   }
 
-  my $cbody = $content->body if ref $content;
+  my $cbody = undef;
+  $cbody = $content->body if ref $content;
   if (defined $cbody)
   { if ($content->breaks) { $cbody =~  s/\n/<BR>/g; }
     $body =~ s/<\?SPINE_Content\?>/$cbody/;

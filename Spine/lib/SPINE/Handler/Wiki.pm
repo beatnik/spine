@@ -62,7 +62,8 @@ sub handler
   if ($wiki)
   { my $user = shift @{$user_dbi->get({login=>$wiki->owner})};
   
-    my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+    my $session = undef;
+    $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
     # if (($session && !$session->username) || !$session)
     #{ $session = $s if ($s && $s->username); }
     my $writewperms = $wiki->permissions & WRITEWPERMISSIONS;

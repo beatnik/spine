@@ -56,7 +56,8 @@ sub handler
   #attribute: url
   #limit returned values to the first
   my ($foo) = @{$attributes_dbi->get(name=>"counter",section=>"stats",attr=>$url, count=>1)};
-  my %hash = %{$foo} if $foo;
+  my %hash = ();
+  %hash = %{$foo} if $foo;
   $body = $hash{'VALUE'} || 0;
   #The value is stored in $hash{"VALUE"}
   

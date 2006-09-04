@@ -58,7 +58,8 @@ sub handler
 
   if ($params[0] eq '"hits"')
   { my ($foo) = @{$attributes_dbi->get(name=>"counter",section=>"stats",attr=>$url, count=>1)};
-    my %hash = %{$foo} if $foo;
+    my %hash = ();
+    %hash = %{$foo} if $foo;
     $body = $hash{'VALUE'} || 0;
   }
   

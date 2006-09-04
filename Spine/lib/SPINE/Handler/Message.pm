@@ -88,7 +88,8 @@ sub handler
   ($limit) = $limit =~ /^(\d*)$/;
   my $offset = $r->param('offset');
   my ($order_hash) = shift @{$attribute_dbi->get(section=>"message",attr=>"order",name=>"$group")};
-  my %order_hash = %{ $order_hash} if $order_hash;
+  my %order_hash = ();
+  %order_hash = %{ $order_hash} if $order_hash;
   ($offset) = $offset =~ /^(\d*)$/;  
   #Ugh.. I really need to comment this code
   my @narrow = ();
@@ -108,18 +109,20 @@ sub handler
     @messages = @ { $message_dbi->get( { "id"=>$id, "mgroup"=>$group, @narrow } ) }; }
   else 
   { @messages = @{ $message_dbi->get(@narrow) } ; }
-  for $message (@messages)
+  for my $message (@messages)
   { next if ref($message) ne "SPINE::Base::Message";
     my $mbody = $tbody;
     my $date = $message->mdate; #First date eh??
     my ($year,$month,$day,$hour,$minute,$second) = $date =~ /^(\d{4})\-(\d{2})\-(\d{2}) (\d{2})\:(\d{2})\:(\d{2})$/;
     $month--;
     my $id = $message->id;
-    my @comments = @{ $message_dbi->get({ mgroup=>$group, parent=>$id }) } if $id;
+    my @comments = ();
+    @comments = @{ $message_dbi->get({ mgroup=>$group, parent=>$id }) } if $id;
     my $time = timelocal($second,$minute,$hour,$day,$month,$year);
     my $wday = (localtime($time))[6];
     my $parent = shift @ { $message_dbi->get( { "id"=>$message->parent, "mgroup"=>$group, count=>1} ) };
-    my $parent_subject = $parent->subject if $parent;
+    my $parent_subject = undef;
+    $parent_subject = $parent->subject if $parent;
     my $datetime = "$days[$wday] $months[$month] $day, $year ($hour:$minute:$second)";
     $date = "$days[$wday] $months[$month] $day $year";
     $time = "$hour:$minute:$second";

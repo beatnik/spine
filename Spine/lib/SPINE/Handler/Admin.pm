@@ -51,7 +51,6 @@ sub handler
   my $url = $request->uri;
   my $location = $request->location;
   $url =~ s/^$location\/?//;
-
   ($url,@params) = split("/",$url);
   if (!$url)
   { $url = $main; }
@@ -62,8 +61,10 @@ sub handler
 
   my $content = undef;
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
-  my $user = shift @{$user_dbi->get({login=>$session->username, count=>1})} if $session;
+  my $session = undef;
+  $undef = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $user = undef;
+  $user = shift @{$user_dbi->get({login=>$session->username, count=>1})} if $session;
 
   unless($session && $user && $session->username eq $user->login && $session->host eq $th_req->remote_host)
   { $content = shift @{$content_dbi->get({name=>$main, count=>1})};
