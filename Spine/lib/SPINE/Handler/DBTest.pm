@@ -23,6 +23,8 @@ package SPINE::Handler::DBTest;
 #Apache::Request Handler
 #DB Handler
 
+use warnings;
+
 use SPINE::DBI::Attribute;
 use SPINE::Transparent::Request;
 use strict;

@@ -22,6 +22,7 @@ package SPINE::Handler::Admin::File;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.45 $
 
+use warnings;
 use strict;
 
 use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $macro_dbi $adminaccess_dbi $session_dbi $attribute_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms %i18n %default);
@@ -221,7 +222,7 @@ sub handler
     closedir(DIR);
     @files = grep { $_ !~ /^\.\.?$/ } @files;
     for(@files)
-    { next if (!-d $chroot.$path."/".$_ and !-f $chroot.$path."/".$_);
+    { next if ( !-d "$chroot$path/$_" and !-f "$chroot$path/$_");
       my $type = -d $chroot.$path."/".$_ ? "folder.jpg" : "file.jpg";
       my (@stat) = stat($chroot.$path."/".$_);
       $stat[7] = '-' if $type eq "folder.jpg";    
@@ -347,7 +348,7 @@ EOF
   return $content;
 }
 
-sub set_error { $error = shift @_; }
+sub set_error { $error = shift @_; return; }
 
 1;
 __END__

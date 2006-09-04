@@ -23,6 +23,7 @@ package SPINE::Handler::Macro;
 #Request Handler
 #DB Handler
 
+use warnings;
 use strict;
 
 use SPINE::Constant;
@@ -32,8 +33,6 @@ use Data::Dumper;
 
 use vars qw($VERSION);
 $VERSION = $SPINE::Constant::VERSION;
-
-#Fix all this!!
 
 sub handler 
 { my $r = shift; #Apache::Request

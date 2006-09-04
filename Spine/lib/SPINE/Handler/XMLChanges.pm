@@ -23,8 +23,10 @@ package SPINE::Handler::XMLChanges;
 #Apache::Request Handler
 #DB Handler
 
+use warnings;
 use strict;
 use vars qw($VERSION);
+
 use Time::Local qw(timelocal);
 use Data::Dumper;
 

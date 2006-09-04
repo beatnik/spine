@@ -22,7 +22,9 @@ package Apache2::SPINE::Log;
 
 #This is the log handler for mod_spine
 
+use warnings;
 use strict;
+
 use Apache2::Const qw(:common);
 use SPINE::DBI::Content;
 use SPINE::Constant;

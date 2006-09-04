@@ -22,6 +22,8 @@ package SPINE::Handler::Admin::Wiki;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.54 $
 
+use warnings;
+
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
 use SPINE::DBI::Style;
@@ -259,6 +261,7 @@ sub save
   }
   else
   { $ierror = 'You do not have valid permissions for this operation : Save wiki<br>'; }
+  return;
 }
 
 sub copy
@@ -269,6 +272,7 @@ sub copy
     $wiki->id(0);
     $wiki_dbi->add($wiki);
   }
+  return;
 }
 
 sub remove 
@@ -276,7 +280,8 @@ sub remove
 { my $wiki = shift @{$wiki_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $wiki->owner eq $user || 
       $wiki->permissions =~ /^\11/ || $wiki->permissions =~ /11$/)  
-  { $wiki_dbi->delete($wiki); }
+  { $wiki_dbi->remove($wiki); }
+  return;
 }
 
 1;

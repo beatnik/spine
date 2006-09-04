@@ -22,6 +22,8 @@ package SPINE::Handler::Admin::Message;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.52 $
 
+use warnings;
+
 use SPINE::DBI::Content;
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
@@ -348,6 +350,7 @@ sub savemessagegroup
   $messagegroup->content($request->param('content')) if ref $messagegroup;  
   $messagegroup->usergroup($request->param('usergroup')) if ref $messagegroup;
   $messagegroup_dbi->update($messagegroup);
+  return;
 }
 
 sub save
@@ -357,6 +360,7 @@ sub save
   $message->body($request->param('body')) if ref $message;
   $message->mdate($request->param('mdate')) if ref $message;
   $message_dbi->update($message);
+  return;
 }
 
 sub copy
@@ -368,6 +372,7 @@ sub copy
   { $message->mgroup($request->param('target'));
     $message_dbi->add($message);
   }
+  return;
 }
 
 sub remove
@@ -375,13 +380,14 @@ sub remove
   { my $messagegroup = shift @{$messagegroup_dbi->get({name=>$request->param('name'), count=>1})};
     my @messages = @{ $message_dbi->get({mgroup=>$request->param('name')}) } ;
     for my $message (@messages)
-    { $message_dbi->delete($message); }
-    $messagegroup_dbi->delete($messagegroup);
+    { $message_dbi->remove($message); }
+    $messagegroup_dbi->remove($messagegroup);
   }
   if ($request->param('name') && $request->param('id') ) 
   { my $message = shift @{ $message_dbi->get({mgroup=>scalar $request->param('name'), id=>scalar $request->param('id') }) } ;
-    $message_dbi->delete($message);
+    $message_dbi->remove($message);
   }
+  return;
 }
 
 1;

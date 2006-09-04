@@ -23,6 +23,7 @@ package SPINE::Handler::Search;
 #Apache::Request Handler
 #DB Handler
 
+use warnings;
 use strict;
 use vars qw($VERSION);
 use Data::Dumper;

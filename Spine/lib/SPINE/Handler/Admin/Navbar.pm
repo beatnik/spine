@@ -22,6 +22,8 @@ package SPINE::Handler::Admin::Navbar;
 
 ## $Author: beatnik $ - $Date: 2006/02/22 20:37:54 $ - $Revision: 1.40 $
 
+use warnings;
+
 use Data::Dumper;
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
@@ -401,6 +403,7 @@ sub save
     $navbar->modified("$year-$mon-$day $hour:$min:$sec") if ref $navbar;
     $navbar_dbi->update($navbar);
   }
+  return;
 }
 
 sub savebutton
@@ -429,6 +432,7 @@ sub savebutton
     $navbarbutton_dbi->update($button);
   } else 
   { $ierror = $valid_perms_string.$save_navbar_string; }
+  return;
 }
 
 sub moveup
@@ -453,6 +457,7 @@ sub moveup
       $navbarbutton_dbi->update($button);
     }
   }
+  return;
 }
 
 sub movedown
@@ -476,6 +481,7 @@ sub movedown
       $navbarbutton_dbi->update($button);
     }
   }
+  return;
 }
 
 sub deletebutton
@@ -483,7 +489,7 @@ sub deletebutton
   my $navbar = shift @{$navbar_dbi->get({name=>$request->param('name'), count=>1 })};
   if ($user eq 'admin' || $navbar->owner eq $user || 
       $navbar->permissions =~ /^\d1/ || $navbar->permissions =~ /\d1$/)
-  { $navbarbutton_dbi->delete($button);
+  { $navbarbutton_dbi->remove($button);
     my ($sec,$min,$hour,$day,$mon,$year) = localtime;
     $mon++; $year += 1900;
     $navbar->modified("$year-$mon-$day $hour:$min:$sec") if ref $navbar;
@@ -499,6 +505,7 @@ sub deletebutton
       }
     }
   }
+  return;
 }
 
 sub copy
@@ -516,6 +523,7 @@ sub copy
       $navbarbutton_dbi->add($button); 
     }
   }
+  return;
 }
 
 sub remove #Document: You need both read and write permissions to delete a navbar
@@ -524,9 +532,10 @@ sub remove #Document: You need both read and write permissions to delete a navba
       $navbar->permissions =~ /^\11/ || $navbar->permissions =~ /11$/)  
   { my @buttons = @{$navbarbutton_dbi->get({navbar=>$navbar->id})};
     for(@buttons)
-    { $navbarbutton_dbi->delete($_); }
-    $navbar_dbi->delete($navbar); 
+    { $navbarbutton_dbi->remove($_); }
+    $navbar_dbi->remove($navbar); 
   }
+  return;
 }
 
 1;

@@ -20,6 +20,7 @@ package SPINE::DBI::Message;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
 
+use warnings;
 use strict;
 use DBI;
 use SPINE::Base::Message;

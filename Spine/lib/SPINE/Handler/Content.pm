@@ -23,6 +23,8 @@ package SPINE::Handler::Content;
 #Apache::Request Handler
 #DB Handler
 
+use warnings;
+
 use SPINE::DBI::Content;
 use SPINE::DBI::Style;
 use SPINE::DBI::User;

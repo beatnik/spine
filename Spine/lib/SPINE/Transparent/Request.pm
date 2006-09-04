@@ -20,6 +20,7 @@ package SPINE::Transparent::Request;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
 
+use warnings;
 use strict;
 use vars qw($VERSION);
 use Data::Dumper;

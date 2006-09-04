@@ -23,7 +23,9 @@ package Apache2::SPINE::Index;
 #This is the main content handler for mod_spine
 #This is the ONLY content handler for mod_spine... for now
 
+use warnings;
 use strict;
+
 use Apache2::Const qw(:common REDIRECT);
 use Apache2::Request; #This one is SWEEEEEEEEEEET!!
 use Apache2::RequestIO qw(print);
@@ -110,7 +112,7 @@ sub handler
   if ($req->param('button') eq 'logout')
   #Log out??
   { my %cookies = Apache2::Cookie->fetch;
-    $session_dbi->delete($cookies{'key'}->value) if $cookies{'key'};
+    $session_dbi->remove($cookies{'key'}->value) if $cookies{'key'};
     #Check if a cookie exists with key key.. Delete the session if it does
     $cookie = Apache2::Cookie->new($req,
                              -name    =>  'key', 

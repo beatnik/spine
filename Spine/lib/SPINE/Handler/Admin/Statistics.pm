@@ -22,6 +22,8 @@ package SPINE::Handler::Admin::Statistics;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.31 $
 
+use warnings;
+
 use SPINE::DBI::Statistics;
 use SPINE::DBI::Content;
 use SPINE::DBI::Adminaccess;
@@ -169,9 +171,10 @@ sub handler
 
 sub remove 
 { my $stats = shift @{$stats_dbi->get(name=>scalar($request->param('name')))};
-  $stats_dbi->delete($stats);
+  $stats_dbi->remove($stats);
   my $counter = shift @{$attribute_dbi->get(section=>"stats",name=>"counter",attr=>scalar($request->param('name')))};
-  $attribute_dbi->delete($counter);
+  $attribute_dbi->remove($counter);
+  return;
 }
 
 1;

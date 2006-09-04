@@ -22,7 +22,9 @@ package SPINE::Base::Adminaccess;
 
 use vars qw($VERSION @NUMERIC @NON_NUMERIC %fields $AUTOLOAD);
 use strict;
+
 use warnings;
+
 no warnings 'redefine';
 use SPINE::Constant;
 

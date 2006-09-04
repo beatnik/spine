@@ -20,6 +20,7 @@ package SPINE::DBI::Statistics;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
 
+use warnings;
 use strict;
 use DBI;
 use Data::Dumper;
@@ -65,13 +66,14 @@ sub getlist
   return \@list;
 }
 
-sub delete
+sub remove
 { my $self = shift;
   my %rec = % { shift @_ };
   my $name = $rec{"name"};
   { my $sth = $self->{_HANDLER}->prepare("delete from statistics where name = \"$name\"");
     $sth->execute();
   }
+  return;
 }
 
 1;

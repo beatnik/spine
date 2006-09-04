@@ -22,6 +22,9 @@ package SPINE::Handler::Admin::Language;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.18 $
 
+use warnings;
+use strict;
+
 use SPINE::DBI::Session;
 use SPINE::DBI::User;
 use SPINE::DBI::Macro;
@@ -32,8 +35,6 @@ use SPINE::DBI::Attribute;
 use SPINE::Constant;
 
 use Data::Dumper;
-
-use strict;
 
 use SPINE::Transparent::Constant;
 use SPINE::Transparent::Request;
@@ -93,11 +94,13 @@ sub savelanguage
 { my $language = $attribute_dbi->get({id => $request->param('id')});
   $language->value($request->param('value')) if ref $language;
   $attribute_dbi->update($language) if $language;
+  return;
 }
 
 sub deletelanguage
 { my $language = $attribute_dbi->get({id => $request->param('id')});
-  $attribute_dbi->delete($language) if $language;
+  $attribute_dbi->remove($language) if $language;
+  return;
 }
 
 

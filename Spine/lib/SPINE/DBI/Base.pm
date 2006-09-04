@@ -20,6 +20,7 @@ package SPINE::DBI::Base;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
 
+use warnings;
 use strict;
 use DBI;
 use Data::Dumper;
@@ -166,7 +167,7 @@ sub get
   my $i = 0;
   while($hashref = $sth->fetchrow_hashref())
   { eval qq{ use SPINE::Base::$self->{MODULE}; \$record = SPINE::Base::$self->{MODULE}->new(\$hashref); };
-    join("_-_",caller).$@ if $@;
+    if ($@) { warn $@ , join("_-_",caller); }
     push(@records,$record); 
     $i++;
     last if $i == $count;
@@ -279,6 +280,7 @@ sub update
     $sth->execute(@placeholders);
     $sth->finish;
   }
+  return;
 }
 
 sub add
@@ -320,7 +322,7 @@ sub add
   return $id;
 }
 
-sub delete
+sub remove
 { my $self = shift;
   my $id = shift;
   if (ref $id eq "SPINE::Base::$self->{MODULE}") { $id = $id->id; } 
@@ -330,6 +332,7 @@ sub delete
     $sth->execute($id);
     $sth->finish;
   }
+  return;
 }
 
 sub fields
@@ -556,15 +559,15 @@ Create one inplace:
 
   my $new_id = $content_dbi->add( SPINE::Base::Content->new( { "name" => "foo" } ) );
 
-=item delete
+=item remove
 
-The C<delete> method is used to delete an existing record from the database.
+The C<remove> method is used to delete an existing record from the database.
 
-  $content_dbi->delete( 5 ); # Delete record with ID 5
+  $content_dbi->remove( 5 ); # Delete record with ID 5
 
   my $content = $content_dbi->get( 5 ); #Get content with ID = 5
 
-  $content_dbi->delete( $content ); # Retrieve record ID from object and delete it
+  $content_dbi->remove( $content ); # Retrieve record ID from object and delete it
 
 =item fields
 

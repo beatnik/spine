@@ -22,6 +22,8 @@ package SPINE::Handler::Admin::Content;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.54 $
 
+use warnings;
+
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
 use SPINE::DBI::Style;
@@ -337,6 +339,7 @@ sub save
   }
   else
   { $ierror = $valid_perms_string.$save_content_string; }
+  return;
 }
 
 sub copy
@@ -347,6 +350,7 @@ sub copy
     $content->id(0);
     $content_dbi->add($content);
   }
+  return;
 }
 
 sub remove 
@@ -354,7 +358,8 @@ sub remove
 { my $content = shift @{$content_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $content->owner eq $user || 
       $content->permissions =~ /^\11/ || $content->permissions =~ /11$/)  
-  { $content_dbi->delete($content); }
+  { $content_dbi->remove($content); }
+  return;
 }
 
 1;

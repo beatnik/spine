@@ -22,6 +22,7 @@ package SPINE::Handler::Admin::Adminaccess;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.18 $
 
+use warnings;
 use SPINE::DBI::Session;
 use SPINE::DBI::User;
 use SPINE::DBI::Macro;
@@ -79,15 +80,17 @@ sub handler
 
   my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
-  { if ($_)
-    { my %hash = %{$_}; }
+  { my %hash = ();
+    if ($_)
+    { %hash = %{$_}; }
     $default{$hash{'NAME'}} = $hash{'VALUE'};
   }
 
   my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
-  { if ($_)
-    { my %hash = %{$_}; }
+  { my %hash = ();
+    if ($_)
+    { %hash = %{$_}; }
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
   
@@ -163,7 +166,7 @@ sub handler
   my $body = undef;
   if (ref $content)
   { $body = $content->body; }
-  my @adminaccess = @{$adminaccess_dbi->get()};
+  @adminaccess = @{$adminaccess_dbi->get()};
   my $list = undef;
   my @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
   my $group = undef;
@@ -195,11 +198,13 @@ sub save
   $adminaccess->usergroup($request->param('usergroup')) if ref $adminaccess;
   $adminaccess->permissions($permissions) if ref $adminaccess;
   $adminaccess_dbi->update($adminaccess) if $adminaccess;
+  return;
 }
 
 sub remove
 { my $adminaccess = $adminaccess_dbi->get({id=>$request->param('id'), count=>1});
-  $adminaccess_dbi->delete($adminaccess) if $adminaccess;
+  $adminaccess_dbi->remove($adminaccess) if $adminaccess;
+  return;
 }
 
 1;

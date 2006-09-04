@@ -22,6 +22,8 @@ package SPINE::Handler::Admin::Style;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.40 $
 
+use warnings;
+
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
 use SPINE::DBI::Style;
@@ -299,7 +301,8 @@ sub save
     $style_dbi->update($style);
   }
   else
-  { $ierror = $valid_perms_string.$save_style_string;; }
+  { $ierror = $valid_perms_string.$save_style_string; }
+  return;
 }
 
 sub copy
@@ -310,13 +313,15 @@ sub copy
     $style->id(0);
     $style_dbi->add($style);
   }
+  return;
 }
 
 sub remove #Document: You need both read and write permissions to delete a style
 { my $style = shift @{$style_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $style->owner eq $user || 
       $style->permissions =~ /^\11/ || $style->permissions =~ /11$/)  
-  { $style_dbi->delete($style); }
+  { $style_dbi->remove($style); }
+  return;
 }
 
 1;

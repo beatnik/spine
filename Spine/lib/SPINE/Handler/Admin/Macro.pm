@@ -22,6 +22,8 @@ package SPINE::Handler::Admin::Macro;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.27 $
 
+use warnings;
+
 use SPINE::DBI::Session;
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
@@ -220,13 +222,15 @@ sub save
   $macro->macrovalue($request->param('value')) if ref $macro;
   $macro->macrokey($request->param('key')) if ref $macro;
   $macro_dbi->update($macro) if $macro;
+  return;
 }
 
 sub remove
 { my @param = (); 
   if ($request->param('id')) { @param = ("id",scalar($request->param('id'))); }
   my $macro = shift @{$macro_dbi->get({name=>$request->param('name'), @param, count=>1})};
-  $macro_dbi->delete($macro) if $macro;
+  $macro_dbi->remove($macro) if $macro;
+  return;
 }
 
 sub copy
@@ -235,6 +239,7 @@ sub copy
   { $macro->name($request->param('target'));
     $macro_dbi->add($macro);
   }
+  return;
 }
 
 1;

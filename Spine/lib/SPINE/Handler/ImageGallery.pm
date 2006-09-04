@@ -23,7 +23,7 @@ package SPINE::Handler::ImageGallery;
 #Apache::Request Handler
 #DB Handler
 
-#TODO: Filter directory names!!!!
+use warnings;
 
 use SPINE::Constant;
 use SPINE::DBI::Content;

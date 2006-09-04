@@ -23,6 +23,7 @@ package SPINE::Handler::Wiki;
 #Apache::Request Handler
 #DB Handler
 
+use warnings;
 use strict;
 
 use vars qw($VERSION);
@@ -137,7 +138,7 @@ sub handler
     $revision->changetype("delete");
     $revision->revise;
     $revision_dbi->add($revision);
-    $wiki_dbi->delete($wiki);
+    $wiki_dbi->remove($wiki);
   }
   if (!$wiki && $page) #New Wiki
   { $body = qq(<form method="post">

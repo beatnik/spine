@@ -22,6 +22,8 @@ package SPINE::Handler::Admin::User;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.46 $
 
+use warnings;
+
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
 use SPINE::DBI::Adminaccess;
@@ -188,11 +190,13 @@ sub save
   $user->password(md5_hex($request->param('password'))) if ref $user;
   $user->email($request->param('email')) if ref $user;
   $user_dbi->update($user);
+  return;
 }
 
 sub remove
 { my $user = shift @{$user_dbi->get({login=>$request->param('login'), count=>1})};
-  $user_dbi->delete($user) if $user;
+  $user_dbi->remove($user) if $user;
+  return;
 }
 
 1;

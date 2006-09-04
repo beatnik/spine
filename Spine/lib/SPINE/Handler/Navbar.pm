@@ -23,6 +23,8 @@ package SPINE::Handler::Navbar;
 #Request Handler
 #DB Handler
 
+use warnings;
+
 use SPINE::Base::Navbar;
 use SPINE::DBI::Content;
 use SPINE::DBI::Navbar;

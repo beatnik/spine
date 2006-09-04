@@ -20,6 +20,7 @@ package SPINE::Constant;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
 
+use warnings;
 use strict;
 require Exporter;
 use vars qw($VERSION @ISA @EXPORT $CODENAME);

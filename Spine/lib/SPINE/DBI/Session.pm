@@ -20,6 +20,7 @@ package SPINE::DBI::Session;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
 
+use warnings;
 use strict;
 use DBI;
 use SPINE::Base::User;
@@ -66,6 +67,7 @@ sub add
     my $sth = $self->{_HANDLER}->prepare($add);
     $sth->execute();
   }
+  return;
 }
 
 sub get
@@ -151,7 +153,7 @@ sub get
   return \@records;
 }
 
-sub delete
+sub remove
 { my $self = shift;
   my $id = shift;
   if (ref $id eq "SPINE::Base::$self->{MODULE}") { $id = $id->id; } 
@@ -160,6 +162,7 @@ sub delete
     my $sth = $self->{_HANDLER}->prepare("delete from $self->{TABLE} where id = '$id'");
     $sth->execute();
   }
+  return;
 }
 
 1;

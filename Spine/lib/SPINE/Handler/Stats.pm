@@ -23,6 +23,8 @@ package SPINE::Handler::Stats;
 #Apache::Request Handler
 #DB Handler
 
+use warnings;
+
 use SPINE::DBI::Content;
 use SPINE::DBI::Statistics;
 use SPINE::DBI::Attribute;
