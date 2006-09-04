@@ -67,13 +67,15 @@ sub handler
   $chroot =~ s/^\/+//;
   $chroot = "/$chroot";
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   my $user = "admin";
   $user = $session->username if $session;
 
   my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash = %{$_} if $_;
     $default{$hash{'NAME'}} = $hash{'VALUE'};
  }
 
@@ -83,7 +85,8 @@ sub handler
 
   my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash = %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
   
@@ -159,7 +162,7 @@ sub handler
       { if (-W "$chroot$path/$filename")
         { set_error("You\'re trying to upload a file that already exists!"); }
         else
-        { open(UPLOAD,">$chroot$path/$filename") || set_error("Error creating file: $!");
+        { open(UPLOAD,">","$chroot$path/$filename") || set_error("Error creating file: $!");
           binmode(UPLOAD);
           my $info = $upload->info;
           while(<$fh>) { print UPLOAD $_; }

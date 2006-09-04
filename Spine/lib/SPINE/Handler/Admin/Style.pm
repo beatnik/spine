@@ -75,13 +75,16 @@ sub handler
   my $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
-  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  my @default_hash = ();
+  @default_hash = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash = %{$_} if $_;
     $default{$hash{'NAME'}} = $hash{'VALUE'};
   }
 
@@ -91,7 +94,8 @@ sub handler
 
   my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>"en")};
   for(@i18n_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash = %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
   
@@ -199,11 +203,13 @@ sub handler
     $body =~ s/\$serversig/$serversig/g;
     $content->body($body);
   }
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  $body = $content->body if ref $content;
 
   if (($params[0] eq 'edit' || $params[0] eq 'save' || $params[0] eq 'new')  && !$error)
   { my $edit_style = shift @{$style_dbi->get({name=>$page, count=>1})};
-    my $sbody = $edit_style->body if ref $edit_style;
+    my $sbody = undef;
+    $sbody = $edit_style->body if ref $edit_style;
     my @macros = @{$macro_dbi->getlist()};
     my $macrolist = undef;
     my $icomment = undef;
@@ -249,7 +255,7 @@ sub handler
     if ($user ne 'admin')
     { @li = grep { $_->name =~ /^[^\.]/ } @li; }
 
-    for $c (@li)
+    for my $c (@li)
     { my $readgperms = $c->permissions & READGPERMISSIONS;
       $readgperms =~ s/0//g;
       my $readwperms = $c->permissions & READWPERMISSIONS;

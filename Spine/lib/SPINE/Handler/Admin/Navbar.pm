@@ -76,13 +76,16 @@ sub handler
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
-  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  my @default_hash = ();
+  @default_hash = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash = %{$_} if $_;
     $default{$hash{'NAME'}} = $hash{'VALUE'};
   }
 
@@ -92,7 +95,8 @@ sub handler
 
   my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash = %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
   
@@ -246,7 +250,8 @@ sub handler
     $body =~ s/\$serversig/$serversig/g;
     $content->body($body);
   }
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  $body = $content->body if ref $content;
 
   if ( ($params[0] eq 'edit' || $params[0] eq 'save' || $params[0] eq 'new' || $params[0] eq 'editbutton' || $params[0] eq 'addbutton') && !$error)
   { my $edit_navbar = shift @{$navbar_dbi->get({name=>$page, count=>1})};
@@ -294,7 +299,8 @@ sub handler
       $stylelist .= qq(<option value="$_"$sel>$_\n); 
     }
 
-    my $separator = $edit_navbar->sep if ref $edit_navbar;
+    my $separator = undef;
+    $separator = $edit_navbar->sep if ref $edit_navbar;
     $separator =~ s/</&lt;/g;
     $separator =~ s/>/&gt;/g;
     $separator =~ s/\"/&quot;/g;
@@ -347,7 +353,7 @@ sub handler
     my $list = undef;
     my $c = undef;
     my @list = ();
-    for $c (@li)
+    for my $c (@li)
     { my $readgperms = $c->permissions & READGPERMISSIONS;
       $readgperms =~ s/0//g;
       my $readwperms = $c->permissions & READWPERMISSIONS;
@@ -434,7 +440,8 @@ sub moveup
     $position--;
     my $otherbutton = shift @{$navbarbutton_dbi->get({navbar=>$request->param("navbar"),position=>$position, count=>1})};
     if (ref($otherbutton) eq "SPINE::Base::Button")
-    { my $otherposition = $otherbutton->position if $otherbutton;
+    { my $otherposition = undef;
+      $otherposition = $otherbutton->position if $otherbutton;
       $otherposition++;
       $otherbutton->position($otherposition);
       $navbarbutton_dbi->update($otherbutton);    
@@ -484,7 +491,7 @@ sub deletebutton
     # Note to myself: The part below is needed because deleting a button causes a gap. Up and Down use ++ and -- above so button position need to be sequential
     my @sortbuttons = @{$navbarbutton_dbi->get({navbar=>$request->param('navbar'),sort=>"position"})};
     my $i = 1;
-    for $button (@sortbuttons)
+    for my $button (@sortbuttons)
     { if (ref($button))
       { $button->position($i);
         $navbarbutton_dbi->update($button); 

@@ -70,13 +70,15 @@ sub handler
   
   $url = '.admin-general'; 
   $error = "";
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
   my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash = %{$_} if $_;
     $default{$hash{'NAME'}} = $hash{'VALUE'};
   }
 
@@ -86,7 +88,8 @@ sub handler
 
   my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash =  %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
   
@@ -180,7 +183,8 @@ sub handler
   if ($params[0] eq 'new' && $request->param("key") && $request->param("name") && !$error && $request->method eq "POST")
   { $macro_dbi->add(SPINE::Base::Macro->new({name=>$request->param('name'), macrokey=>$request->param('key'), macrovalue=>$request->param('value')})); }
 
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  $body = $content->body if ref $content;
   if ($request->param('name') && ($params[0] eq 'edit' || $params[0] eq 'new' || ($params[0] eq 'remove' && $request->param('id') ) ) && !$error )
   { my @macro = @{$macro_dbi->get({name=>$request->param('name')})};
     my $list = undef;

@@ -68,7 +68,8 @@ sub handler
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $url = '.admin-usergroup'; 
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
   
@@ -118,7 +119,8 @@ sub handler
   if ($params[0] eq 'new' && $request->param("usergroup") && $request->param("username") && $request->method eq "POST")
   { $usergroup_dbi->add(SPINE::Base::Usergroup->new({usergroup=>$request->param('usergroup'), username=>$request->param('username')})); }
 
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  $body = $content->body if ref $content;
   my $list = undef;
   my @groups = @{$usergroup_dbi->get()};
   my @users = @{$user_dbi->getlist(field=>'login')};

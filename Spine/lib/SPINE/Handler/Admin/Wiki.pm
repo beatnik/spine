@@ -72,7 +72,8 @@ sub handler
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
@@ -174,7 +175,8 @@ sub handler
     $body =~ s/\$serversig/$serversig/g;
     $content->body($body);
   }
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  $body = $content->body if ref $content;
 
   #This part is tricky. This part will merge permissions (r-- in group A and -wx in group B = rwx)
   if ( ($params[0] eq 'edit' || $params[0] eq 'save' || $params[0] eq 'new') && !$error)
@@ -215,7 +217,7 @@ sub handler
     if ($user ne 'admin')
     { @li = grep { $_->name =~ /^[^\.]/ } @li; }
     
-    for $c (@li)
+    for my $c (@li)
     { my $readgperms = $c->permissions & READGPERMISSIONS;
       $readgperms =~ s/0//g;
       my $readwperms = $c->permissions & READWPERMISSIONS;

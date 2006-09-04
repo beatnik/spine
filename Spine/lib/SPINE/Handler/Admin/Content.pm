@@ -72,13 +72,15 @@ sub handler
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
   my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    if ($_) { %hash = %{$_}; }
     $default{$hash{'NAME'}} = $hash{'VALUE'};
  }
 
@@ -88,7 +90,8 @@ sub handler
 
   my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = undef;
+    if ($_) { %hash = %{$_}; }
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
   
@@ -201,7 +204,8 @@ sub handler
     $body =~ s/\$serversig/$serversig/g;
     $content->body($body);
   }
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  if (ref $content) { $body = $content->body; }
 
   #This part is tricky. This part will merge permissions (r-- in group A and -wx in group B = rwx)
   if ( ($params[0] eq 'edit' || $params[0] eq 'save' || $params[0] eq 'new') && !$error)
@@ -280,7 +284,7 @@ sub handler
     if ($user ne 'admin')
     { @li = grep { $_->name =~ /^[^\.]/ } @li; }
     
-    for $c (@li)
+    for my $c (@li)
     { my $readgperms = $c->permissions & READGPERMISSIONS;
       $readgperms =~ s/0//g;
       my $readwperms = $c->permissions & READWPERMISSIONS;
@@ -292,7 +296,7 @@ sub handler
             (@groups && $readgperms) #Content is group readable and user is part of group
          )
        { push(@list,$c->name); next; }
-    }  
+    }
     for(@list) { $list .= qq(<option value="$_">$_\n); }
     $body =~ s/\$list/$list/g;
     $body =~ s/\$type/content/g;
@@ -311,9 +315,11 @@ sub save
     $content->style($request->param('style')) if ref $content;
     $content->keywords($request->param('keywords')) if ref $content;
     $content->macros($request->param('macros')) if ref $content;
-    my $logging = $request->param('logging') || 0 if ref $content;
+    my $logging = undef;
+    $logging = $request->param('logging') || 0 if ref $content;
     $content->logging($request->param($logging)) if ref $content;
-    my $breaks = $request->param('breaks') || 0 if ref $content;
+    my $breaks = undef;
+    $breaks = $request->param('breaks') || 0 if ref $content;
     $content->breaks($breaks) if ref $content;
     $content->type($request->param('type')) if ref $content;
     $content->body($request->param('body')) if ref $content;

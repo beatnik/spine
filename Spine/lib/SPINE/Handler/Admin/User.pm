@@ -65,7 +65,8 @@ sub handler
   $session_dbi = SPINE::DBI::Session->new($dbh);  
   $url = '.admin-user'; 
   
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
@@ -135,7 +136,8 @@ sub handler
   if (!ref $content)
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
 
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  $body = $content->body if ref $content;
   
   if ((!$params[0] || $params[0] eq 'remove' || $params[0] eq 'save')  || $error)
   { my @users = @{$user_dbi->get()};
@@ -150,7 +152,8 @@ sub handler
   if (($params[0] eq "edit" || $params[0] eq "save" || $params[0] eq "new")  && !$error)
   { my $user = shift @{ $user_dbi->get({login=>$request->param("login"), count=>1}) };
     my @usergroups =  @{ $usergroup_dbi->get({username=>$request->param("login")}) };
-    my %hash = $user->tohash if ref $user;
+    my %hash = ();
+    %hash = $user->tohash if ref $user;
     $body =~ s/\$error/$error/g;        
     $body =~ s/\$login/$hash{login}/g;  
     $body =~ s/\$name/$hash{fullname}/g;  

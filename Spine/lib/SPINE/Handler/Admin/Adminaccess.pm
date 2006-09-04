@@ -72,19 +72,22 @@ sub handler
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   $url = '.admin-access'; 
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
   my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
-  { my %hash = %{$_} if $_;
+  { if ($_)
+    { my %hash = %{$_}; }
     $default{$hash{'NAME'}} = $hash{'VALUE'};
   }
 
   my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
-  { my %hash = %{$_} if $_;
+  { if ($_)
+    { my %hash = %{$_}; }
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
   
@@ -157,7 +160,9 @@ sub handler
     $adminaccess_dbi->add(SPINE::Base::Adminaccess->new({section=>$request->param('section'), usergroup=>$request->param('usergroup'), permissions=>$permissions}));
   }
 
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  if (ref $content)
+  { $body = $content->body; }
   my @adminaccess = @{$adminaccess_dbi->get()};
   my $list = undef;
   my @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};

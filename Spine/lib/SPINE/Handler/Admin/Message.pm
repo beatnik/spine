@@ -77,13 +77,16 @@ sub handler
 
   $url = '.admin-general'; 
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
-  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  my @default_hash = ();
+  @default_hash = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash = %{$_} if $_;
     $default{$hash{'NAME'}} = $hash{'VALUE'};
  }
 
@@ -91,9 +94,11 @@ sub handler
   $lang = ".$lang" if $lang;
   $lang = "" if $lang eq ".en";
 
-  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
+  my @i18n_hash = ();
+  my @i18n_hash = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
-  { my %hash = %{$_} if $_;
+  { my %hash = ();
+    %hash = %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
   
@@ -211,7 +216,8 @@ sub handler
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  $body = $content->body if ref $content;
 
   if (!$error && ($params[0] eq 'edit' || $params[0] eq 'new' || $params[0] eq 'savegroup' || $params[0] eq 'save' || $params[0] eq 'create' || ($params[0] eq 'remove' &&  $request->param('id') ) ) )
   { my $message = undef;

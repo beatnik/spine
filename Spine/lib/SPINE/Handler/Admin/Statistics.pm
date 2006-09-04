@@ -67,7 +67,8 @@ sub handler
   $session_dbi = SPINE::DBI::Session->new($dbh);  
   $url = '.admin-stats-general'; 
 
-  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $session = undef;
+  $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
@@ -112,7 +113,8 @@ sub handler
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
-  my $body = $content->body if ref $content;
+  my $body = undef;
+  $body = $content->body if ref $content;
 
   if ($params[0] eq 'view')
   { my $name = $request->param('name');
