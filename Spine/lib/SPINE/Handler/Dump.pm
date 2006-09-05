@@ -83,9 +83,9 @@ sub toXML
 }
 
 sub toSQL
-{ my $body .= "\n\n--\n-- mysql v3 dump for SPINE 1.1 beta : Table $type\n--\n\n";
-  my $ref = shift(@_);
+{ my $ref = shift(@_);
   my $type = shift(@_);
+  my $body .= "\n\n--\n-- mysql v3 dump for SPINE 1.1 beta : Table $type\n--\n\n";
   for(@{$ref})
   { my %hash = $_->tohash;
     $body .= "insert into $type (";

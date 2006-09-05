@@ -131,7 +131,7 @@ sub handler
   if (ref($content) ne "SPINE::Base::Content") { return $content; }
   my $type = $content->type || 'text/html';
   my $body = $content->body;
-  my $location = $req->location;
+  $location = $req->location;
   $req->no_cache(1);
   $req->content_type($type);
   $req->rflush; # instead of send_http_header;

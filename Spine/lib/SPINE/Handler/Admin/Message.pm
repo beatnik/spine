@@ -97,7 +97,7 @@ sub handler
   $lang = "" if $lang eq ".en";
 
   my @i18n_hash = ();
-  my @i18n_hash = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
+  @i18n_hash = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
   for(@i18n_hash)
   { my %hash = ();
     %hash = %{$_} if $_;
@@ -255,8 +255,8 @@ sub handler
     }  
 
     my $contentlist = "";
-    my @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
-    my $group = undef;
+    @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
+    $group = undef;
     for(@groups) { my $sel = $messagegroup->usergroup eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
     my @perms = $messagegroup->permissions =~ /^(\d)(\d)(\d)(\d)/;
     my @checked = (""," checked");
@@ -264,8 +264,8 @@ sub handler
     $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
     my $wpermissions = qq(Read: <input type="checkbox" name="worldr" value="1"$checked[$perms[2]]>);
     $wpermissions .= qq(Write: <input type="checkbox" name="worldw" value="1"$checked[$perms[3]]>);    
-    my @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
-    my $group = undef;
+    @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
+    $group = undef;
     for(@groups) 
     { my $sel = $messagegroup->usergroup eq $_ ? ' selected' : ''; 
       next if !$_; $group .= qq(<option$sel>$_); 

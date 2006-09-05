@@ -163,11 +163,11 @@ sub handler
       { if (-W "$chroot$path/$filename")
         { set_error("You\'re trying to upload a file that already exists!"); }
         else
-        { open(UPLOAD,">","$chroot$path/$filename") || set_error("Error creating file: $!");
-          binmode(UPLOAD);
+        { open(my $UPLOAD,">","$chroot$path/$filename") || set_error("Error creating file: $!");
+          binmode($UPLOAD);
           my $info = $upload->info;
-          while(<$fh>) { print UPLOAD $_; }
-          close(UPLOAD);
+          while(<$fh>) { print $UPLOAD $_; }
+          close($UPLOAD);
         }
       }   
     } else
