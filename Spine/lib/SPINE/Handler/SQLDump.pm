@@ -52,12 +52,12 @@ sub handler
     @keys = sort keys %hash;
     while($_ = shift(@keys))
     { my $f = $hash{$_};
-      $f =~ s/\"/\\\"/g;
-      $f =~ s/\'/\\\'/g;
-      $f =~ s/\n/\\n/g;
-      $f =~ s/\r/\\r/g;
-      $f =~ s/</\&lt;/g;
-      $f =~ s/>/\&gt;/g;
+      $f =~ s/\"/\\\"/gmx;
+      $f =~ s/\'/\\\'/gmx;
+      $f =~ s/\n/\\n/gmx;
+      $f =~ s/\r/\\r/gmx;
+      $f =~ s/</\&lt;/gmx;
+      $f =~ s/>/\&gt;/gmx;
       $body .= qq('$f');
       $body .= "," if @keys;
     }

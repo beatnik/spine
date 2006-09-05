@@ -67,7 +67,7 @@ sub handler
 { my $r = shift;
   my $page = $r->uri;
   my $location = $r->location;
-  $page =~ s/$location//;
+  $page =~ s/$location//mx;
   my $file = $r->filename; 
   my $uri = $r->uri; 
   my $dbh = undef;
@@ -137,9 +137,9 @@ sub handler
   $req->rflush; # instead of send_http_header;
   #$req->send_http_header;
   return OK if $req->header_only;
-  while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$req,$content)/ge) 
-  { $body =~ s/<\?SPINE_Location\?>/$location/g;
-    $body =~ s/<\?SPINE_Servername\?>/$ENV{SERVER_NAME}/g; 
+  while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$req,$content)/gmxe) 
+  { $body =~ s/<\?SPINE_Location\?>/$location/mxg;
+    $body =~ s/<\?SPINE_Servername\?>/$ENV{SERVER_NAME}/mxg; 
   }
   #I hope this doesn't come back to hunt me
   $req->print($body);
@@ -156,7 +156,7 @@ sub process_handler #Ofcourse I could've done this pure inline, but I'm lazy
   $req = $req; #For some reason, removing this breaks stuff... so don't remove!!
   $content = $content; #For some reason, removing this breaks stuff... so don't remove!!
   my $value = "";
-  $module =~ s/^(\w*).*/$1/g; #Just make sure it's all aboot letters..
+  $module =~ s/^(\w*).*/$1/mxg; #Just make sure it's all aboot letters..
   return if !$module;
   return if !$tag;
   eval qq{

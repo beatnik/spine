@@ -46,21 +46,21 @@ sub handler
   my $body;
   my $url = $request->uri;
   my $location = $request->location;
-  $url =~ s/^$location\/?//g;
+  $url =~ s/^$location\/?//gmx;
   ($url) = split("/",$url);
 
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
   my @params = split(/,/,$params);
   my $dir = shift @params;
   my $images = $request->document_root.$location;
   my $message_dbi = SPINE::DBI::Message->new($dbh);
-  ($dir) = $dir =~ /\"?([^\"]*)\"?/;
+  ($dir) = $dir =~ /\"?([^\"]*)\"?/mx;
   $dir = $request->param("dir") || $dir;
-  $dir =~ s/[;\`'!\?\@\|\"\*~<>\^\[\]\{\}\$\n\f\a\r\0\t\s]+//g;
+  $dir =~ s/[;\`'!\?\@\|\"\*~<>\^\[\]\{\}\$\n\f\a\r\0\t\s]+//gmx;
   my $pic = shift @params;
-  ($pic) = $pic =~ /\"?([^\"]*)\"?/;
+  ($pic) = $pic =~ /\"?([^\"]*)\"?/mx;
   $pic ||= $request->param("pic");
-  $pic =~ s/[;\`'!\?\@\|\"\*~<>\^\[\]\{\}\$\n\f\a\r\0\t\s]+//g; 
+  $pic =~ s/[;\`'!\?\@\|\"\*~<>\^\[\]\{\}\$\n\f\a\r\0\t\s]+//gmx; 
   if ($request->param('name') && $request->param('comment') && $request->param('pic') && $request->param('dir'))
   { my ($sec,$min,$hour,$mday,$mon,$year) = localtime;
     $year += 1900;
@@ -88,14 +88,14 @@ sub handler
     $body = "<table width=\"500\"><tr>\n";
     my $foo = 0;
     for(@files)
-    { if ($_ =~ /^\./) { next; }
+    { if ($_ =~ /^\./mx) { next; }
       my $thumb = $_;
       if ($foo > 4) { $body .= "</tr><tr>\n"; $foo = 0; }
       $foo++;
-      $thumb =~ s/(\.JPE?G)$/_low$1/i; $thumb =~ s/(\.PNG)$/_low$1/i;
+      $thumb =~ s/(\.JPE?G)$/_low$1/imx; $thumb =~ s/(\.PNG)$/_low$1/imx;
       if (-d "$images/$dir/$_")
       { $body .= qq(<td align="center"><a href="$url?dir=$dir/$_">\n<img src="/images/folder.png">\n<br>$_</a></td>); next; }
-      if ($_ =~ /.*\.png$/i || $_ =~ /.*\.jpe?g$/i) 
+      if ($_ =~ /.*\.png$/mxi || $_ =~ /.*\.jpe?g$/imx) 
       { my $f = $_; $f = uri_escape($_); $body .= qq(<td align="center"><a href="$url?dir=$dir&pic=$f">\n<img src="$location/$dir/.thumbs/$thumb">\n<br>$_</a></td>); next; }
     }
     $body .= "</tr></table>";
@@ -105,7 +105,7 @@ sub handler
   { opendir(DIRECTORY,"$images/$dir") || die $!;
     my @files = readdir(DIRECTORY);
     shift @files; shift @files;
-    @files = grep { /\.(jpe?g|gif|png)$/i } @files;
+    @files = grep { /\.(jpe?g|gif|png)$/mxi } @files;
     @files = sort { $a cmp $b } @files;
     closedir(DIRECTORY);
     my ($prev,$next,$i);

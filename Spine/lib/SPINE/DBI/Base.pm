@@ -83,7 +83,7 @@ sub get
     $id ||= $params{'id'};
   }
   if($id) 
-  { ($id) = $id =~ /(\d*)/;
+  { ($id) = $id =~ /(\d*)/mx;
     my $statement = "select * from $self->{TABLE} where id = ?";
     my $sth = $self->{_HANDLER}->prepare($statement);
     $sth->execute($id);
@@ -103,14 +103,14 @@ sub get
     while($field = shift @fields) 
     { $found = "";
       if( grep { $field eq $_ } @{$self->{NUMERIC}} ) 
-      { ($params{$field}) = $params{$field} =~ /(\d*)/;
+      { ($params{$field}) = $params{$field} =~ /(\d*)/mx;
         push(@placeholders,$params{$field});
         $narrow .= " $field = ?"; 
         $found++;
       }
       if( grep { $field eq $_ } @{$self->{NON_NUMERIC}} )
       { my $value = $self->{_HANDLER}->quote($params{$field});
-        $value =~ s/^'//; $value =~ s/'$//;
+        $value =~ s/^'//mx; $value =~ s/'$//mx;
         push(@placeholders,$value);
         $narrow .= " $field = ?"; 
         $found++;
@@ -118,13 +118,13 @@ sub get
       if($fields[0] && $found) { $narrow .= " $searchtype "; }
     }
     $narrow = "where$narrow" if $narrow;
-    #($sortfield) = $sortfield =~ /(\w*)/;
+    #($sortfield) = $sortfield =~ /(\w*)/mx;
     if (defined($limit))
-    { ($limit) = $limit =~ /(\d*)/;
+    { ($limit) = $limit =~ /(\d*)/mx;
       $limit ||= 1;
     }
     if (defined($offset))
-    { ($offset) = $offset =~ /(\d*)/; }
+    { ($offset) = $offset =~ /(\d*)/mx; }
     
     my $statement = "select * from $self->{TABLE} $narrow order by $sortfield";
     if ($self->{_HANDLER}->{Driver}->{Name} eq "mysql")
@@ -215,7 +215,7 @@ sub getlist
     while($value = shift @fields) 
     { $found = "";
       if( grep { $value eq $_ } @{$self->{NUMERIC}} ) 
-      { ($params{$value}) = $params{$value} =~ /(\d*)/;
+      { ($params{$value}) = $params{$value} =~ /(\d*)/mx;
         $narrow .= " $value = ?"; 
 	push(@placeholders,$params{$value});
         $found++;
@@ -223,7 +223,7 @@ sub getlist
       if( grep { $value eq $_ } @{$self->{NON_NUMERIC}} )
       { $narrow .= " $value = ?";
         my $qvalue = $self->{_HANDLER}->quote($params{$value});
-        $qvalue =~ s/^'//; $qvalue =~ s/'$//;
+        $qvalue =~ s/^'//mx; $qvalue =~ s/'$//mx;
         push(@placeholders,$qvalue);
         $found++;
       } 
@@ -231,7 +231,7 @@ sub getlist
       #If there are still fields in @fields and there is already a match, use searchtype to bind the results
       $narrow = "where $narrow" if $narrow;
     }
-    ($sortfield) = $sortfield =~ /(\w*)/;
+    ($sortfield) = $sortfield =~ /(\w*)/mx;
     my $statement = "select $field from $self->{TABLE} $narrow order by $sortfield";
     my $sth = $self->{_HANDLER}->prepare($statement); 
     $sth->execute(@placeholders);
@@ -264,14 +264,14 @@ sub update
     my @placeholders = ();
     for(@{$self->{NUMERIC}}) 
     { if($_ eq 'id') { next; } 
-      ($record{$_}) = $record{$_} =~ /(\d*)/;
+      ($record{$_}) = $record{$_} =~ /(\d*)/mx;
       push(@placeholders,$record{$_});
       $update .= "$_ = ?, ";
     }
     for(@{$self->{NON_NUMERIC}})  
     { if($_ eq 'name') { next; } 
       my $value = $self->{_HANDLER}->quote($record{$_});
-      $value =~ s/^'//; $value =~ s/'$//;
+      $value =~ s/^'//mx; $value =~ s/'$//mx;
       push(@placeholders,$value);
       $update .= "$_ = ?, "; 
     }
@@ -297,10 +297,10 @@ sub add
     my @placeholders = ();
     for my $field (@fields) 
     { if (grep { $_ eq $field } @{$self->{NUMERIC}}) 
-      { ($record{$field}) = $record{$field} =~ /(\d*)/; push(@placeholders, $record{$field}); $add .= "?, "; }
+      { ($record{$field}) = $record{$field} =~ /(\d*)/mx; push(@placeholders, $record{$field}); $add .= "?, "; }
       if (grep { $_ eq $field } @{$self->{NON_NUMERIC}}) 
       { my $value = $self->{_HANDLER}->quote($record{$field});
-        $value =~ s/^'//; $value =~ s/'$//;
+        $value =~ s/^'//mx; $value =~ s/'$//mx;
         push(@placeholders,$value);
         $add .= "?, ";
       } 
@@ -329,7 +329,7 @@ sub remove
   my $id = shift;
   if (ref $id eq "SPINE::Base::$self->{MODULE}") { $id = $id->id; } 
   if ($id) 
-  { ($id) = $id =~ /(\d*)/;
+  { ($id) = $id =~ /(\d*)/mx;
     my $sth = $self->{_HANDLER}->prepare("delete from $self->{TABLE} where id = ?");
     $sth->execute($id);
     $sth->finish;

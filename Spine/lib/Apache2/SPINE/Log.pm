@@ -59,7 +59,7 @@ sub handler
   my $location = $r->location;
   $file =~ s/^$location\/?//;
   $file ||= $main;
-  $file =~ s/^(.*?)\/.*$/$1/g;
+  $file =~ s/^(.*?)\/.*$/$1/mxg;
   my $in = $r->headers_in();
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $content = shift @ { $content_dbi->get( { name => $file } ) };

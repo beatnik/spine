@@ -24,14 +24,12 @@ use warnings;
 use strict;
 use DBI;
 use SPINE::Base::User;
-use SPINE::DBI::Base;
 use SPINE::Constant;
 
-use vars qw($VERSION @ISA);
+use base qw(SPINE::DBI::Base);
+use vars qw($VERSION);
 
 $VERSION = $SPINE::Constant::VERSION;
-
-@ISA = qw(SPINE::DBI::Base);
 
 sub new
 { my $proto = shift;
@@ -58,7 +56,7 @@ sub add
     for my $field (@{$self->{FIELDS}}) 
     { #if($field eq 'id') { next; } 
       if (grep { $_ eq $field } @{$self->{NUMERIC}}) 
-      { ($record{$field}) = $record{$field} =~ /(\d*)/; $add .= "$record{$field}, "; }
+      { ($record{$field}) = $record{$field} =~ /(\d*)/mx; $add .= "$record{$field}, "; }
       if (grep { $_ eq $field } @{$self->{NON_NUMERIC}}) 
       { $add .= $self->{_HANDLER}->quote($record{$field}).", "; } 
     }
@@ -95,7 +93,7 @@ sub get
     delete($params{'searchtype'}); 
   }
   if($id) 
-  { #($id) = $id =~ /(\d*)/;
+  { #($id) = $id =~ /(\d*)/mx;
     my $statement = "select * from $self->{TABLE} where id = '$id'";
     my $sth = $self->{_HANDLER}->prepare($statement);
     $sth->execute();
@@ -113,7 +111,7 @@ sub get
     while($field = shift @fields) 
     { $found = "";
       if( grep { $field eq $_ } @{$self->{NUMERIC}} ) 
-      { ($params{$field}) = $params{$field} =~ /(\d*)/;
+      { ($params{$field}) = $params{$field} =~ /(\d*)/mx;
         $narrow .= " $field = $params{$field}"; 
         $found++;
       }
@@ -124,7 +122,7 @@ sub get
       if($fields[0] && $found) { $narrow .= " $searchtype "; }
     }
     $narrow = "where $narrow" if $narrow;
-    ($sortfield) = $sortfield =~ /(\w*)/;
+    ($sortfield) = $sortfield =~ /(\w*)/mx;
     my $statement = "select * from $self->{TABLE} $narrow order by $sortfield";
     my $sth = $self->{_HANDLER}->prepare($statement); 
     $sth->execute();
@@ -158,7 +156,7 @@ sub remove
   my $id = shift;
   if (ref $id eq "SPINE::Base::$self->{MODULE}") { $id = $id->id; } 
   if ($id) 
-  { #($id) = $id =~ /(\d*)/;
+  { #($id) = $id =~ /(\d*)/mx;
     my $sth = $self->{_HANDLER}->prepare("delete from $self->{TABLE} where id = '$id'");
     $sth->execute();
   }

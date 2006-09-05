@@ -36,7 +36,7 @@ sub handler
 { my $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift; #
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
   my @params = split(/,/,$params);
   my $body = undef;
   #If there are parameters, they're stored in @params

@@ -64,8 +64,8 @@ sub handler
   $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   
-  $chroot =~ s/\/+$//;
-  $chroot =~ s/^\/+//;
+  $chroot =~ s/\/+$//mx;
+  $chroot =~ s/^\/+//mx;
   $chroot = "/$chroot";
 
   my $session = undef;
@@ -121,36 +121,36 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   my $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   my $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   my $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
 
-  $path =~ s/\/+$//;
-  $path =~ s/^\/+//;
-  $path =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//g;   
+  $path =~ s/\/+$//mx;
+  $path =~ s/^\/+//mx;
+  $path =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//gmx;   
   $path = "/$path" if $path;
   
-  $target =~ s/\/+$//;
-  $target =~ s/^\/+//;
-  $target =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//g;
+  $target =~ s/\/+$//mx;
+  $target =~ s/^\/+//mx;
+  $target =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//gmx;
 
-  $foldername =~ s/\/+$//;
-  $foldername =~ s/^\/+//;
-  $foldername =~ /^.*[\/\\](.*)$/;
-  $foldername = $1 if $1;
+  $foldername =~ s/\/+$//mx;
+  $foldername =~ s/^\/+//mx;
+  if ($foldername =~ /^.*[\/\\](.*)$/mx)
+  { $foldername = $1 if $1; }
 
   $foldername = "/$foldername" if $foldername;
 
-  $filename =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//g; 
+  $filename =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//gmx; 
   $error = "";
   
-  $filename =~ /^.*[\/\\](.*)$/;
-  $filename = $1 if $1;
+  if ($filename =~ /^.*[\/\\](.*)$/mx)
+  { $filename = $1 if $1; }
 
   my @params = $request->param;
-  my @checkboxes = grep { /^check\d*$/ } sort { $a <=> $b } @params;
+  my @checkboxes = grep { /^check\d*$/mx } sort { $a <=> $b } @params;
 
   if ($action eq "upload" && $filename && defined($path) && $writeperms && $request->method() eq "POST")
   { my $upload = $request->upload("filename");
@@ -220,7 +220,7 @@ sub handler
     my @files = readdir(DIR);
     my %files = ();
     closedir(DIR);
-    @files = grep { $_ !~ /^\.\.?$/ } @files;
+    @files = grep { $_ !~ /^\.\.?$/mx } @files;
     for(@files)
     { next if ( !-d "$chroot$path/$_" and !-f "$chroot$path/$_");
       my $type = -d $chroot.$path."/".$_ ? "folder.jpg" : "file.jpg";
@@ -230,22 +230,22 @@ sub handler
       $files{$_} = { type => $type, fullpath => $chroot.$path."/".$_, size => $stat[7], date => $stat[9], localtime => $date };
     }
     my @sorted = ();
-    if ($sort =~ /^filename/)
+    if ($sort =~ /^filename/mx)
     { @sorted = sort { $files{$b}{type} cmp $files{$a}{type} || $a cmp $b } @files; }
 
-    if ($sort =~ /^date/)
+    if ($sort =~ /^date/mx )
     { @sorted = sort { $files{$b}{date} <=> $files{$a}{date} || $a cmp $b } @files; }
 
-    if ($sort =~ /^size/)
+    if ($sort =~ /^size/mx )
     { @sorted = sort { $files{$b}{size} <=> $files{$a}{size} || $a cmp $b } @files; }
 
-    if ($sort =~ /^(filename|date|size)r$/) { @sorted = reverse @sorted; }
+    if ($sort =~ /^(filename|date|size)r$/mx ) { @sorted = reverse @sorted; }
 
     my $datesort = $sort ne "date" ? "date" : "dater";
     my $sizesort = $sort ne "size" ? "size" : "sizer";
     my $filenamesort = $sort ne "filename" ? "filename" : "filenamer";
   
-    $list = <<EOF;
+    $list = <<'EOF';
 <div class="dialog" id="upload"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('upload').style.display='none';"><br><form name="uploadform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Upload in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="upload"><input type="file" name="filename">&nbsp;<input type="submit" class="button" value="Upload"></form></div>
 <div class="dialog" id="createfolder"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('createfolder').style.display='none';"><br><form name="createform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Create Folder in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="createfolder"><input type="hidden" name="filename" value=""><input type="text" name="foldername">&nbsp;<input type="submit" class="button" value="Create"></form></div>
 <div class="dialog" id="copy"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('copy').style.display='none';"><br><form name="copyform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Copy <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="copy"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Copy" onClick='document.copyform.filename.value = document.myform.filename.value; return true;'></form></div>
@@ -297,10 +297,10 @@ EOF
 
   if ($path ne $chroot)
   { my $backdir = $path;
-    $backdir =~ s/\/$//;
-    $backdir =~ s/^(.*)\/.*$/$1/;
+    $backdir =~ s/\/$//mx;
+    $backdir =~ s/^(.*)\/.*$/$1/mx;
    $list .= 
-<<EOF;
+<<'EOF';
 <tr class="unselected" disabled>
 <td>
 <input type="radio" disabled>
@@ -315,7 +315,7 @@ EOF
   for(@sorted)
   { if ($files{$_}{type} eq "file.jpg") 
     { $list .= 
-<<EOF;
+<<'EOF';
 <tr>
 <td>
 
@@ -324,11 +324,11 @@ EOF
 <td align="center">$files{$_}{size}</td><td align="center">$files{$_}{localtime}</td>
 <td>&nbsp;</td>
 </tr>
-EOF
+'EOF'
 
     } else
     {     $list .= 
-<<EOF;
+<<'EOF';
 <tr>
 <td>
 <input type="radio" name="radiobutton" value="$i" disabled>

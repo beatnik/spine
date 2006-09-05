@@ -64,7 +64,7 @@ sub handler
   %default = ();
   %i18n = ();
   
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
 
   ($url,@params) = split("/",$url);
 
@@ -124,11 +124,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
 
   shift @params;
   if (!$params[0] || !$page || $page eq $enter_name_string)
@@ -246,10 +246,10 @@ sub handler
   if (!ref $style)
   { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
     my $body = $content->body;
-    $body =~ s/\$page/$url/g;
-    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
+    $body =~ s/\$page/$url/gmx;
+    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/mx;
     $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-    $body =~ s/\$serversig/$serversig/g;
+    $body =~ s/\$serversig/$serversig/gmx;
     $content->body($body);
   }
   my $body = undef;
@@ -266,7 +266,7 @@ sub handler
     { my $sel = $edit_navbar->usergroup eq $_ ? ' selected' : ''; 
       next if !$_; $group .= qq(<option$sel>$_); 
     }
-    my @perms = $edit_navbar->permissions =~ /^(\d)(\d)(\d)(\d)/;
+    my @perms = $edit_navbar->permissions =~ /^(\d)(\d)(\d)(\d)/mx;
     my @checked = (""," checked");
     my $gpermissions = qq(Read: <input type="checkbox" name="groupr" value="1"$checked[$perms[0]]>);
     $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
@@ -275,13 +275,13 @@ sub handler
     $lastposition = $lastbutton->position if $lastbutton;
     $lastposition++;
     push(@buttons,$lastbutton)  if $lastbutton;
-    $body =~ s/\$filename/$edit_navbar->name/ge if ref $edit_navbar;
-    $body =~ s/\$navbar/$edit_navbar->id/ge if ref $edit_navbar;
-    $body =~ s/\$owner/$edit_navbar->owner/ge if ref $edit_navbar;
-    $body =~ s/\$usergroup/$group/ge if ref $edit_navbar;
-    $body =~ s/\$wpermissions/$wpermissions/ge if ref $edit_navbar;
-    $body =~ s/\$gpermissions/$gpermissions/ge if ref $edit_navbar;
-    $body =~ s/\$modified/$edit_navbar->modified/ge if ref $edit_navbar;
+    $body =~ s/\$filename/$edit_navbar->name/gmxe if ref $edit_navbar;
+    $body =~ s/\$navbar/$edit_navbar->id/gmxe if ref $edit_navbar;
+    $body =~ s/\$owner/$edit_navbar->owner/gmxe if ref $edit_navbar;
+    $body =~ s/\$usergroup/$group/gmxe if ref $edit_navbar;
+    $body =~ s/\$wpermissions/$wpermissions/gmxe if ref $edit_navbar;
+    $body =~ s/\$gpermissions/$gpermissions/gmxe if ref $edit_navbar;
+    $body =~ s/\$modified/$edit_navbar->modified/gxme if ref $edit_navbar;
 
     my $alignlist = undef;
     for(qw(none left center right)) 
@@ -303,51 +303,51 @@ sub handler
 
     my $separator = undef;
     $separator = $edit_navbar->sep if ref $edit_navbar;
-    $separator =~ s/</&lt;/g;
-    $separator =~ s/>/&gt;/g;
-    $separator =~ s/\"/&quot;/g;
+    $separator =~ s/</&lt;/gmx;
+    $separator =~ s/>/&gt;/gmx;
+    $separator =~ s/\"/&quot;/gmx;
 
-    $body =~ s/\$positioning/$poslist/g if ref $edit_navbar;
-    $body =~ s/\$alignment/$alignlist/g if ref $edit_navbar;
-    $body =~ s/\$font/$edit_navbar->font/ge if ref $edit_navbar;
-    $body =~ s/\$color/$edit_navbar->color/ge if ref $edit_navbar;
-    $body =~ s/\$size/$edit_navbar->size/ge if ref $edit_navbar;
-    $body =~ s/\$style/$stylelist/g if ref $edit_navbar;
-    $body =~ s/\$separator/$separator/g;
-    $body =~ s/\$position/$lastposition/g;
-    $body =~ s/\$error/$ierror/g;
+    $body =~ s/\$positioning/$poslist/gmx if ref $edit_navbar;
+    $body =~ s/\$alignment/$alignlist/gmx if ref $edit_navbar;
+    $body =~ s/\$font/$edit_navbar->font/gmxe if ref $edit_navbar;
+    $body =~ s/\$color/$edit_navbar->color/gmxe if ref $edit_navbar;
+    $body =~ s/\$size/$edit_navbar->size/gmxe if ref $edit_navbar;
+    $body =~ s/\$style/$stylelist/gmx if ref $edit_navbar;
+    $body =~ s/\$separator/$separator/gmx;
+    $body =~ s/\$position/$lastposition/gmx;
+    $body =~ s/\$error/$ierror/gmx;
     my $buttons = "";
     my $button_content = shift @{$content_dbi->get({name=>".admin-navbar-button", count=>1})};
     if (!ref $button_content)
     { $button_content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
       my $body = $button_content->body;
-      $body =~ s/\$page/.admin-navbar-button/g;
-      my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
+      $body =~ s/\$page/.admin-navbar-button/gmx;
+      my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/mx;
       $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-      $body =~ s/\$serversig/$serversig/g;
+      $body =~ s/\$serversig/$serversig/gmx;
       $button_content->body($body);
     }    
     for(@buttons)
     { my $bodybutton = $button_content->body;
-      $bodybutton =~ s/\$buttonid/$_->id/ge if ref $_;
-      $bodybutton =~ s/\$id/$_->navbar/ge if ref $_;
-      $bodybutton =~ s/\$name/$edit_navbar->name/ge if ref $_;
-      $bodybutton =~ s/\$position/$_->position/ge if ref $_;
-      $bodybutton =~ s/\$border/$_->border/ge if ref $_;
-      $bodybutton =~ s/\$link/$_->link/ge if ref $_;      
-      $bodybutton =~ s/\$image/$_->image/ge if ref $_;      
-      $bodybutton =~ s/\$label/$_->label/ge if ref $_;      
-      $bodybutton =~ s/\$target/$_->target/ge if ref $_;      
-      $bodybutton =~ s/\$width/$_->width/ge if ref $_;      
-      $bodybutton =~ s/\$height/$_->height/ge if ref $_;      
-      $bodybutton =~ s/\$font/$_->font/ge if ref $_;      
-      $bodybutton =~ s/\$color/$_->color/ge if ref $_;      
-      $bodybutton =~ s/\$size/$_->size/ge if ref $_;      
-      $bodybutton =~ s/\$style/$_->style/ge if ref $_;      
-      $bodybutton =~ s/\$class/$_->class/ge if ref $_;                                                            
+      $bodybutton =~ s/\$buttonid/$_->id/gmxe if ref $_;
+      $bodybutton =~ s/\$id/$_->navbar/gmxe if ref $_;
+      $bodybutton =~ s/\$name/$edit_navbar->name/gmxe if ref $_;
+      $bodybutton =~ s/\$position/$_->position/gmxe if ref $_;
+      $bodybutton =~ s/\$border/$_->border/gmxe if ref $_;
+      $bodybutton =~ s/\$link/$_->link/gmxe if ref $_;      
+      $bodybutton =~ s/\$image/$_->image/gmxe if ref $_;      
+      $bodybutton =~ s/\$label/$_->label/gmxe if ref $_;      
+      $bodybutton =~ s/\$target/$_->target/gmxe if ref $_;      
+      $bodybutton =~ s/\$width/$_->width/gmxe if ref $_;      
+      $bodybutton =~ s/\$height/$_->height/gmxe if ref $_;      
+      $bodybutton =~ s/\$font/$_->font/gmxe if ref $_;      
+      $bodybutton =~ s/\$color/$_->color/gmxe if ref $_;      
+      $bodybutton =~ s/\$size/$_->size/gmxe if ref $_;      
+      $bodybutton =~ s/\$style/$_->style/gmxe if ref $_;      
+      $bodybutton =~ s/\$class/$_->class/gmxe if ref $_;                                                            
       $buttons .= $bodybutton;
     }
-    $body =~ s/\$buttonlist/$buttons/g;  
+    $body =~ s/\$buttonlist/$buttons/gmx;  
   } 
 
   if ( ((!$params[0] || $params[0] eq 'copy' || $params[0] eq 'remove') && $params[0] ne 'edit' ) || $error)
@@ -357,9 +357,9 @@ sub handler
     my @list = ();
     for my $c (@li)
     { my $readgperms = $c->permissions & READGPERMISSIONS;
-      $readgperms =~ s/0//g;
+      $readgperms =~ s/0//gmx;
       my $readwperms = $c->permissions & READWPERMISSIONS;
-      $readwperms =~ s/0//g;
+      $readwperms =~ s/0//gmx;
       my @groups = grep { $_ eq $c->usergroup } @usergroups;
       if ( ($user eq 'admin' || #User is admin
             $c->owner eq $user || #User is owner of content
@@ -370,11 +370,11 @@ sub handler
     }
     @list = sort { $a cmp $b } @list;
     for(@list) { $list .= qq(<option value="$_">$_\n); }
-    $body =~ s/\$list/$list/g;
-    $body =~ s/\$type/navbar/g;
-    $body =~ s/\$label/navigation bar/g;
+    $body =~ s/\$list/$list/gmx;
+    $body =~ s/\$type/navbar/gmx;
+    $body =~ s/\$label/navigation bar/gmx;
   } 
-  $body =~ s/\$error/$error/g;
+  $body =~ s/\$error/$error/gmx;
   $content->body($body);
   return $content;
 }
@@ -383,7 +383,7 @@ sub save
 { #Add other fields here!!
   my $navbar = shift @{$navbar_dbi->get({name=>scalar($request->param('name')), count=>1})};
   if ($user eq 'admin' || $navbar->owner eq $user || 
-      $navbar->permissions =~ /^\d1/ || $navbar->permissions =~ /\d1$/)
+      $navbar->permissions =~ /^\d1/mx || $navbar->permissions =~ /\d1$/mx)
   { my $permissions = scalar $request->param('groupr') ? "1" : 0;
     $permissions .= scalar $request->param('groupw') ? "1" : 0;
     $permissions .= scalar $request->param('worldr') ? "1" : 0;
@@ -410,7 +410,7 @@ sub savebutton
 { my $button = shift @{$navbarbutton_dbi->get({navbar=>$request->param('navbar'), position=>$request->param('position'), count=>1})};
   my $navbar = shift @{$navbar_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $navbar->owner eq $user || 
-      $navbar->permissions =~ /^\d1/ || $navbar->permissions =~ /\d1$/)
+      $navbar->permissions =~ /^\d1/mx || $navbar->permissions =~ /\d1$/mx)
   { my $label = $request->param('label') || $request->param('link');
     $button->link($request->param('link')) if ref $button;
     $button->image($request->param('image')) if ref $button;
@@ -439,7 +439,7 @@ sub moveup
 { my $button = shift @{$navbarbutton_dbi->get({navbar=>$request->param('navbar'), position=>$request->param('position'), count=>1})};
   my $navbar = shift @{$navbar_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $navbar->owner eq $user || 
-      $navbar->permissions =~ /^\d1/ || $navbar->permissions =~ /\d1$/)
+      $navbar->permissions =~ /^\d1/mx || $navbar->permissions =~ /\d1$/mx)
   { my $position = $request->param('position');
     $position--;
     my $otherbutton = shift @{$navbarbutton_dbi->get({navbar=>$request->param("navbar"),position=>$position, count=>1})};
@@ -464,7 +464,7 @@ sub movedown
 { my $button = shift @{$navbarbutton_dbi->get({navbar=>$request->param('navbar'), position=>$request->param('position'), count=>1})};
   my $navbar = shift @{$navbar_dbi->get({name=>$request->param('name'),count=>1 })};
   if ($user eq 'admin' || $navbar->owner eq $user || 
-      $navbar->permissions =~ /^\d1/ || $navbar->permissions =~ /\d1$/)
+      $navbar->permissions =~ /^\d1/mx || $navbar->permissions =~ /\d1$/xm)
   { my $position = $request->param('position');
     $position++;
     my $otherbutton = shift @{$navbarbutton_dbi->get({navbar=>$request->param("navbar"),position=>$position, count=>1})};
@@ -488,7 +488,7 @@ sub deletebutton
 { my $button = shift @{$navbarbutton_dbi->get({navbar=>$request->param('navbar'), position=>$request->param('position'), count=>1})};
   my $navbar = shift @{$navbar_dbi->get({name=>$request->param('name'), count=>1 })};
   if ($user eq 'admin' || $navbar->owner eq $user || 
-      $navbar->permissions =~ /^\d1/ || $navbar->permissions =~ /\d1$/)
+      $navbar->permissions =~ /^\d1/mx || $navbar->permissions =~ /\d1$/mx)
   { $navbarbutton_dbi->remove($button);
     my ($sec,$min,$hour,$day,$mon,$year) = localtime;
     $mon++; $year += 1900;
@@ -511,7 +511,7 @@ sub deletebutton
 sub copy
 { my $navbar = shift @{$navbar_dbi->get({name=>$request->param('name') , count=>1})};
   if ($navbar && ($user eq 'admin' || $navbar->owner eq $user || 
-      $navbar->permissions =~ /^1/ || $navbar->permissions =~ /1\d$/))
+      $navbar->permissions =~ /^1/mx || $navbar->permissions =~ /1\d$/mx))
   { $navbar->name($request->param('target'));
     my @buttons = @{$navbarbutton_dbi->get({navbar=>$navbar->id})};
     $navbar->id(0);
@@ -529,7 +529,7 @@ sub copy
 sub remove #Document: You need both read and write permissions to delete a navbar
 { my $navbar = shift @{$navbar_dbi->get({name=>$request->param('name') , count=>1})};
   if ($user eq 'admin' || $navbar->owner eq $user || 
-      $navbar->permissions =~ /^\11/ || $navbar->permissions =~ /11$/)  
+      $navbar->permissions =~ /^\11/mx || $navbar->permissions =~ /11$/mx)  
   { my @buttons = @{$navbarbutton_dbi->get({navbar=>$navbar->id})};
     for(@buttons)
     { $navbarbutton_dbi->remove($_); }

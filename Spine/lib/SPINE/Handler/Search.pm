@@ -44,7 +44,7 @@ sub handler
 { my $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift; #
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
   my @params = split(/,/,$params);
   my $body = undef;
 
@@ -69,23 +69,23 @@ sub handler
     
     my $loadpage = 0;
     my $readwperms = $content->permissions & READWPERMISSIONS;
-    $readwperms =~ s/0//g;
+    $readwperms =~ s/0//gmx;
     $loadpage = $readwperms; 
     
     if ($session && $content_owner && $session->username eq $content_owner->login && $session->host eq $request->get_remote_host && !$loadpage)
     { my @usergroups =  @{ $usergroup_dbi->get({username=>$session->username}) };
       @usergroups = map { $_ = $_->usergroup } @usergroups;
       my $readgperms = $content->permissions & READGPERMISSIONS;
-      $readgperms =~ s/0//g;
+      $readgperms =~ s/0//gmx;
       $loadpage = 
       ($session->username eq 'admin') ||
       ($content->owner eq $session->username) ||
       (@usergroups && $readgperms);
     }
-    $loadpage = 0 if $content->name =~ /^admin/;
+    $loadpage = 0 if $content->name =~ /^admin/mx;
     next if !$loadpage;
-    next if $content->name =~ /^\./;
-    if ($keywords =~ /$keyword/)
+    next if $content->name =~ /^\./mx;
+    if ($keywords =~ /$keyword/mx)
     { my $name = $content->name;
       $body .= qq(<a href="$name">$name</a><br>\n); }
   }

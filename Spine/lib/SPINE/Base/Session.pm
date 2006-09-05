@@ -59,10 +59,10 @@ sub user {
 sub AUTOLOAD {
  my $self = shift;
  my $method = $AUTOLOAD;
- $method =~ s/.*:://;
+ $method =~ s/.*:://mx;
  return if $method eq "DESTROY";
  warn "Invalid method! $method" unless $fields{$method};
- $_[0] =~ s/\s+$// if @_;
+ $_[0] =~ s/\s+$//mx if @_;
  $self->{uc $method} = shift if @_;
  return $self->{uc $method};
 }

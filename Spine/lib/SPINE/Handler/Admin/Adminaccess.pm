@@ -61,7 +61,7 @@ sub handler
   %default = ();
   %i18n = ();
   
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
 
   ($url,@params) = split("/",$url);
 
@@ -111,11 +111,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
   
   shift @params;
 
@@ -176,14 +176,14 @@ sub handler
   for(@adminaccess)
   { my %hash = $_->tohash;
     my $group = undef;
-    my @perms = $hash{permissions} =~ /^(\d)(\d)(\d)$/;
+    my @perms = $hash{permissions} =~ /^(\d)(\d)(\d)$/mx;
     my @checked = (""," checked");
     for(@groups) { my $sel = $hash{"usergroup"} eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
     my $permissions = qq(<input type="checkbox" name="read" value="1"$checked[$perms[0]]><input type="checkbox" name="write" value="1"$checked[$perms[1]]><input type="checkbox" name="exec" value="1"$checked[$perms[2]]>);
     $list .= qq(<tr bgcolor="#ffffff"><form action="<?SPINE_Location?>admin/adminaccess/save/" method="post"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="text" name="section" class="input" value="$hash{section}" size="30">\n</td><td><select name="usergroup">$group</select>\n</td><td>$permissions\n</td>\n<td><input type="submit" value="Save" class="button" name="action"></td>\n</form><form action="<?SPINE_Location?>admin/adminaccess/remove/" method="post"><input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="submit" value="Delete" class="button" name="action"></td>\n</form></tr>\n); 
   }
-  $body =~ s/\$list/$list/g;
-  $body =~ s/\$error/$error/g;
+  $body =~ s/\$list/$list/gmx;
+  $body =~ s/\$error/$error/gmx;
   $content->body($body);
   return $content;
 }

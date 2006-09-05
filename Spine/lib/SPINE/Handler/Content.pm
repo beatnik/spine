@@ -66,7 +66,7 @@ sub handler
   my $style = undef;
   my $url = $tr_req->request->uri;
   my $location = $tr_req->request->location;
-  $url =~ s/^$location\/?//g;
+  $url =~ s/^$location\/?//gmx;
   ($url,@params) = split("/",$url);
   if (!$url)
   { $url = $main; }
@@ -101,20 +101,20 @@ sub handler
     { $login_info = shift @{$content_dbi->get({name=>".login_info", count=>1})} || SPINE::Base::Content::default(); }
     my $loadpage = 0;
     my $readwperms = $page->permissions & READWPERMISSIONS;
-    $readwperms =~ s/0//g;
+    $readwperms =~ s/0//gmx;
     $loadpage = $readwperms; 
     
     if ($session && $user && $session->username eq $user->login && $session->host eq scalar($tr_req->remote_host()) && !$loadpage)
     { my @usergroups =  @{ $usergroup_dbi->get({username=>$session->username}) };
       @usergroups = map { $_ = $_->usergroup } @usergroups;
       my $readgperms = $page->permissions & READGPERMISSIONS;
-      $readgperms =~ s/0//g;
+      $readgperms =~ s/0//gmx;
       $loadpage = 
       ($session->username eq 'admin') ||
       ($page->owner eq $session->username) ||
       (@usergroups && $readgperms);
     }
-    $loadpage = 0 if $page->name =~ /^admin/;
+    $loadpage = 0 if $page->name =~ /^admin/mx;
 
     if ($loadpage)
     { $content = $page }
@@ -127,20 +127,20 @@ sub handler
 
   my $body = undef;
   $body = $style->body if ref $style;
-  while ($body =~ s/(<\?SPINE_(Macro[^\?]*)\?>)/process_handler($1,$2,$dbh,$request,$style)/ge) 
+  while ($body =~ s/(<\?SPINE_(Macro[^\?]*)\?>)/process_handler($1,$2,$dbh,$request,$style)/gmxe) 
   { #
   }
 
   my $cbody = undef;
   $cbody = $content->body if ref $content;
   if (defined $cbody)
-  { if ($content->breaks) { $cbody =~  s/\n/<BR>/g; }
-    $body =~ s/<\?SPINE_Content\?>/$cbody/;
+  { if ($content->breaks) { $cbody =~  s/\n/<BR>/gmx; }
+    $body =~ s/<\?SPINE_Content\?>/$cbody/mx;
   }
 
   #$body =~ s/<\?SPINE_Content\("([^)]*)"\)\?>/
   #${$content_dbi->get({name=>$1})}[0]->body;
-  #/ge; #TODO: This still needs to be fixed! Authorisation at this level... Perhaps add a flag for 'include only' content?!?
+  #/gemx; #TODO: This still needs to be fixed! Authorisation at this level... Perhaps add a flag for 'include only' content?!?
 
   my $title = undef;
   if (ref $style && $style->title) { $title = $style->title; } 
@@ -148,20 +148,20 @@ sub handler
   if (!$title && ref $content && $content->title) { $title = $content->title; }
 
   $location = $request->location;
-  if ($location !~ /\/$/) { $location .= "/"; }
+  if ($location !~ /\/$/mx) { $location .= "/"; }
   my $servername = $request->dir_config("servername") || $ENV{SERVER_NAME};
   
-  $body =~ s/<\?SPINE_Title\?>/$title/g;
+  $body =~ s/<\?SPINE_Title\?>/$title/gmx;
 
-  $body =~ s/<\?SPINE_Webmaster\?>/$request->dir_config("webmaster")/ge;
-  $body =~ s/<\?SPINE_Sitename\?>/$request->dir_config("sitename")/ge;
-  $body =~ s/<\?SPINE_Referer\?>/$request->header_in("referer")/ge; #Undocumented Feature? Add to DOCS!!
-  $body =~ s/<\?SPINE_Login\?>/$login_info->body/ge; #This will load either login on login_info
-  $body =~ s/<\?SPINE_Page\?>/$url/g;
-  $body =~ s/<\?SPINE_Servername\?>/$servername/g; 
-  $body =~ s/<\?SPINE_Location\?>/$location/g; 
-  $body =~ s/<\?SPINE_Logout\?>//g; #Backwards compatibility
-  $body =~ s/<\?SPINE_User\?>/$username/g;  #Undocumented Feature? Add to DOCS!
+  $body =~ s/<\?SPINE_Webmaster\?>/$request->dir_config("webmaster")/gmxe;
+  $body =~ s/<\?SPINE_Sitename\?>/$request->dir_config("sitename")/gemx;
+  $body =~ s/<\?SPINE_Referer\?>/$request->header_in("referer")/gmxe; #Undocumented Feature? Add to DOCS!!
+  $body =~ s/<\?SPINE_Login\?>/$login_info->body/gmxe; #This will load either login on login_info
+  $body =~ s/<\?SPINE_Page\?>/$url/gmx;
+  $body =~ s/<\?SPINE_Servername\?>/$servername/gmx; 
+  $body =~ s/<\?SPINE_Location\?>/$location/gmx; 
+  $body =~ s/<\?SPINE_Logout\?>//gmx; #Backwards compatibility
+  $body =~ s/<\?SPINE_User\?>/$username/gmx;  #Undocumented Feature? Add to DOCS!
 #--
   $content->body($body);
   return $content;
@@ -179,7 +179,7 @@ sub process_handler #Ofcourse I could've done this pure inline, but I'm lazy
   $req = $req; #For some reason, removing this breaks stuff... so don't remove!!
   $content = $content; #For some reason, removing this breaks stuff... so don't remove!!
   my $value = "";
-  $module =~ s/^(\w*).*/$1/g; #Just make sure it's all aboot letters..
+  $module =~ s/^(\w*).*/$1/mxg; #Just make sure it's all aboot letters..
   return if !$module;
   return if !$tag;
   eval qq{

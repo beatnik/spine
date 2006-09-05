@@ -52,7 +52,7 @@ sub handler
 
   my $url = $request->uri;
   my $location = $request->location;
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
   ($url,@params) = split("/",$url);
   if (!$url)
   { $url = $main; }
@@ -81,7 +81,7 @@ sub handler
   { my $module = ucfirst $params[0];
     my $value;
     my $status;
-    $module =~ s/^(\w*).*/$1/g; #Just make sure it's all aboot letters..
+    $module =~ s/^(\w*).*/$1/gmx; #Just make sure it's all aboot letters..
     eval qq{
       use SPINE::Handler::Admin::$module;
       (\$value,\$status) = SPINE::Handler::Admin::${module}::handler(\$request,\$dbh);  #Call the handler method in that uhm handler

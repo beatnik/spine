@@ -63,7 +63,7 @@ sub handler
 
   my $url = $request->uri;
   my $location = $request->location;
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
   my $new_id = undef;
 
   ($url,@params) = split("/",$url);
@@ -125,11 +125,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
   
   $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
 
   shift @params;
   if (!$params[0] || (!$page && $params[0] ne "create") || $page eq $enter_name_string)
@@ -231,9 +231,9 @@ sub handler
     my $messagegroup = shift @{ $messagegroup_dbi->get({name=>$group, count=>1}) } ;
     my $readgperms = $messagegroup->permissions & READGPERMISSIONS;
     my @list = ();
-    $readgperms =~ s/0//g;
+    $readgperms =~ s/0//gmx;
     my $readwperms = $messagegroup->permissions & READWPERMISSIONS;
-    $readwperms =~ s/0//g;
+    $readwperms =~ s/0//gmx;
     my @groups = grep { $_ eq $messagegroup->usergroup } @usergroups;
     $id ||= 0;
 
@@ -242,9 +242,9 @@ sub handler
     my @clist = ();
     for my $c (@li)
     { my $readgperms = $c->permissions & READGPERMISSIONS;
-      $readgperms =~ s/0//g;
+      $readgperms =~ s/0//gmx;
       my $readwperms = $c->permissions & READWPERMISSIONS;
-      $readwperms =~ s/0//g;
+      $readwperms =~ s/0//gmx;
       my @groups = grep { $_ eq $c->usergroup } @usergroups;
       if ( ($user eq 'admin' || #User is admin
             $c->owner eq $user || #User is owner of content
@@ -258,7 +258,7 @@ sub handler
     @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
     $group = undef;
     for(@groups) { my $sel = $messagegroup->usergroup eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
-    my @perms = $messagegroup->permissions =~ /^(\d)(\d)(\d)(\d)/;
+    my @perms = $messagegroup->permissions =~ /^(\d)(\d)(\d)(\d)/mx;
     my @checked = (""," checked");
     my $gpermissions = qq(Read: <input type="checkbox" name="groupr" value="1"$checked[$perms[0]]>);
     $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
@@ -303,13 +303,13 @@ sub handler
     }
    my $mgroup = $messagegroup->name;
    my $owner = $messagegroup->owner;
-   $body =~ s/\$messagedata/$data/g;
-   $body =~ s/\$messagegroup/$mgroup/g;
-   $body =~ s/\$contentlist/$contentlist/g;   
-   $body =~ s/\$gpermissions/$gpermissions/g;
-   $body =~ s/\$wpermissions/$wpermissions/g;
-   $body =~ s/\$owner/$owner/g;
-   $body =~ s/\$group/$group/g;   
+   $body =~ s/\$messagedata/$data/gmx;
+   $body =~ s/\$messagegroup/$mgroup/gmx;
+   $body =~ s/\$contentlist/$contentlist/gmx;   
+   $body =~ s/\$gpermissions/$gpermissions/gmx;
+   $body =~ s/\$wpermissions/$wpermissions/gmx;
+   $body =~ s/\$owner/$owner/gmx;
+   $body =~ s/\$group/$group/gmx;   
   } 
 
   if ($error || !$params[0] || $params[0] eq 'copy' || $params[0] eq 'remove') 
@@ -317,9 +317,9 @@ sub handler
     my @list = ();
     for my $m (@li)
     { my $readgperms = $m->permissions & READGPERMISSIONS;
-      $readgperms =~ s/0//g;
+      $readgperms =~ s/0//gmx;
       my $readwperms = $m->permissions & READWPERMISSIONS;
-      $readwperms =~ s/0//g;
+      $readwperms =~ s/0//gmx;
       my @groups = grep { $_ eq $m->usergroup } @usergroups;
       if ( ($user eq 'admin' || #User is admin
             $m->owner eq $user || #User is owner of messagegroup
@@ -331,10 +331,10 @@ sub handler
     my $list = undef;
     @list = sort { $a cmp $b } @list;
     for(@list) { $list .= "<option value=\"$_\">$_\n"; }
-    $body =~ s/\$list/$list/g;
-    $body =~ s/\$type/message/g;
-    $body =~ s/\$label/message group/g;
-    $body =~ s/\$error/$error/g;        
+    $body =~ s/\$list/$list/gmx;
+    $body =~ s/\$type/message/gmx;
+    $body =~ s/\$label/message group/gmx;
+    $body =~ s/\$error/$error/gmx;        
   } 
   $content->body($body);
   return $content;

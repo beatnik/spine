@@ -39,9 +39,9 @@ sub handler
   my $dbh = shift; #DB Handler
   my $tag = shift;
   my $content = shift;
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/mxg;
   my @params = split(/,/,$params);
-  @params = map { /\"?([^\"]*)\"?/; $_ = $1; } @params;
+  @params = map { /\"?([^\"]*)\"?/mx; $_ = $1; } @params;
   my $macro_dbi = SPINE::DBI::Macro->new($dbh);
   my $macro = shift @ { $macro_dbi->get({name=>$content->macros, macrokey=>$params[0], count=>1 }) };; 
   return $macro->macrovalue if ref $macro;

@@ -39,16 +39,16 @@ sub handler
 { my $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift; #
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
   my @params = split(/,/,$params);
   my $body = undef;
   my $since = $request->param("since") || "1980-01-01 00:00:00";
-  my (@since_time) = $since =~ /^(\d{4})\-(\d{2})\-(\d{2}) (\d{2})\:(\d{2})\:(\d{2})$/;
+  my (@since_time) = $since =~ /^(\d{4})\-(\d{2})\-(\d{2}) (\d{2})\:(\d{2})\:(\d{2})$/mx;
   $since_time[1]--;
   my $since_time = timelocal($since_time[5],$since_time[4],$since_time[3],$since_time[2],$since_time[1],$since_time[0]);
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   for my $content (@{$content_dbi->get("sort"=>"modified")})
-  { my @mod_time = $content->modified =~ /^(\d{4})\-(\d{2})\-(\d{2}) (\d{2})\:(\d{2})\:(\d{2})$/;
+  { my @mod_time = $content->modified =~ /^(\d{4})\-(\d{2})\-(\d{2}) (\d{2})\:(\d{2})\:(\d{2})$/mx;
     $mod_time[1]--;
     my $mod_time = timelocal($mod_time[5],$mod_time[4],$mod_time[3],$mod_time[2],$mod_time[1],$mod_time[0]);
     if ($mod_time > $since_time)

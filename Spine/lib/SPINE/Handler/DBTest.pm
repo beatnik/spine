@@ -46,7 +46,7 @@ sub handler
   my $main = $request->dir_config("main") || "index.html";
   my $url = $request->uri;
   my $location = $request->location;
-  $url =~ s/^$location\/?//g;  
+  $url =~ s/^$location\/?//gmx;  
   ($url) = split("/",$url);
   #Clean up the URL a bit
   if (!$url)

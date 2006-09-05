@@ -1,7 +1,5 @@
 package SPINE::Handler::Admin::Usergroup;
 
-# TODO: Doublecheck - Compare with existing modules
-
 ## This module is part of SPINE
 ## Copyright 2000-2005 Hendrik Van Belleghem
 ## SPINE is free software; you can redistribute it and/or modify
@@ -59,7 +57,7 @@ sub handler
   my $url = $request->uri;
   my $location = $request->location;
   
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
 
   ($url,@params) = split("/",$url);
 
@@ -84,11 +82,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
   
   shift @params;
 
@@ -136,8 +134,8 @@ sub handler
     for(@groups) { my $sel = $hash{"usergroup"} eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
     $list .= qq(<tr bgcolor="#ffffff"><td>$hash{username}\n</td><td>$hash{usergroup}\n</td>\n</form><form action="<?SPINE_Location?>admin/usergroup/remove/" method="post"><input type="hidden" name="usergroup" value="$hash{usergroup}"><input type="hidden" name="username" value="$hash{username}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="submit" value="Delete" class="button" name="action"></td>\n</form></tr>\n); 
   }
-  $body =~ s/\$list/$list/g;
-  $body =~ s/\$error/$error/g;
+  $body =~ s/\$list/$list/gmx;
+  $body =~ s/\$error/$error/gmx;
   $content->body($body);
   return $content;
 }

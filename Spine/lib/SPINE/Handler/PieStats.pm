@@ -41,7 +41,7 @@ sub handler
   my $height = $request->param('height') || 400;
   my $category = $request->param('category') || "useragent";
   my $page = $request->param('page') || "index.html";
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
   my @params = split(/,/,$params);
   my $stats_dbi = SPINE::DBI::Statistics->new($dbh);
   my @category = ();

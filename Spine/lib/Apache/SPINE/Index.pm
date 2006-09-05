@@ -131,9 +131,9 @@ sub handler
   $req->content_type($type);
   $req->send_http_header;
   return OK if $req->header_only;
-  while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$req,$content)/ge) 
-  { $body =~ s/<\?SPINE_Location\?>/$location/g;
-    $body =~ s/<\?SPINE_Servername\?>/$ENV{SERVER_NAME}/g; 
+  while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$req,$content)/mxge) 
+  { $body =~ s/<\?SPINE_Location\?>/$location/mxg;
+    $body =~ s/<\?SPINE_Servername\?>/$ENV{SERVER_NAME}/mxg; 
   }
   #I hope this doesn't come back to hunt me
   $req->print($body);

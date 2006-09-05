@@ -22,12 +22,11 @@ package SPINE::Transparent::Constant;
 
 use warnings;
 use strict;
-require Exporter;
-use vars qw($VERSION @ISA @EXPORT $OK $FORBIDDEN $NOT_FOUND);
+use base qw(Exporter);
+use vars qw($VERSION @EXPORT $OK $FORBIDDEN $NOT_FOUND);
 
 $VERSION = $SPINE::Constant::VERSION;
 
-@ISA = qw(Exporter);
 @EXPORT = qw($OK $NOT_FOUND $FORBIDDEN);
 
 sub new {

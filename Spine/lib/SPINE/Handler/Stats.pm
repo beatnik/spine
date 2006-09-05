@@ -42,7 +42,7 @@ sub handler
   my $dbh = shift; #DB Handler
   my $tag = shift;
   my $body = 0;
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
   my @params = split(/,/,$params);
 
   my $main = $request->dir_config("main") || "index.html";
@@ -53,7 +53,7 @@ sub handler
   my @p = ();
   my $url = $request->uri;
   my $location = $request->location;
-  $url =~ s/^$location\/?//g;
+  $url =~ s/^$location\/?//gmx;
   ($url,@p) = split("/",$url);
   if (!$url)
   { $url = $main; }

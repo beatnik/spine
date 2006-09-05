@@ -64,7 +64,7 @@ sub handler
 
   my $url = $request->uri;
   my $location = $request->location;
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
 
   ($url,@params) = split("/",$url);
 
@@ -120,11 +120,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
 
   shift @params;
   if (!$params[0] || !$page || $page eq $enter_name_string)
@@ -199,10 +199,10 @@ sub handler
   if (!ref $style)
   { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
     my $body = $content->body;
-    $body =~ s/\$page/$url/g;
-    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
+    $body =~ s/\$page/$url/gmx;
+    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/mx;
     $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-    $body =~ s/\$serversig/$serversig/g;
+    $body =~ s/\$serversig/$serversig/gmx;
     $content->body($body);
   }
   my $body = undef;
@@ -220,32 +220,32 @@ sub handler
     { my $selected = $edit_style->macros eq $_ ? ' selected' : ''; 
       $macrolist .= "<option value=\"$_\"$selected>$_\n"; 
     }
-    $sbody =~ s/\&/\&amp\;/g; 
-    $sbody =~ s/\</\&lt\;/g;
-    $sbody =~ s/\>/\&gt\;/g;
-    $body =~ s/\$title/$edit_style->title/ge if ref $edit_style;
-    $body =~ s/\$filename/$edit_style->name/ge if ref $edit_style;
-    $body =~ s/\$size/length($sbody)/ge;
-    $body =~ s/\$macros/$macrolist/g;
-    $body =~ s/\$owner/$edit_style->owner/ge if ref $edit_style; 
-    $body =~ s/\$lastmod/$edit_style->modified/ge if ref $edit_style;
+    $sbody =~ s/\&/\&amp\;/gmx; 
+    $sbody =~ s/\</\&lt\;/gmx;
+    $sbody =~ s/\>/\&gt\;/gmx;
+    $body =~ s/\$title/$edit_style->title/gmxe if ref $edit_style;
+    $body =~ s/\$filename/$edit_style->name/gmxe if ref $edit_style;
+    $body =~ s/\$size/length($sbody)/gmxe;
+    $body =~ s/\$macros/$macrolist/gmx;
+    $body =~ s/\$owner/$edit_style->owner/gmxe if ref $edit_style; 
+    $body =~ s/\$lastmod/$edit_style->modified/gmxe if ref $edit_style;
     my @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
     my $group = undef;
     for(@groups) { my $sel = $edit_style->usergroup eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
-    my @perms = $edit_style->permissions =~ /^(\d)(\d)(\d)(\d)/;
+    my @perms = $edit_style->permissions =~ /^(\d)(\d)(\d)(\d)/mx;
     my @checked = (""," checked");
     my $gpermissions = qq(Read: <input type="checkbox" name="groupr" value="1"$checked[$perms[0]]>);
     $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
     my $wpermissions = qq(Read: <input type="checkbox" name="worldr" value="1"$checked[$perms[2]]>);
     $wpermissions .= qq(Write: <input type="checkbox" name="worldw" value="1"$checked[$perms[3]]>);
-    $body =~ s/\$group/$group/g;
-    $body =~ s/\$lastmod/$edit_style->modified/ge if ref $edit_style;
-    $body =~ s/\$size/length($sbody)/ge;
-    $body =~ s/\$icomment/$icomment/g;
-    $body =~ s/\$gpermissions/$gpermissions/g;
-    $body =~ s/\$wpermissions/$wpermissions/g;
-    $body =~ s/\$error/$ierror/g;
-    $body =~ s/\$body/$sbody/g;
+    $body =~ s/\$group/$group/gmx;
+    $body =~ s/\$lastmod/$edit_style->modified/gmxe if ref $edit_style;
+    $body =~ s/\$size/length($sbody)/gmxe;
+    $body =~ s/\$icomment/$icomment/gmx;
+    $body =~ s/\$gpermissions/$gpermissions/gmx;
+    $body =~ s/\$wpermissions/$wpermissions/gmx;
+    $body =~ s/\$error/$ierror/gmx;
+    $body =~ s/\$body/$sbody/gmx;
   } 
 
   if ( ((!$params[0] || $params[0] eq 'copy' || $params[0] eq 'remove') && $params[0] ne 'edit' ) || $error)
@@ -255,13 +255,13 @@ sub handler
     #Only show hidden files in the listing if you are admin
     #Comment these 2 lines if you wish to include the dot-files in the listing..
     if ($user ne 'admin')
-    { @li = grep { $_->name =~ /^[^\.]/ } @li; }
+    { @li = grep { $_->name =~ /^[^\.]/mx } @li; }
 
     for my $c (@li)
     { my $readgperms = $c->permissions & READGPERMISSIONS;
-      $readgperms =~ s/0//g;
+      $readgperms =~ s/0//gmx;
       my $readwperms = $c->permissions & READWPERMISSIONS;
-      $readwperms =~ s/0//g;
+      $readwperms =~ s/0//gmx;
       my @groups = grep { $_ eq $c->usergroup } @usergroups;
       if ( ($user eq 'admin' || #User is admin
             $c->owner eq $user || #User is owner of content
@@ -272,10 +272,10 @@ sub handler
     }  
     my $list = undef;
     for(@list) { $list .= "<option value=\"$_\">$_\n"; }
-    $body =~ s/\$list/$list/g;
-    $body =~ s/\$type/style/g;
-    $body =~ s/\$label/style/g;
-    $body =~ s/\$error/$error/g;    
+    $body =~ s/\$list/$list/gmx;
+    $body =~ s/\$type/style/gmx;
+    $body =~ s/\$label/style/gmx;
+    $body =~ s/\$error/$error/gmx;    
   } 
   $content->body($body);
   return $content;
@@ -284,7 +284,7 @@ sub handler
 sub save
 { my $style = shift @{$style_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $style->owner eq $user || 
-      $style->permissions =~ /^\d1/ || $style->permissions =~ /\d1$/)
+      $style->permissions =~ /^\d1/mx || $style->permissions =~ /\d1$/mx)
   { $style->title($request->param('title')) if ref $style;
     $style->body($request->param('body')) if ref $style;
     $style->macros($request->param('macros')) if ref $style;
@@ -308,7 +308,7 @@ sub save
 sub copy
 { my $style = shift @{$style_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $style->owner eq $user || 
-      $style->permissions =~ /^1/ || $style->permissions =~ /1\d$/)
+      $style->permissions =~ /^1/mx || $style->permissions =~ /1\d$/mx)
   { $style->name($request->param('target'));
     $style->id(0);
     $style_dbi->add($style);
@@ -319,7 +319,7 @@ sub copy
 sub remove #Document: You need both read and write permissions to delete a style
 { my $style = shift @{$style_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $style->owner eq $user || 
-      $style->permissions =~ /^\11/ || $style->permissions =~ /11$/)  
+      $style->permissions =~ /^\11/mx || $style->permissions =~ /11$/mx)  
   { $style_dbi->remove($style); }
   return;
 }

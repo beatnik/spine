@@ -53,9 +53,9 @@ sub handler
   my $date = "$year-$mon-$day $hour:$min:$sec";
   my $file = $r->uri;
   my $location = $r->location;
-  $file =~ s/^$location\/?//;
+  $file =~ s/^$location\/?//mx;
   $file ||= $main;
-  $file =~ s/^(.*?)\/.*$/$1/g;
+  $file =~ s/^(.*?)\/.*$/$1/mxg;
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $content = shift @ { $content_dbi->get({ name => $file }) };
   if (!$content) { return DONE; }

@@ -61,7 +61,7 @@ sub handler
   $ierror = '';
   %default = ();
   %i18n = ();
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
 
   ($url,@params) = split("/",$url);
 
@@ -116,11 +116,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
 
   shift @params;
   #@params is something like qw(content new);
@@ -200,10 +200,10 @@ sub handler
   if (!ref $style)
   { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
     my $body = $content->body;
-    $body =~ s/\$page/$url/g;
-    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
+    $body =~ s/\$page/$url/gmx;
+    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/mx;
     $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-    $body =~ s/\$serversig/$serversig/g;
+    $body =~ s/\$serversig/$serversig/gmx;
     $content->body($body);
   }
   my $body = undef;
@@ -216,9 +216,9 @@ sub handler
     my @list = ();
     for my $c (@li)
     { my $readgperms = $c->permissions & READGPERMISSIONS;
-      $readgperms =~ s/0//g;
+      $readgperms =~ s/0//gmx;
       my $readwperms = $c->permissions & READWPERMISSIONS;
-      $readwperms =~ s/0//g;
+      $readwperms =~ s/0//gmx;
       my @groups = grep { $_ eq $c->usergroup } @usergroups;
       if ( ($user eq 'admin' || #User is admin
             $c->owner eq $user || #User is owner of content
@@ -246,33 +246,33 @@ sub handler
     my @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
     my $group = undef;
     for(@groups) { my $sel = $edit_content->usergroup eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
-    my @perms = $edit_content->permissions =~ /^(\d)(\d)(\d)(\d)/;
+    my @perms = $edit_content->permissions =~ /^(\d)(\d)(\d)(\d)/mx;
     my @checked = (""," checked");
     my $logging = qq(<input type="checkbox" value="1"$selected[0] name="logging">);
     my $gpermissions = qq(Read: <input type="checkbox" name="groupr" value="1"$checked[$perms[0]]>);
     $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
     my $wpermissions = qq(Read: <input type="checkbox" name="worldr" value="1"$checked[$perms[2]]>);
     $wpermissions .= qq(Write: <input type="checkbox" name="worldw" value="1"$checked[$perms[3]]>);
-    $cbody =~ s/\&/\&amp\;/g; 
-    $cbody =~ s/\</\&lt\;/g;
-    $cbody =~ s/\>/\&gt\;/g;
-    $body =~ s/\$title/$edit_content->title/ge if ref $edit_content;
-    $body =~ s/\$filename/$edit_content->name/ge if ref $edit_content;
-    $body =~ s/\$owner/$edit_content->owner/ge if ref $edit_content;
-    $body =~ s/\$type/$edit_content->type/ge if ref $edit_content;
-    $body =~ s/\$stylelist/$stylelist/g;
-    $body =~ s/\$breaks/$breaks/g;
-    $body =~ s/\$logging/$logging/g;
-    $body =~ s/\$macrolist/$macrolist/g;
-    $body =~ s/\$group/$group/g;
-    $body =~ s/\$keywords/$edit_content->keywords/ge if ref $edit_content;
-    $body =~ s/\$lastmod/$edit_content->modified/ge if ref $edit_content;
-    $body =~ s/\$size/length($cbody)/ge;
-    $body =~ s/\$icomment/$icomment/g;
-    $body =~ s/\$gpermissions/$gpermissions/g;
-    $body =~ s/\$wpermissions/$wpermissions/g;
-    $body =~ s/\$error/$ierror/g; 
-    $body =~ s/\$body/$cbody/g;
+    $cbody =~ s/\&/\&amp\;/gmx; 
+    $cbody =~ s/\</\&lt\;/gmx;
+    $cbody =~ s/\>/\&gt\;/gmx;
+    $body =~ s/\$title/$edit_content->title/gemx if ref $edit_content;
+    $body =~ s/\$filename/$edit_content->name/gmxe if ref $edit_content;
+    $body =~ s/\$owner/$edit_content->owner/gmxe if ref $edit_content;
+    $body =~ s/\$type/$edit_content->type/gemx if ref $edit_content;
+    $body =~ s/\$stylelist/$stylelist/gmx;
+    $body =~ s/\$breaks/$breaks/mxg;
+    $body =~ s/\$logging/$logging/mxg;
+    $body =~ s/\$macrolist/$macrolist/mxg;
+    $body =~ s/\$group/$group/gmx;
+    $body =~ s/\$keywords/$edit_content->keywords/mxge if ref $edit_content;
+    $body =~ s/\$lastmod/$edit_content->modified/mxge if ref $edit_content;
+    $body =~ s/\$size/length($cbody)/mxge;
+    $body =~ s/\$icomment/$icomment/mxg;
+    $body =~ s/\$gpermissions/$gpermissions/mxg;
+    $body =~ s/\$wpermissions/$wpermissions/mxg;
+    $body =~ s/\$error/$ierror/gmx; 
+    $body =~ s/\$body/$cbody/gmx;
   } 
 
   if ( ( (!$params[0] || $params[0] eq 'copy' || $params[0] eq 'remove') && $params[0] ne 'edit' ) || $error )
@@ -284,13 +284,13 @@ sub handler
     #Only show hidden files in the listing if you are admin
     #Comment these 2 lines if you wish to include the dot-files in the listing..
     if ($user ne 'admin')
-    { @li = grep { $_->name =~ /^[^\.]/ } @li; }
+    { @li = grep { $_->name =~ /^[^\.]/mx } @li; }
     
     for my $c (@li)
     { my $readgperms = $c->permissions & READGPERMISSIONS;
-      $readgperms =~ s/0//g;
+      $readgperms =~ s/0//gmx;
       my $readwperms = $c->permissions & READWPERMISSIONS;
-      $readwperms =~ s/0//g;
+      $readwperms =~ s/0//gmx;
       my @groups = grep { $_ eq $c->usergroup } @usergroups;
       if ( ($user eq 'admin' || #User is admin
             $c->owner eq $user || #User is owner of content
@@ -300,10 +300,10 @@ sub handler
        { push(@list,$c->name); next; }
     }
     for(@list) { $list .= qq(<option value="$_">$_\n); }
-    $body =~ s/\$list/$list/g;
-    $body =~ s/\$type/content/g;
-    $body =~ s/\$label/content/g;
-    $body =~ s/\$error/$error/g;        
+    $body =~ s/\$list/$list/gmx;
+    $body =~ s/\$type/content/gmx;
+    $body =~ s/\$label/content/gmx;
+    $body =~ s/\$error/$error/gmx;        
   } 
   $content->body($body);
   return $content;
@@ -312,7 +312,7 @@ sub handler
 sub save
 { my $content = shift @{$content_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $content->owner eq $user || 
-      $content->permissions =~ /^\d1/ || $content->permissions =~ /\d1$/)
+      $content->permissions =~ /^\d1/mx || $content->permissions =~ /\d1$/mx)
   { $content->title($request->param('title')) if ref $content;
     $content->style($request->param('style')) if ref $content;
     $content->keywords($request->param('keywords')) if ref $content;
@@ -345,7 +345,7 @@ sub save
 sub copy
 { my $content = shift @{$content_dbi->get({name=>$request->param('name')})};
   if ($user eq 'admin' || $content->owner eq $user || 
-      $content->permissions =~ /^1/ || $content->permissions =~ /1\d$/)
+      $content->permissions =~ /^1/mx || $content->permissions =~ /1\d$/mx)
   { $content->name($request->param('target'));
     $content->id(0);
     $content_dbi->add($content);
@@ -357,7 +357,7 @@ sub remove
 #Document: You need both read and write permissions to delete a content
 { my $content = shift @{$content_dbi->get({name=>$request->param('name'), count=>1})};
   if ($user eq 'admin' || $content->owner eq $user || 
-      $content->permissions =~ /^\11/ || $content->permissions =~ /11$/)  
+      $content->permissions =~ /^\11/mx || $content->permissions =~ /11$/mx)  
   { $content_dbi->remove($content); }
   return;
 }

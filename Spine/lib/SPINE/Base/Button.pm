@@ -40,7 +40,7 @@ for (@NUMERIC, @NON_NUMERIC)
 sub AUTOLOAD {
  my $self = shift;
  my $method = $AUTOLOAD;
- $method =~ s/.*:://;
+ $method =~ s/.*:://mx;
  return if $method eq "DESTROY";
  warn "Invalid method! $method" unless $fields{$method};
  $self->{uc $method} = shift if @_;

@@ -58,7 +58,7 @@ sub handler
   %default = ();
   %i18n = ();
   
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
 
   ($url,@params) = split("/",$url);
 
@@ -116,11 +116,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
 
   shift @params;
   #@params is something like qw(content new);
@@ -192,26 +192,26 @@ sub handler
     my $list = undef;
     for(@macro)
     { my %hash = $_->tohash;
-      $hash{macrokey} =~ s/</&lt;/g;
-      $hash{macrokey} =~ s/>/&gt;/g;
-      $hash{macrokey} =~ s/\"/&quot;/g;
-      $hash{macrovalue} =~ s/</&lt;/g;
-      $hash{macrovalue} =~ s/>/&gt;/g;
-      $hash{macrovalue} =~ s/\"/&quot;/g;
+      $hash{macrokey} =~ s/</&lt;/gmx;
+      $hash{macrokey} =~ s/>/&gt;/gmx;
+      $hash{macrokey} =~ s/\"/&quot;/gmx;
+      $hash{macrovalue} =~ s/</&lt;/gmx;
+      $hash{macrovalue} =~ s/>/&gt;/gmx;
+      $hash{macrovalue} =~ s/\"/&quot;/gmx;
       $list .= qq(<tr bgcolor="#ffffff"><form action="<?SPINE_Location?>admin/macro/save/" method="post"><input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="text" name="key" class="input" value="$hash{macrokey}" size="30">\n</td><td><input type="text" name="value" class="input" value="$hash{macrovalue}" size="30">\n</td>\n<td><input type="submit" value="save" class="button" name="action"></td>\n</form><form action="<?SPINE_Location?>admin/macro/remove/" method="post"><input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="submit" value="delete" class="button" name="action"></td>\n</form></tr>\n); 
     }
-    $body =~ s/\$name/$request->param('name')/ge;
-    $body =~ s/\$list/$list/g;
+    $body =~ s/\$name/$request->param('name')/gmxe;
+    $body =~ s/\$list/$list/gmx;
   } 
   if ( ( (!$params[0] || $params[0] eq 'copy' || ($params[0] eq 'remove' && !$request->param('id') ) ) && $params[0] ne 'edit' ) || $error )
   { my @list = @{$macro_dbi->getlist()};
     my $list = "";
     my $c = undef;
     for(@list) { $list .= qq(<option value="$_">$_\n); }
-    $body =~ s/\$list/$list/g;
-    $body =~ s/\$type/macro/g;
-    $body =~ s/\$label/macro/g;
-    $body =~ s/\$error/$error/g;
+    $body =~ s/\$list/$list/gmx;
+    $body =~ s/\$type/macro/gmx;
+    $body =~ s/\$label/macro/gmx;
+    $body =~ s/\$error/$error/gmx;
   } 
   $content->body($body);
   return $content;

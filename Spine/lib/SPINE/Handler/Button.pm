@@ -43,7 +43,7 @@ sub handler
   my $dbh = shift; #DB Handler
   my $tag = shift;
   my $body;
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/mx;
   my @params = split(/,/,$params);
   my $button_dbi = SPINE::DBI::Button->new($dbh);
   my @buttons = @{$button_dbi->get()};

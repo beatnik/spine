@@ -24,14 +24,12 @@ use warnings;
 use strict;
 use DBI;
 use SPINE::Base::Revision;
-use SPINE::DBI::Base;
 use SPINE::Constant;
 
-use vars qw($VERSION @ISA);
+use vars qw($VERSION);
+use base qw(SPINE::DBI::Base);
 
 $VERSION = $SPINE::Constant::VERSION;
-
-@ISA = qw(SPINE::DBI::Base);
 
 sub new
 { my $proto = shift;

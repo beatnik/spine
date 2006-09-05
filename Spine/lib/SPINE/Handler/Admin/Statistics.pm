@@ -56,7 +56,7 @@ sub handler
   SPINE::Transparent::Constant->new($request);
   my %cookies = $th_req->cookies;
     
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
 
   ($url,@params) = split("/",$url);
 
@@ -83,11 +83,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
 
   shift @params;
 
@@ -127,8 +127,8 @@ sub handler
         my $number = $hash{number};
         $list .= qq(<tr><td>$hash{$stat}</td><td><img src="/images/dot.jpg" width="$number" height="10">&nbsp;$hash{number}</td></tr>\n);
       }
-      $body =~ s/\$${stat}list/$list/g;
-      $body =~ s/\$name/$name/g;
+      $body =~ s/\$${stat}list/$list/gxm;
+      $body =~ s/\$name/$name/gmx;
     }
   } 
 
@@ -137,7 +137,7 @@ sub handler
     #Only show hidden files in the listing if you are admin
     #Comment these 2 lines if you wish to include the dot-files in the listing..
     if ($user ne 'admin')
-    { @list = grep { $_ =~ /^[^\.]/ } @list; }
+    { @list = grep { $_ =~ /^[^\.]/mx } @list; }
 
     my $list = undef;
     for(@list) { $list .= "<option value=\"$_\">$_\n"; }
@@ -148,7 +148,7 @@ sub handler
     { next if !$attr;
       my $a = $attr->attr;
       if ($user ne 'admin')
-      { $counters{$a} = $attr->value if $a =~ /^[^\.]/; }
+      { $counters{$a} = $attr->value if $a =~ /^[^\.]/mx; }
       else { $counters{$a} = $attr->value; }
     }
     #@list = @{$stats_dbi->get("name")};
@@ -159,10 +159,10 @@ sub handler
     { $namelist .= qq(<tr><td>$name</td><td><img src="/images/dot.jpg" width="$counters{$name}" height="10">&nbsp;$counters{$name}</td></tr>\n);
     }
 
-    $body =~ s/\$list/$list/g;
-    $body =~ s/\$namelist/$namelist/g;
-    $body =~ s/\$type/statistics/g;
-    $body =~ s/\$label/statistics/g;
+    $body =~ s/\$list/$list/gmx;
+    $body =~ s/\$namelist/$namelist/gmx;
+    $body =~ s/\$type/statistics/gmx;
+    $body =~ s/\$label/statistics/gmx;
   }
    
   $content->body($body);

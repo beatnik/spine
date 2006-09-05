@@ -56,7 +56,7 @@ sub handler
   my $url = $request->uri;
   my $location = $request->location;
   
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
 
   ($url,@params) = split("/",$url);
 
@@ -81,11 +81,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   $readperms = $adminaccess & READACCESS;
-  $readperms =~ s/0//g;
+  $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
-  $writeperms =~ s/0//g;
+  $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
-  $execperms =~ s/0//g;
+  $execperms =~ s/0//gmx;
   
   shift @params;
 
@@ -148,26 +148,26 @@ sub handler
     { my %hash = $_->tohash;
       $list .= qq(<tr bgcolor="#ffffff"><form action="<?SPINE_Location?>admin/user/edit/" method="post"><input type="hidden" name="login" value="$hash{login}">\n<td>$hash{fullname}</td>\n<td>$hash{login}</td>\n<td><input type="submit" value="edit" class="button" name="action"></td>\n</form><form action="<?SPINE_Location?>admin/user/remove/" method="post"><input type="hidden" name="login" value="$hash{login}">\n<td><input type="submit" value="delete" class="button" name="action"></td>\n</form><td>&nbsp;</td></tr>\n); 
     }
-    $body =~ s/\$userdata/$list/g;
-    $body =~ s/\$error/$error/g;        
+    $body =~ s/\$userdata/$list/gmx;
+    $body =~ s/\$error/$error/gmx;        
   } 
   if (($params[0] eq "edit" || $params[0] eq "save" || $params[0] eq "new")  && !$error)
   { my $user = shift @{ $user_dbi->get({login=>$request->param("login"), count=>1}) };
     my @usergroups =  @{ $usergroup_dbi->get({username=>$request->param("login")}) };
     my %hash = ();
     %hash = $user->tohash if ref $user;
-    $body =~ s/\$error/$error/g;        
-    $body =~ s/\$login/$hash{login}/g;  
-    $body =~ s/\$name/$hash{fullname}/g;  
-    $body =~ s/\$password//g;  
-    $body =~ s/\$id/$hash{id}/g;  
-    $body =~ s/\$email/$hash{email}/g;  
+    $body =~ s/\$error/$error/gmx;        
+    $body =~ s/\$login/$hash{login}/gmx;  
+    $body =~ s/\$name/$hash{fullname}/gmx;  
+    $body =~ s/\$password//gmx;  
+    $body =~ s/\$id/$hash{id}/gmx;  
+    $body =~ s/\$email/$hash{email}/gmx;  
     @usergroups = map { $_ = $_->usergroup } @usergroups;
     my @adminaccess = ();
     for(@usergroups)
     { push(@adminaccess, @{ $adminaccess_dbi->get({usergroup=>$_}) }); }
     my $usergroups = join(", ",@usergroups);
-    $body =~ s/\$usergroups/$usergroups/g;      
+    $body =~ s/\$usergroups/$usergroups/gmx;      
     my $adminaccess = undef;
     my %permissions = ();
     for(@adminaccess) { $permissions{$_->section} = $permissions{$_->section} | $_->permissions; }
@@ -177,7 +177,7 @@ sub handler
     for(keys %permissions) 
     { #$adminaccess .= qq(<input type="checkbox"
       $adminaccess .= $_."&nbsp;&nbsp;". $permissions{$_}."<br>"; }
-    $body =~ s/\$permissions/$adminaccess/g;      
+    $body =~ s/\$permissions/$adminaccess/gmx;      
   }
   $content->body($body);
   return $content;

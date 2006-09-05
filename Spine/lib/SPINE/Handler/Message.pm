@@ -47,7 +47,7 @@ sub handler
 { my $r = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift;
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
   my @params = split(/,/,$params);
   my $message_dbi = SPINE::DBI::Message->new($dbh);
   my $messagegroup_dbi = SPINE::DBI::Messagegroup->new($dbh);
@@ -59,27 +59,27 @@ sub handler
   my $location = $r->location;
   $error = '';
   
-  $url =~ s/^$location\/?//;
+  $url =~ s/^$location\/?//mx;
 
   my $id = shift @params;
-  ($id) = $id =~ /\"?([^\"]*)\"?/;
+  ($id) = $id =~ /\"?([^\"]*)\"?/mx;
 
   my $subject = shift @params;
-  ($subject) = $subject =~ /\"?([^\"]*)\"?/;
+  ($subject) = $subject =~ /\"?([^\"]*)\"?/mx;
 
   ($url,@params) = split("/",$url);
 
-  ($group) = $group =~ /\"?([^\"]*)\"?/;
+  ($group) = $group =~ /\"?([^\"]*)\"?/mx;
   #Message group is the first parameter
   my $messagegroup = shift @{ $messagegroup_dbi->get({name=>$group, count=>1}) } ; 
   my $content = shift @ { $content_dbi->get({name=>$messagegroup->content, count=>1}) };
   if (!ref $content)
   { $content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
     my $body = $content->body;
-    $body =~ s/\$page/$url/g;
-    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/;
+    $body =~ s/\$page/$url/gmx;
+    my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/mx;
     $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
-    $body =~ s/\$serversig/$serversig/g;
+    $body =~ s/\$serversig/$serversig/gmx;
     $content->body($body);
   }  
   my $tbody = $content->body;
@@ -87,12 +87,12 @@ sub handler
   #The message ID is the second parameter.
   my $parent = $r->param('parent') || 0;
   my $limit = $r->param('limit');
-  ($limit) = $limit =~ /^(\d*)$/;
+  ($limit) = $limit =~ /^(\d*)$/mx;
   my $offset = $r->param('offset');
   my ($order_hash) = shift @{$attribute_dbi->get(section=>"message",attr=>"order",name=>"$group")};
   my %order_hash = ();
   %order_hash = %{ $order_hash} if $order_hash;
-  ($offset) = $offset =~ /^(\d*)$/;  
+  ($offset) = $offset =~ /^(\d*)$/mx;  
   #Ugh.. I really need to comment this code
   my @narrow = ();
   push(@narrow,"mgroup", $group) if $group ne '';
@@ -114,32 +114,32 @@ sub handler
   for my $message (@messages)
   { next if ref($message) ne "SPINE::Base::Message";
     my $mbody = $tbody;
-    my $date = $message->mdate; #First date eh??
-    my ($year,$month,$day,$hour,$minute,$second) = $date =~ /^(\d{4})\-(\d{2})\-(\d{2}) (\d{2})\:(\d{2})\:(\d{2})$/;
+    my $mdate = $message->mdate; #First date eh??
+    my ($year,$month,$day,$hour,$minute,$second) = $mdate =~ /^(\d{4})\-(\d{2})\-(\d{2}) (\d{2})\:(\d{2})\:(\d{2})$/;
     $month--;
     my $id = $message->id;
     my @comments = ();
     @comments = @{ $message_dbi->get({ mgroup=>$group, parent=>$id }) } if $id;
-    my $time = timelocal($second,$minute,$hour,$day,$month,$year);
-    my $wday = (localtime($time))[6];
+    my $mtime = timelocal($second,$minute,$hour,$day,$month,$year);
+    my $wday = (localtime($mtime))[6];
     my $parent = shift @ { $message_dbi->get( { "id"=>$message->parent, "mgroup"=>$group, count=>1} ) };
     my $parent_subject = undef;
     $parent_subject = $parent->subject if $parent;
     my $datetime = "$days[$wday] $months[$month] $day, $year ($hour:$minute:$second)";
-    $date = "$days[$wday] $months[$month] $day $year";
-    $time = "$hour:$minute:$second";
-    $mbody =~ s/<\?SPINE_Message_Body\?>/$message->body/ge;
-    $mbody =~ s/<\?SPINE_Message_Subject\?>/$message->subject/ge;
-    $mbody =~ s/<\?SPINE_Message_Date\?>/$date/g;
-    $mbody =~ s/<\?SPINE_Message_Time\?>/$time/g;
-    $mbody =~ s/<\?SPINE_Message_DateTime\?>/$datetime/g;
-    $mbody =~ s/<\?SPINE_Message_Owner\?>/$message->owner/ge;
-    $mbody =~ s/<\?SPINE_Message_Id\?>/$message->id/ge;
-    $mbody =~ s/<\?SPINE_Page\?>/$url/ge;
-    $mbody =~ s/<\?SPINE_Message_Parent_Id\?>/$message->parent/ge;
-    $mbody =~ s/<\?SPINE_Message_Parent_Subject\?>/$parent_subject/g;
-    $mbody =~ s/<\?SPINE_Message_Group\?>/$group/ge;
-    $mbody =~ s/<\?SPINE_Message_Comments\?>/scalar(@comments)/ge;
+    $mdate = "$days[$wday] $months[$month] $day $year";
+    $mtime = "$hour:$minute:$second";
+    $mbody =~ s/<\?SPINE_Message_Body\?>/$message->body/gmxe;
+    $mbody =~ s/<\?SPINE_Message_Subject\?>/$message->subject/gmxe;
+    $mbody =~ s/<\?SPINE_Message_Date\?>/$mdate/gmx;
+    $mbody =~ s/<\?SPINE_Message_Time\?>/$mtime/gmx;
+    $mbody =~ s/<\?SPINE_Message_DateTime\?>/$datetime/gmx;
+    $mbody =~ s/<\?SPINE_Message_Owner\?>/$message->owner/gxme;
+    $mbody =~ s/<\?SPINE_Message_Id\?>/$message->id/gemx;
+    $mbody =~ s/<\?SPINE_Page\?>/$url/gemx;
+    $mbody =~ s/<\?SPINE_Message_Parent_Id\?>/$message->parent/gemx;
+    $mbody =~ s/<\?SPINE_Message_Parent_Subject\?>/$parent_subject/gmx;
+    $mbody =~ s/<\?SPINE_Message_Group\?>/$group/gmxe;
+    $mbody =~ s/<\?SPINE_Message_Comments\?>/scalar(@comments)/gemx;
     $body .= $mbody;
   }
   return $body;

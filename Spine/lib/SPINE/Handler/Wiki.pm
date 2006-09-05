@@ -41,11 +41,11 @@ sub handler
 { my $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift; #
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
   my $action = $request->param("action");
   my $page = $ENV{PATH_INFO};
-  $page =~ s/^\\+//g;
-  $page =~ s/^\/+//g;
+  $page =~ s/^\\+//gmx;
+  $page =~ s/^\/+//gmx;
   my %cookies = Apache::Cookie->fetch;
   my @params = split(/,/,$params);
   my $body = "";
@@ -68,9 +68,9 @@ sub handler
     # if (($session && !$session->username) || !$session)
     #{ $session = $s if ($s && $s->username); }
     my $writewperms = $wiki->permissions & WRITEWPERMISSIONS;
-    $writewperms =~ s/0//g;
+    $writewperms =~ s/0//gmx;
     my $readwperms = $wiki->permissions & READWPERMISSIONS;
-    $readwperms =~ s/0//g;
+    $readwperms =~ s/0//gmx;
     $readwiki = $readwperms;
     $writewiki = $writewperms; 
   
@@ -79,9 +79,9 @@ sub handler
       @usergroups = map { $_ = $_->usergroup } @usergroups;
       my $writegperms = $wiki->permissions & WRITEGPERMISSIONS;
       my $readperms = $wiki->permissions & READACCESS;
-      $readperms =~ s/0//g;
+      $readperms =~ s/0//gmx;
       my $writeperms = $wiki->permissions & WRITEACCESS;
-      $writeperms =~ s/0//g;
+      $writeperms =~ s/0//gmx;
       my $execperms = $wiki->permissions & EXECACCESS;
       $writewiki = 
       ($session->username eq 'admin') ||

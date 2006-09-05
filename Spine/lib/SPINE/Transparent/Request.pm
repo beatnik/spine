@@ -37,7 +37,7 @@ sub new {
    eval qq|use Apache::Request; \$self->{REMOTE_HOST} = \$self->{REQUEST}->get_remote_host(); |; 
   }
  if (ref($self->{REQUEST}) eq "Apache2::Request")
- { eval qq|use Apache2::Cookie; \$self->{COOKIES} = Apache2::Cookie->fetch; |; 
+ { eval qq|use Apache2::Cookie; \$self->{COOKIES} = scalar Apache2::Cookie->fetch; |; 
    eval qq|use Apache2::Request; \$self->{REMOTE_HOST} = \$self->{REQUEST}->connection->get_remote_host(); |; 
  }
  bless $self,$class;

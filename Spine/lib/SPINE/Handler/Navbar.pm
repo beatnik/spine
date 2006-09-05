@@ -42,14 +42,14 @@ sub handler
 { my $r = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift;
-  my ($params) = $tag =~ m,\(([^\)]*)\),g;
+  my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
   my @params = split(/,/,$params);
   my $navbar_dbi = SPINE::DBI::Navbar->new($dbh);
   my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   my $button_dbi = SPINE::DBI::Button->new($dbh);
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $name = shift @params;
-  ($name) = $name =~ /\"?([^\"]*)\"?/;
+  ($name) = $name =~ /\"?([^\"]*)\"?/mx;
   my $navbar = shift @{ $navbar_dbi->get({name=>$name, count=>1}) } ;
 
   my (@attributes) = shift @{ $attribute_dbi->get({section=>"navbar",name=>$name}) } ;
@@ -88,9 +88,9 @@ sub handler
     }
 
     if (!$buttonhash{image} && $buttonhash{label})
-    { $body .= $navbarhash{style} =~ /bold/gi ? "<b>" : "";
-      $body .= $navbarhash{style} =~ /italic/gi ? "<i>" : "";
-      $body .= $navbarhash{style} =~ /underline/gi ? "<u>" : "";
+    { $body .= $navbarhash{style} =~ /bold/gmxi ? "<b>" : "";
+      $body .= $navbarhash{style} =~ /italic/gmxi ? "<i>" : "";
+      $body .= $navbarhash{style} =~ /underline/gmxi ? "<u>" : "";
     }
 
     $body .= $buttonhash{label} if (!$buttonhash{image} && $buttonhash{label});
@@ -99,9 +99,9 @@ sub handler
     $i--;
     $body .= "$navbarhash{sep}" if $i;
     if ($navbarhash{style})
-    { $body .= $navbarhash{style} =~ /bold/gi ? "</b>" : "";
-      $body .= $navbarhash{style} =~ /italic/gi ? "</i>" : "";
-      $body .= $navbarhash{style} =~ /underline/gi ? "</u>" : "";
+    { $body .= $navbarhash{style} =~ /bold/gmxi ? "</b>" : "";
+      $body .= $navbarhash{style} =~ /italic/gmxi ? "</i>" : "";
+      $body .= $navbarhash{style} =~ /underline/gmxi ? "</u>" : "";
     }
     $body .= qq(</li>) if $attributes{"li"};
   }
