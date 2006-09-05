@@ -22,12 +22,11 @@ package SPINE::Constant;
 
 use warnings;
 use strict;
-require Exporter;
-use vars qw($VERSION @ISA @EXPORT $CODENAME);
+use base qw(Exporter);
+use vars qw($VERSION @EXPORT $CODENAME);
 
 $VERSION = "1.2";
 $CODENAME = "Baldrick";
-@ISA = qw(Exporter);
 @EXPORT = qw(READACCESS WRITEACCESS EXECACCESS READGPERMISSIONS WRITEGPERMISSIONS READWPERMISSIONS WRITEWPERMISSIONS);
 
 use constant READACCESS => '100';
