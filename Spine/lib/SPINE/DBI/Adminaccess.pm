@@ -26,6 +26,7 @@ use DBI;
 use SPINE::Base::Adminaccess;
 use SPINE::Constant;
 use base qw(SPINE::DBI::Base);
+use Carp;
 
 use vars qw($VERSION);
 

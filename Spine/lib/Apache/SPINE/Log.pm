@@ -29,6 +29,7 @@ use SPINE::DBI::Content;
 use SPINE::Constant;
 use DBI;
 use Data::Dumper;
+use Carp;
 
 use vars qw($VERSION);
 
@@ -47,7 +48,7 @@ sub handler
   my $DBUSER_ = $r->dir_config("dbuser") || DBUSER;
   my $DBPWD_ = $r->dir_config("dbpwd") || DBPWD;  
   my $main = $r->dir_config("main") || "index.html";
-  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or die "Could not connect to Database:$!"; 
+  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or croak "Could not connect to Database:$!"; 
   my ($sec,$min,$hour,$day,$mon,$year) = localtime;
   $mon++; $year += 1900;
   my $date = "$year-$mon-$day $hour:$min:$sec";

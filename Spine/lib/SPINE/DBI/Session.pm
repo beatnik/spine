@@ -25,6 +25,7 @@ use strict;
 use DBI;
 use SPINE::Base::User;
 use SPINE::Constant;
+use Carp;
 
 use base qw(SPINE::DBI::Base);
 use vars qw($VERSION);
@@ -99,7 +100,7 @@ sub get
     $sth->execute();
     my $record; 
     eval qq{ use SPINE::Base::$self->{MODULE}; \$record = SPINE::Base::$self->{MODULE}->new(\$sth->fetchrow_hashref()); };
-    warn join("_-_",caller).$@ if $@;
+    carp join("_-_",caller).$@ if $@;
     $sortfield = "";
     return $record;  
   } 
@@ -131,7 +132,7 @@ sub get
     my @records = ();
     while($hashref = $sth->fetchrow_hashref()) 
     { eval qq{ use SPINE::Base::$self->{MODULE}; \$record = SPINE::Base::$self->{MODULE}->new(\$hashref); };
-      warn join("_-_",caller).$@ if $@;
+      carp join("_-_",caller).$@ if $@;
       push(@records,$record); 
     }
     $sortfield = "";
@@ -145,7 +146,7 @@ sub get
   my @records = ();
   while($hashref = $sth->fetchrow_hashref())
   { eval qq{ use SPINE::Base::$self->{MODULE}; \$record = SPINE::Base::$self->{MODULE}->new(\$hashref); };
-    warn join("_-_",caller).$@ if $@;
+    carp join("_-_",caller).$@ if $@;
     push(@records,$record); 
   }
   return \@records;

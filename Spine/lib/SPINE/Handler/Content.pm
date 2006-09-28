@@ -38,6 +38,7 @@ use SPINE::Transparent::Request;
 
 use Data::Dumper;
 
+use Carp;
 use strict;
 use vars qw($VERSION);
 
@@ -186,7 +187,7 @@ sub process_handler #Ofcourse I could've done this pure inline, but I'm lazy
     use SPINE::Handler::$module;
     \$value = SPINE::Handler::${module}::handler(\$req,\$dbh,\$tag,\$content);  #Call the handler method in that uhm handler
   };
-  warn $@ if $@; #Warn if necessary
+  carp $@ if $@; #Warn if necessary
   return $value;
 }
 

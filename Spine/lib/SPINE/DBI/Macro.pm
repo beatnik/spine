@@ -25,6 +25,7 @@ use strict;
 use DBI;
 use SPINE::Base::Macro;
 use SPINE::Constant;
+use Carp;
 
 use vars qw($VERSION);
 

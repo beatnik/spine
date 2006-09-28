@@ -32,6 +32,7 @@ use SPINE::Constant;
 use SPINE::Transparent::Request;
 use SPINE::Transparent::Constant;
 
+use Carp;
 use strict;
 use vars qw($VERSION);
 
@@ -89,7 +90,7 @@ sub handler
     if ($@)
     { $status = $SPINE::Transparent::Constant::OK;
       my $c = SPINE::Base::Content->new({body=>"Something went wrong while loading $params[0]! Please contact your server administrator if the problem persists."});
-      warn $@;
+      carp $@;
       return ($c,$status);
     }
     $status ||= $SPINE::Transparent::Constant::OK;

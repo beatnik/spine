@@ -31,6 +31,8 @@ use SPINE::Constant;
 use DBI;
 use Data::Dumper;
 
+use Carp;
+
 use Apache2::Connection;
 use Apache2::Request;
 
@@ -51,13 +53,13 @@ sub handler
   my $DBUSER_ = $r->dir_config("dbuser") || DBUSER;
   my $DBPWD_ = $r->dir_config("dbpwd") || DBPWD;  
   my $main = $r->dir_config("main");
-  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or die "Could not connect to Database:$!"; 
+  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or croak "Could not connect to Database:$!"; 
   my ($sec,$min,$hour,$day,$mon,$year) = localtime;
   $mon++; $year += 1900;
   my $date = "$year-$mon-$day $hour:$min:$sec";
   my $file = $r->uri;
   my $location = $r->location;
-  $file =~ s/^$location\/?//;
+  $file =~ s/^$location\/?//mx;
   $file ||= $main;
   $file =~ s/^(.*?)\/.*$/$1/mxg;
   my $in = $r->headers_in();

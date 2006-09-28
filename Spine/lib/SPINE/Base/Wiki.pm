@@ -23,6 +23,7 @@ package SPINE::Base::Wiki;
 use vars qw($VERSION @NUMERIC @NON_NUMERIC %fields $AUTOLOAD);
 use strict;
 use warnings;
+use Carp;
 no warnings 'redefine';
 use SPINE::Constant;
 
@@ -84,7 +85,7 @@ sub AUTOLOAD {
  my $method = $AUTOLOAD;
  $method =~ s/.*:://mx;
  return if $method eq "DESTROY";
- warn "Invalid method: $method" unless $fields{$method};
+ carp "Invalid method: $method" unless $fields{$method};
  $self->{uc $method} = shift if @_;
  return $self->{uc $method};
 }

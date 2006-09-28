@@ -24,6 +24,7 @@ use warnings;
 use strict;
 use DBI;
 use Data::Dumper;
+use Carp;
 use vars qw($VERSION $DEBUGTABLE);
 
 $DEBUGTABLE = "";
@@ -89,7 +90,7 @@ sub get
     $sth->execute($id);
     my $record; 
     eval qq{ use SPINE::Base::$self->{MODULE}; \$record = SPINE::Base::$self->{MODULE}->new(\$sth->fetchrow_hashref()); };
-    warn join("_-_",caller).$@ if $@;
+    carp join("_-_",caller).$@ if $@;
     $sortfield = "";
     $sth->finish;
     return $record;  
@@ -135,7 +136,7 @@ sub get
     { if (defined($limit)) { $statement .= " limit $limit"; }
       if (defined($offset)) { $statement .= " offset $offset"; }
     }
-    warn $statement if $SPINE::DBI::Base::DEBUGTABLE eq $self->{TABLE};
+    carp $statement if $SPINE::DBI::Base::DEBUGTABLE eq $self->{TABLE};
     my $sth = $self->{_HANDLER}->prepare($statement); 
     $sth->execute(@placeholders);
     my $record = "";
@@ -144,7 +145,7 @@ sub get
     my $i = 0;
     while($hashref = $sth->fetchrow_hashref()) 
     { eval qq{ use SPINE::Base::$self->{MODULE}; \$record = SPINE::Base::$self->{MODULE}->new(\$hashref); };
-      warn join("_-_",caller).$@ if $@;
+      carp join("_-_",caller).$@ if $@;
       push(@records,$record); 
       $i++;
       if ($i && $i == $count) { last; }
@@ -169,7 +170,7 @@ sub get
   my $i = 0;
   while($hashref = $sth->fetchrow_hashref())
   { eval qq{ use SPINE::Base::$self->{MODULE}; \$record = SPINE::Base::$self->{MODULE}->new(\$hashref); };
-    if ($@) { warn $@ , join("_-_",caller); }
+    if ($@) { carp $@ , join("_-_",caller); }
     push(@records,$record); 
     $i++;
     last if $i == $count;

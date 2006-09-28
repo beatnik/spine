@@ -24,6 +24,7 @@ use warnings;
 use strict;
 use DBI;
 use Data::Dumper;
+use Carp;
 use vars qw($VERSION);
 use SPINE::Constant;
 

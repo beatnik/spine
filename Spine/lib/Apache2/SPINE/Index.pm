@@ -39,6 +39,7 @@ use SPINE::Handler::Content;
 use SPINE::DBI::User;
 use SPINE::Constant;
 
+use Carp;
 use Digest::MD5 qw(md5_hex);
 
 use vars qw($VERSION);
@@ -57,7 +58,7 @@ sub initialise #Hope this subroutine does not get called constantly
   my $DB_ = $r->dir_config("dbname") || DB;
   my $DBUSER_ = $r->dir_config("dbuser") || DBUSER;
   my $DBPWD_ = $r->dir_config("dbpwd") || DBPWD;  
-  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or die "Could not connect to Database:$!"; 
+  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or croak "Could not connect to Database:$!"; 
   return $dbh;
   #But yes, I do recommend using Apache::DBI
   #Ofcourse, mod_spine wouldn't notice if you didn't
@@ -163,7 +164,7 @@ sub process_handler #Ofcourse I could've done this pure inline, but I'm lazy
     use SPINE::Handler::$module;
     \$value = SPINE::Handler::${module}::handler(\$req,\$dbh,\$tag,\$content);  #Call the handler method in that uhm handler
   };
-  warn $@ if $@; #Warn if necessary
+  carp $@ if $@; #Warn if necessary
   return $value;
 }
 

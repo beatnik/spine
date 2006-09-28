@@ -22,6 +22,7 @@ package SPINE::Base::Navbar;
 
 use vars qw($VERSION @NUMERIC @NON_NUMERIC $AUTOLOAD %fields);
 use warnings;
+use Carp;
 no warnings 'redefine';
 use strict;
 use SPINE::Constant;
@@ -39,7 +40,7 @@ sub AUTOLOAD {
  my $method = $AUTOLOAD;
  $method =~ s/.*:://mx;
  return if $method eq "DESTROY";
- warn "Invalid method: $method" unless $fields{$method};
+ carp "Invalid method: $method" unless $fields{$method};
  $self->{uc $method} = shift if @_;
  return $self->{uc $method};
 }
