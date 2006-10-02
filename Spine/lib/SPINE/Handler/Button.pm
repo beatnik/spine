@@ -26,8 +26,6 @@ package SPINE::Handler::Button;
 #Apache::Request Handler
 #DB Handler
 
-use warnings;
-
 use SPINE::DBI::Button;
 use SPINE::Constant;
 use Data::Dumper;

@@ -23,7 +23,6 @@ package SPINE::Handler::Macro;
 #Request Handler
 #DB Handler
 
-use warnings;
 use strict;
 
 use SPINE::Constant;

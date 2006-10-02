@@ -22,7 +22,6 @@ package SPINE::Handler::Admin::File;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.45 $
 
-use warnings;
 use strict;
 
 use vars qw($VERSION $content_dbi $style_dbi $user_dbi $usergroup_dbi $macro_dbi $adminaccess_dbi $session_dbi $attribute_dbi $request $user $adminaccess $error $ierror $readperms $writeperms $execperms %i18n %default);

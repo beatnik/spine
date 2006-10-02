@@ -20,8 +20,6 @@ package SPINE::Handler::Admin;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
 
-use warnings;
-
 use SPINE::DBI::Content;
 use SPINE::DBI::User;
 use SPINE::DBI::Session;

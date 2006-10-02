@@ -23,8 +23,6 @@ package SPINE::Handler::ImageGallery;
 #Apache::Request Handler
 #DB Handler
 
-use warnings;
-
 use SPINE::Constant;
 use SPINE::DBI::Content;
 use SPINE::DBI::Message;

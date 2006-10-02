@@ -25,7 +25,6 @@ package SPINE::Handler::Admin::Env;
 #Apache::Request Handler
 #DB Handler
 
-use warnings;
 use strict;
 use SPINE::Base::Content;
 use SPINE::Constant;

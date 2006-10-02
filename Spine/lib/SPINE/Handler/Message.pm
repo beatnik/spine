@@ -23,8 +23,6 @@ package SPINE::Handler::Message;
 #Request Handler
 #DB Handler
 
-use warnings;
-
 use SPINE::Base::Message;
 use SPINE::DBI::Content;
 use SPINE::DBI::Message;

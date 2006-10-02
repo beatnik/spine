@@ -23,8 +23,6 @@ package SPINE::Handler::Dump;
 #Apache::Request Handler
 #DB Handler
 
-use warnings;
-
 use strict;
 
 use vars qw($VERSION);

@@ -22,8 +22,6 @@ package SPINE::Handler::Admin::Usergroup;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:45 $ - $Revision: 1.3 $
 
-use warnings;
-
 use SPINE::DBI::Session;
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;

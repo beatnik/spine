@@ -22,8 +22,6 @@ package SPINE::Handler::Admin::Statistics;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.31 $
 
-use warnings;
-
 use SPINE::DBI::Statistics;
 use SPINE::DBI::Content;
 use SPINE::DBI::Adminaccess;

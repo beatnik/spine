@@ -22,8 +22,6 @@ package SPINE::Handler::Admin::Navbar;
 
 ## $Author: beatnik $ - $Date: 2006/02/22 20:37:54 $ - $Revision: 1.40 $
 
-use warnings;
-
 use Data::Dumper;
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;

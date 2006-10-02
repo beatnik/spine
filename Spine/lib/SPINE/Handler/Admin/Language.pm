@@ -22,7 +22,6 @@ package SPINE::Handler::Admin::Language;
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.18 $
 
-use warnings;
 use strict;
 
 use SPINE::DBI::Session;
