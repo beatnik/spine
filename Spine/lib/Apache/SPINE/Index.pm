@@ -23,7 +23,6 @@ package Apache::SPINE::Index;
 #This is the main content handler for mod_spine
 #This is the ONLY content handler for mod_spine... for now
 
-use warnings;
 use strict;
 use Apache::Constants qw(:common REDIRECT);
 use Apache::Request; #This one is SWEEEEEEEEEEET!!

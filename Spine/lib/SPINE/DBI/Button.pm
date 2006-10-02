@@ -20,7 +20,6 @@ package SPINE::DBI::Button;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
 
-use warnings;
 use strict;
 use DBI;
 use SPINE::Base::Button;

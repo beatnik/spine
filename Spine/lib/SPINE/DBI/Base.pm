@@ -20,7 +20,6 @@ package SPINE::DBI::Base;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
 
-use warnings;
 use strict;
 use DBI;
 use Data::Dumper;
@@ -110,7 +109,7 @@ sub get
         $found++;
       }
       if( grep { $field eq $_ } @{$self->{NON_NUMERIC}} )
-      { my $value = $self->{_HANDLER}->quote($params{$field});
+      { my $value = $params{$field};
         $value =~ s/^'//mx; $value =~ s/'$//mx;
         push(@placeholders,$value);
         $narrow .= " $field = ?"; 
@@ -223,7 +222,7 @@ sub getlist
       }
       if( grep { $value eq $_ } @{$self->{NON_NUMERIC}} )
       { $narrow .= " $value = ?";
-        my $qvalue = $self->{_HANDLER}->quote($params{$value});
+        my $qvalue = $params{$value};
         $qvalue =~ s/^'//mx; $qvalue =~ s/'$//mx;
         push(@placeholders,$qvalue);
         $found++;
@@ -271,7 +270,7 @@ sub update
     }
     for(@{$self->{NON_NUMERIC}})  
     { if($_ eq 'name') { next; } 
-      my $value = $self->{_HANDLER}->quote($record{$_});
+      my $value = $record{$_};
       $value =~ s/^'//mx; $value =~ s/'$//mx;
       push(@placeholders,$value);
       $update .= "$_ = ?, "; 
@@ -300,7 +299,7 @@ sub add
     { if (grep { $_ eq $field } @{$self->{NUMERIC}}) 
       { ($record{$field}) = $record{$field} =~ /(\d*)/mx; push(@placeholders, $record{$field}); $add .= "?, "; }
       if (grep { $_ eq $field } @{$self->{NON_NUMERIC}}) 
-      { my $value = $self->{_HANDLER}->quote($record{$field});
+      { my $value = $record{$field};
         $value =~ s/^'//mx; $value =~ s/'$//mx;
         push(@placeholders,$value);
         $add .= "?, ";
@@ -308,6 +307,7 @@ sub add
     }
     chop $add; chop $add;
     $add .= " )";
+    carp $add if $SPINE::DBI::Base::DEBUGTABLE eq $self->{TABLE};
     my $sth = $self->{_HANDLER}->prepare($add);
     $sth->execute(@placeholders);
     #Fix this!
