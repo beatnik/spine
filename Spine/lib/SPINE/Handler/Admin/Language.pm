@@ -71,13 +71,13 @@ sub handler
   for(@attributes)
   { my %hash = $_->tohash; 
   $body .= <<"EOF";
-<form action="<?SPINE_Location?>admin/language/" method="post">
+<form action="<?SPINE_Location?>admin/language/" method="post"><tr>
 <input type="hidden" name="id" value="$hash{id}">
 <input type="hidden" name="attr" value="$hash{attr}">
-<input type="text" class="input" name="name" value="$hash{name}">
-<input type="text" class="input" name="value" value="$hash{value}" size="60">
-<input type="image" name="save" src="/images/save.png">
-<input type="image" name="delete" src="/images/delete.png">
+<td><input type="text" class="input" name="name" value="$hash{name}"></td>
+<td><input type="text" class="input" name="value" value="$hash{value}" size="60"></td>
+<td><input type="image" name="save" src="/images/save.png"></td>
+<td><input type="image" name="delete" src="/images/delete.png"></td></tr>
 </form>\n
 
 EOF
@@ -85,7 +85,7 @@ EOF
 }
   my $content = SPINE::Base::Content::default;
   $content->style(".admin_plugin");
-  $content->body($body);
+  $content->body("<table>$body</table>");
   return $content;
 }
 
