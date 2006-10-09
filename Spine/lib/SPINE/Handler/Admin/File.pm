@@ -244,7 +244,7 @@ sub handler
     my $sizesort = $sort ne "size" ? "size" : "sizer";
     my $filenamesort = $sort ne "filename" ? "filename" : "filenamer";
   
-    $list = <<'EOF';
+    $list = <<"EOF";
 <div class="dialog" id="upload"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('upload').style.display='none';"><br><form name="uploadform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Upload in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="upload"><input type="file" name="filename">&nbsp;<input type="submit" class="button" value="Upload"></form></div>
 <div class="dialog" id="createfolder"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('createfolder').style.display='none';"><br><form name="createform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Create Folder in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="createfolder"><input type="hidden" name="filename" value=""><input type="text" name="foldername">&nbsp;<input type="submit" class="button" value="Create"></form></div>
 <div class="dialog" id="copy"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('copy').style.display='none';"><br><form name="copyform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Copy <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="copy"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Copy" onClick='document.copyform.filename.value = document.myform.filename.value; return true;'></form></div>
@@ -299,7 +299,7 @@ EOF
     $backdir =~ s/\/$//mx;
     $backdir =~ s/^(.*)\/.*$/$1/mx;
    $list .= 
-<<'EOF';
+<<"EOF";
 <tr class="unselected" disabled>
 <td>
 <input type="radio" disabled>
@@ -314,7 +314,7 @@ EOF
   for(@sorted)
   { if ($files{$_}{type} eq "file.jpg") 
     { $list .= 
-<<'EOF';
+<<"EOF";
 <tr>
 <td>
 
@@ -323,11 +323,11 @@ EOF
 <td align="center">$files{$_}{size}</td><td align="center">$files{$_}{localtime}</td>
 <td>&nbsp;</td>
 </tr>
-'EOF'
+EOF
 
     } else
     {     $list .= 
-<<'EOF';
+<<"EOF";
 <tr>
 <td>
 <input type="radio" name="radiobutton" value="$i" disabled>

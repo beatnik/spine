@@ -70,7 +70,7 @@ sub handler
   my $body = "";
   for(@attributes)
   { my %hash = $_->tohash; 
-  $body .= <<'EOF';
+  $body .= <<"EOF";
 <form action="<?SPINE_Location?>admin/language/" method="post">
 <input type="hidden" name="id" value="$hash{id}">
 <input type="hidden" name="attr" value="$hash{attr}">
