@@ -5,6 +5,7 @@
 --
 
 insert into attribute (attr,name,section,value) values ('li','ruth_main','navbar','1');
+
 insert into attribute (attr,name,section,value) values ('en','valid_perms','i18n','You do not have valid permissions for this operation : ');
 insert into attribute (attr,name,section,value) values ('en','enter_name','i18n','Enter name');
 insert into attribute (attr,name,section,value) values ('en','create_content','i18n','Creating new content<br>');
@@ -14,6 +15,18 @@ insert into attribute (attr,name,section,value) values ('en','save_content','i18
 insert into attribute (attr,name,section,value) values ('en','copy_content','i18n','Copy content<br>');
 insert into attribute (attr,name,section,value) values ('en','content_exists','i18n','This Content already exists!<br>');
 insert into attribute (attr,name,section,value) values ('en','content_not_exists','i18n','This Content does not exist!<br>');
+
+insert into attribute (attr,name,section,value) values ('nl','valid_perms','i18n','U heeft niet voldoende rechten voor deze operatie : ');
+insert into attribute (attr,name,section,value) values ('nl','enter_name','i18n','Naam invoegen');
+insert into attribute (attr,name,section,value) values ('nl','create_content','i18n','Nieuwe content aanmaken<br>');
+insert into attribute (attr,name,section,value) values ('nl','remove_content','i18n','Content verwijderen<br>');
+insert into attribute (attr,name,section,value) values ('nl','edit_content','i18n','Content wijzigen<br>');
+insert into attribute (attr,name,section,value) values ('nl','save_content','i18n','Content opslaan<br>');
+insert into attribute (attr,name,section,value) values ('nl','copy_content','i18n','Content kopieren<br>');
+insert into attribute (attr,name,section,value) values ('nl','content_exists','i18n','Deze content bestaat reeds!<br>');
+insert into attribute (attr,name,section,value) values ('nl','content_not_exists','i18n','Deze content bestaat niet!<br>');
+
+
 insert into attribute (attr,name,section,value) values ('admin','lang','default','en');
 insert into attribute (attr,name,section,value) values ('order','news','message','desc');
 
