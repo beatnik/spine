@@ -56,7 +56,28 @@ sub handler
   my $location = $request->location;
   
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
+  my $lang = $request->param('lang');
+  my $body = "";
 
+  my @lang = @{ $attribute_dbi->get( {"section"=>"i18n"}) };
+  my %lang = ();
+  for(@lang)
+  { my $l = $_->attr;
+    $lang{$l}++;
+  }
+  my $selected = "";
+  for (sort keys %lang)
+  { $selected .= qq(<option value="$_">$_); }
+  
+  $body .= <<"EOF";
+<form action="<?SPINE_Location?>admin/language/" method="post"><tr>
+<td><font face=""><b>Change language</b></font><br>&nbsp;&nbsp;
+<input type="submit" value="Load" class="button">&nbsp;<select name="lang">$selected</select></td></tr>
+</form>\n
+</table><hr width="95%"><table>
+EOF
+
+  $lang ||= "en";
   # This part catches the image as button bug in IE.
   my $save = $request->param('save.x') ? "save" : "";
   my $delete = $request->param('delete.x') ? "delete" : "";    
@@ -66,8 +87,7 @@ sub handler
   if ($request->method eq "POST" && $action eq "delete")
   { deletebutton(); }
 
-  my @attributes = @{ $attribute_dbi->get( {section=>"i18n", attr => "en" }) };
-  my $body = "";
+  my @attributes = @{ $attribute_dbi->get( {section=>"i18n", attr => "$lang" }) };
   for(@attributes)
   { my %hash = $_->tohash; 
   $body .= <<"EOF";
