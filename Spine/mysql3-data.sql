@@ -8,7 +8,11 @@ insert into attribute (attr,name,section,value) values ('li','ruth_main','navbar
 
 insert into attribute (attr,name,section,value) values ('en','valid_perms','i18n','You do not have valid permissions for this operation : ');
 insert into attribute (attr,name,section,value) values ('en','enter_name','i18n','Enter name');
-insert into attribute (attr,name,section,value) values ('en','create_content','i18n','Creating new content<br>');
+
+insert into attribute (attr,name,section,value) values ('nl','valid_perms','i18n','U heeft niet voldoende rechten voor deze operatie : ');
+insert into attribute (attr,name,section,value) values ('nl','enter_name','i18n','Naam invoegen');
+
+insert into attribute (attr,name,section,value) values ('en','create_content','i18n','Create new content<br>');
 insert into attribute (attr,name,section,value) values ('en','remove_content','i18n','Remove content<br>');
 insert into attribute (attr,name,section,value) values ('en','edit_content','i18n','Edit content<br>');
 insert into attribute (attr,name,section,value) values ('en','save_content','i18n','Save content<br>');
@@ -16,8 +20,32 @@ insert into attribute (attr,name,section,value) values ('en','copy_content','i18
 insert into attribute (attr,name,section,value) values ('en','content_exists','i18n','This Content already exists!<br>');
 insert into attribute (attr,name,section,value) values ('en','content_not_exists','i18n','This Content does not exist!<br>');
 
-insert into attribute (attr,name,section,value) values ('nl','valid_perms','i18n','U heeft niet voldoende rechten voor deze operatie : ');
-insert into attribute (attr,name,section,value) values ('nl','enter_name','i18n','Naam invoegen');
+insert into attribute (attr,name,section,value) values ('en','create_style','i18n','Create new style<br>');
+insert into attribute (attr,name,section,value) values ('en','remove_style','i18n','Remove style<br>');
+insert into attribute (attr,name,section,value) values ('en','edit_style','i18n','Edit style<br>');
+insert into attribute (attr,name,section,value) values ('en','save_style','i18n','Save style<br>');
+insert into attribute (attr,name,section,value) values ('en','copy_style','i18n','Copy style<br>');
+insert into attribute (attr,name,section,value) values ('en','style_exists','i18n','This style already exists!<br>');
+insert into attribute (attr,name,section,value) values ('en','style_not_exists','i18n','This style does not exist!<br>');
+
+insert into attribute (attr,name,section,value) values ('en','new_upload','i18n','Upload a file<br>');
+insert into attribute (attr,name,section,value) values ('en','new_folder','i18n','Create a folder<br>');
+insert into attribute (attr,name,section,value) values ('en','copy_file','i18n','Copy a file<br>');
+insert into attribute (attr,name,section,value) values ('en','rename_file','i18n','Rename a file<br>');
+insert into attribute (attr,name,section,value) values ('en','read_folder','i18n','Read folder contents<br>');
+insert into attribute (attr,name,section,value) values ('en','mkdir_failed','i18n','Unable to create folder.');
+insert into attribute (attr,name,section,value) values ('en','copy_failed','i18n','Unable to copy file.');
+insert into attribute (attr,name,section,value) values ('en','remove_failed','i18n','Unable to remove file.');
+insert into attribute (attr,name,section,value) values ('en','rename_failed','i18n','Unable to rename file.');
+insert into attribute (attr,name,section,value) values ('en','readdir_failed','i18n','Unable to read folder.');
+insert into attribute (attr,name,section,value) values ('en','docroot_permissions','i18n','Does the document root directory have correct permissions?');
+insert into attribute (attr,name,section,value) values ('en','upload_failed','i18n','File could not be uploaded. If this problem persists, submit a bug report.');
+insert into attribute (attr,name,section,value) values ('en','upload_unknown','i18n','Error creating file:');
+insert into attribute (attr,name,section,value) values ('en','file_exists','i18n','This file already exists!<br>');
+insert into attribute (attr,name,section,value) values ('en','file_not_exists','i18n','This file does not exists!<br>');
+insert into attribute (attr,name,section,value) values ('en','folder_exists','i18n','This folder already exists!<br>');
+insert into attribute (attr,name,section,value) values ('en','folder_not_exists','i18n','This folder does not exist!');
+
 insert into attribute (attr,name,section,value) values ('nl','create_content','i18n','Nieuwe content aanmaken<br>');
 insert into attribute (attr,name,section,value) values ('nl','remove_content','i18n','Content verwijderen<br>');
 insert into attribute (attr,name,section,value) values ('nl','edit_content','i18n','Content wijzigen<br>');
@@ -26,6 +54,31 @@ insert into attribute (attr,name,section,value) values ('nl','copy_content','i18
 insert into attribute (attr,name,section,value) values ('nl','content_exists','i18n','Deze content bestaat reeds!<br>');
 insert into attribute (attr,name,section,value) values ('nl','content_not_exists','i18n','Deze content bestaat niet!<br>');
 
+insert into attribute (attr,name,section,value) values ('nl','create_style','i18n','Nieuwe style aanmaken<br>');
+insert into attribute (attr,name,section,value) values ('nl','remove_style','i18n','Style verwijderen<br>');
+insert into attribute (attr,name,section,value) values ('nl','edit_style','i18n','Style wijzigen<br>');
+insert into attribute (attr,name,section,value) values ('nl','save_style','i18n','Style opslaan<br>');
+insert into attribute (attr,name,section,value) values ('nl','copy_style','i18n','Style kopieren<br>');
+insert into attribute (attr,name,section,value) values ('nl','style_exists','i18n','Deze style bestaat reeds!<br>');
+insert into attribute (attr,name,section,value) values ('nl','style_not_exists','i18n','Deze style bestaat niet!<br>');
+
+insert into attribute (attr,name,section,value) values ('nl','new_upload','i18n','Upload een bestand<br>');
+insert into attribute (attr,name,section,value) values ('nl','new_folder','i18n','Folder aanmaken<br>');
+insert into attribute (attr,name,section,value) values ('nl','copy_file','i18n','Bestand kopieren<br>');
+insert into attribute (attr,name,section,value) values ('nl','rename_file','i18n','Bestand van naam veranderen<br>');
+insert into attribute (attr,name,section,value) values ('nl','read_folder','i18n','Inhoud van de folder lezen<br> ');
+insert into attribute (attr,name,section,value) values ('nl','mkdir_failed','i18n','Folder kan niet aangemaakt worden.');
+insert into attribute (attr,name,section,value) values ('nl','copy_failed','i18n','Bestand kan niet gekopieerd worden.');
+insert into attribute (attr,name,section,value) values ('nl','remove_failed','i18n','Bestand kan niet verwijderd worden.');
+insert into attribute (attr,name,section,value) values ('nl','rename_failed','i18n','Bestand kan niet van naam veranderd worden.');
+insert into attribute (attr,name,section,value) values ('nl','readdir_failed','i18n','Inhoud van folder kan niet gelezen worden.');
+insert into attribute (attr,name,section,value) values ('nl','docroot_permissions','i18n','Heeft document root correcte toegangsrechten?');
+insert into attribute (attr,name,section,value) values ('nl','upload_failed','i18n','Bestand kan niet geupload worden. Rapporteer een programmafout als dit een blijvend probleem is.');
+insert into attribute (attr,name,section,value) values ('nl','upload_unknown','i18n','Fout bij het aanmaken van het bestand:');
+insert into attribute (attr,name,section,value) values ('nl','file_exists','i18n','Dit bestand bestaat reeds!<br>');
+insert into attribute (attr,name,section,value) values ('nl','file_not_exists','i18n','Dit bestand bestaat niet!<br>');
+insert into attribute (attr,name,section,value) values ('nl','folder_exists','i18n','Deze folder bestaat reeds!<br>');
+insert into attribute (attr,name,section,value) values ('nl','folder_not_exists','i18n','Deze folder bestaat niet!<br> ');
 
 insert into attribute (attr,name,section,value) values ('admin','lang','default','en');
 insert into attribute (attr,name,section,value) values ('order','news','message','desc');
