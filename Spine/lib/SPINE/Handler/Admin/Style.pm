@@ -101,11 +101,11 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_style_string = $i18n{'create_style'} || "Create a new style<br>";
-  $remove_style_string = $i18n{'remove_style'} || "Remove a style<br>";
-  $edit_style_string = $i18n{'edit_style'} || "Edit a style<br>";
-  $save_style_string = $i18n{'save_style'} || "Save a style<br>";
-  $copy_style_string = $i18n{'copy_style'} || "Copy a style<br>";
+  $create_style_string = $i18n{'create_style'} || "Create new style<br>";
+  $remove_style_string = $i18n{'remove_style'} || "Remove style<br>";
+  $edit_style_string = $i18n{'edit_style'} || "Edit style<br>";
+  $save_style_string = $i18n{'save_style'} || "Save style<br>";
+  $copy_style_string = $i18n{'copy_style'} || "Copy style<br>";
   $style_exists_string = $i18n{'style_exists'} || "This style already exists!<br>";
   $style_notexists_string = $i18n{'style_not_exists'} || "This style does not exist!<br>";
   

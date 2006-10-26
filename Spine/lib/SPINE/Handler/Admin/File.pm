@@ -89,26 +89,26 @@ sub handler
     %hash = %{$_} if $_;
     $i18n{$hash{'NAME'}} = $hash{'VALUE'};
   }
-  
-  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+
+   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $new_upload_string = $i18n{'create_content'} || "Create a new content<br>";
-  $new_folder_string = $i18n{'create_content'} || "Create a new content<br>";
-  $copy_file_string = $i18n{'create_content'} || "Create a new content<br>";
-  $rename_file_string = $i18n{'create_content'} || "Create a new content<br>";
-  $read_folder_string = $i18n{'create_content'} || "Create a new content<br>";
-  $mkdir_failed_string = $i18n{'create_content'} || "Create a new content<br>";
-  $copy_failed_string = $i18n{'create_content'} || "Create a new content<br>";
-  $remove_failed_string = $i18n{'create_content'} || "Create a new content<br>";
-  $rename_failed_string = $i18n{'create_content'} || "Create a new content<br>";
-  $readdir_failed_string = $i18n{'create_content'} || "Create a new content<br>";
-  $docroot_permissions_string = $i18n{'create_content'} || "Create a new content<br>";
-  $upload_failed_string = $i18n{'create_content'} || "Create a new content<br>";
-  $upload_unknown_string = $i18n{'create_content'} || "Create a new content<br>";
-  $file_exists_string = $i18n{'create_content'} || "Create a new content<br>";
-  $file_notexists_string = $i18n{'create_content'} || "Create a new content<br>";
-  $folder_exists_string = $i18n{'create_content'} || "Create a new content<br>";
-  $folder_notexists_string = $i18n{'create_content'} || "Create a new content<br>";
+  $new_upload_string = $i18n{'new_upload'} || "Upload a file<br>";
+  $new_folder_string = $i18n{'new_folder'} || "Create a folder<br>";
+  $copy_file_string = $i18n{'copy_file'} || "Copy a file<br>";
+  $rename_file_string = $i18n{'rename_file'} || "Rename a file<br>";
+  $read_folder_string = $i18n{'read_folder'} || "Read folder contents<br>";
+  $mkdir_failed_string = $i18n{'mkdir_failed'} || "Unable to create folder.";
+  $copy_failed_string = $i18n{'copy_failed'} || "Unable to copy file.";
+  $remove_failed_string = $i18n{'remove_failed'} || "Unable to remove file.";
+  $rename_failed_string = $i18n{'rename_failed'} || "Unable to rename file.";
+  $readdir_failed_string = $i18n{'readdir_failed'} || "Unable to read folder.";
+  $docroot_permissions_string = $i18n{'docroot_permissions'} || "Does the document root directory have correct permissions?";
+  $upload_failed_string = $i18n{'upload_failed'} || "File could not be uploaded. If this problem persists, submit a bug report.";
+  $upload_unknown_string = $i18n{'upload_unknown'} || "Error creating file:";
+  $file_exists_string = $i18n{'file_exists'} || "This file already exists!<br>";
+  $file_notexists_string = $i18n{'file_not_exists'} || "This file does not exists!<br>";
+  $folder_exists_string = $i18n{'folder_exists'} || " This folder already exists!<br>";
+  $folder_notexists_string = $i18n{'folder_not_exists'} || " This folder does not exist!<br>";
 
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
