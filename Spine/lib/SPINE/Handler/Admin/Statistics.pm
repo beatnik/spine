@@ -38,7 +38,8 @@ use SPINE::Transparent::Constant;
 #Apache::Request Handler
 #DB Handler
 
-use vars qw($VERSION $content_dbi $stats_dbi $request $user_dbi $usergroup_dbi $adminaccess_dbi $attribute_dbi $session_dbi $request $readperms $writeperms $execperms $user $adminaccess $error);
+use vars qw($VERSION $content_dbi $stats_dbi $request $user_dbi $usergroup_dbi $adminaccess_dbi $attribute_dbi $session_dbi $request $readperms $writeperms $execperms $user $adminaccess $error %i18n %default);
+use vars qw($valid_perms_string $view_stats_string $remove_stats_string);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -46,7 +47,8 @@ sub handler
 { $request = shift; #Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
-
+  %default = ();
+  %i18n = ();
   my $url = $request->uri;
   my $location = $request->location;
 
@@ -72,6 +74,28 @@ sub handler
   $user = "admin";
   $user = $session->username if $session;
 
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = ();
+    if ($_) { %hash = %{$_}; }
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+ }
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
+  for(@i18n_hash)
+  { my %hash = undef;
+    if ($_) { %hash = %{$_}; }
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $view_stats_string = $i18n{'view_stats'} || " View statistics<br>";
+  $remove_stats_string = $i18n{'remove_stats'} || "Remove statistics<br>";
+
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
   my @adminaccess = ();
@@ -93,12 +117,12 @@ sub handler
   { $url = '.admin-stats-general'; @params = (); }
 
   if ($params[0] eq 'view' && !$readperms)
-  { $error = 'You do not have valid permissions for this operation : Viewing statistics<br>'; 
+  { $error = $valid_perms_string.$view_stats_string;
     $url = '.admin-stats-general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Removing statistics<br>'; 
+  { $error = $valid_perms_string.$remove_stats_string;
     $url = '.admin-stats-general'; 
   }
 
