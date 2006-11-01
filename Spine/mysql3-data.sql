@@ -44,7 +44,33 @@ insert into attribute (attr,name,section,value) values ('en','upload_unknown','i
 insert into attribute (attr,name,section,value) values ('en','file_exists','i18n','This file already exists!<br>');
 insert into attribute (attr,name,section,value) values ('en','file_not_exists','i18n','This file does not exists!<br>');
 insert into attribute (attr,name,section,value) values ('en','folder_exists','i18n','This folder already exists!<br>');
-insert into attribute (attr,name,section,value) values ('en','folder_not_exists','i18n','This folder does not exist!');
+insert into attribute (attr,name,section,value) values ('en','folder_not_exists','i18n','This folder does not exist!<br>');
+
+insert into attribute (attr,name,section,value) values ('en','create_adminaccess','i18n','Add new admin access permissions<br>');
+insert into attribute (attr,name,section,value) values ('en','remove_adminaccess','i18n','Remove admin access permissions<br>');
+insert into attribute (attr,name,section,value) values ('en','save_adminaccess','i18n','Save admin access permissions<br>');
+insert into attribute (attr,name,section,value) values ('en','adminaccess_exists','i18n','These admin access permissions already exists!<br>');
+insert into attribute (attr,name,section,value) values ('en','adminaccess_not_exists','i18n','These admin access permissions does not exist!<br>');
+
+insert into attribute (attr,name,section,value) values ('en','create_message','i18n','Create a new message<br>');
+insert into attribute (attr,name,section,value) values ('en','remove_message','i18n','Remove a message<br>');
+insert into attribute (attr,name,section,value) values ('en','edit_message','i18n','Edit a message<br>');
+insert into attribute (attr,name,section,value) values ('en','save_message','i18n','Save a message<br>');
+insert into attribute (attr,name,section,value) values ('en','save_messagegroup','i18n','Save a messagegroup<br>');
+insert into attribute (attr,name,section,value) values ('en','copy_messagegroup','i18n','Copy a messagegroup<br>');
+insert into attribute (attr,name,section,value) values ('en','messagegroup_exists','i18n','This messagegroup already exists!<br>');
+insert into attribute (attr,name,section,value) values ('en','messagegroup_not_exists','i18n','This messagegroup does not exist!<br>');
+
+insert into attribute (attr,name,section,value) values ('en','view_stats','i18n','View statistics<br>');
+insert into attribute (attr,name,section,value) values ('en','remove_stats','i18n','Remove statistics<br>');
+
+insert into attribute (attr,name,section,value) values ('nl','create_adminaccess','i18n','Nieuwe toegangsrechten toevoegen<br>');
+insert into attribute (attr,name,section,value) values ('nl','remove_adminaccess','i18n','Toegangsrechten verwijderen<br> ');
+insert into attribute (attr,name,section,value) values ('nl','save_adminaccess','i18n','Toegangsrechten opslaan<br>');
+insert into attribute (attr,name,section,value) values ('nl','adminaccess_exists','i18n','Deze toegangsrechten bestaan reeds!<br>');
+insert into attribute (attr,name,section,value) values ('nl','adminaccess_not_exists','i18n','Deze toegangsrechten bestaan niet!<br>');
+
+--- 
 
 insert into attribute (attr,name,section,value) values ('nl','create_content','i18n','Nieuwe content aanmaken<br>');
 insert into attribute (attr,name,section,value) values ('nl','remove_content','i18n','Content verwijderen<br>');
@@ -78,7 +104,19 @@ insert into attribute (attr,name,section,value) values ('nl','upload_unknown','i
 insert into attribute (attr,name,section,value) values ('nl','file_exists','i18n','Dit bestand bestaat reeds!<br>');
 insert into attribute (attr,name,section,value) values ('nl','file_not_exists','i18n','Dit bestand bestaat niet!<br>');
 insert into attribute (attr,name,section,value) values ('nl','folder_exists','i18n','Deze folder bestaat reeds!<br>');
-insert into attribute (attr,name,section,value) values ('nl','folder_not_exists','i18n','Deze folder bestaat niet!<br> ');
+insert into attribute (attr,name,section,value) values ('nl','folder_not_exists','i18n','Deze folder bestaat niet!<br>');
+
+insert into attribute (attr,name,section,value) values ('nl','create_message','i18n','Nieuw bericht toevoegen<br>');
+insert into attribute (attr,name,section,value) values ('nl','remove_message','i18n','Bericht verwijderen<br>');
+insert into attribute (attr,name,section,value) values ('nl','edit_message','i18n','Bericht wijzigen<br>');
+insert into attribute (attr,name,section,value) values ('nl','save_message','i18n','Bericht opslaan<br>');
+insert into attribute (attr,name,section,value) values ('nl','save_messagegroup','i18n','Berichtengroep opslaan<br>');
+insert into attribute (attr,name,section,value) values ('nl','copy_messagegroup','i18n','Berichtengroep kopieren<br> ');
+insert into attribute (attr,name,section,value) values ('nl','messagegroup_exists','i18n','Deze berichtengroep bestaat reeds!<br>');
+insert into attribute (attr,name,section,value) values ('nl','messagegroup_not_exists','i18n','Deze berichtengroep bestaat niet!<br> ');
+
+insert into attribute (attr,name,section,value) values ('nl','view_stats','i18n','Statistieken bekijken<br>');
+insert into attribute (attr,name,section,value) values ('nl','remove_stats','i18n','Statistieken verwijderen<br>');
 
 insert into attribute (attr,name,section,value) values ('admin','lang','default','en');
 insert into attribute (attr,name,section,value) values ('order','news','message','desc');
