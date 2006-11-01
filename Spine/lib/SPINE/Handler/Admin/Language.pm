@@ -130,11 +130,11 @@ __END__
 
 =head1 NAME
 
-SPINE::Handler::Admin::Adminaccess
+SPINE::Handler::Admin::Language
 
 =head1 DESCRIPTION
 
-This is the Admin Access Control Handler for SPINE.
+This is the Language Admin Handler for SPINE.
 
 SPINE is a perl based content management system. This release uses mod_perl. It should, in time, support all features of the
 CGI based version (but it will ofcourse add new things as well). This is a complete rewrite of the engine.
