@@ -28,6 +28,7 @@ use SPINE::DBI::Content;
 use SPINE::DBI::Message;
 use SPINE::DBI::Messagegroup;
 use SPINE::DBI::Attribute;
+use SPINE::Transparent::Request;
 use SPINE::Constant;
 
 use Data::Dumper;
@@ -51,10 +52,11 @@ sub handler
   my $messagegroup_dbi = SPINE::DBI::Messagegroup->new($dbh);
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
+  my $tr_req = SPINE::Transparent::Request->new($r);
   my $message = undef;
   my $group = shift @params;
-  my $url = $r->uri;
-  my $location = $r->location;
+  my $url = $tr_req->uri;
+  my $location = $tr_req->location;
   $error = '';
   
   $url =~ s/^$location\/?//mx;
