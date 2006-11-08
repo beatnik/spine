@@ -48,7 +48,7 @@ sub handler
   my $s = shift; #Session
   my $tr_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
-  my $main = $request->dir_config("main") || "main";
+  my $main = $tr_req->dir_config("main") || "main";
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $style_dbi = SPINE::DBI::Style->new($dbh);
   my $user_dbi = SPINE::DBI::User->new($dbh);
@@ -63,8 +63,8 @@ sub handler
   my $content = undef;
   my $status = undef;
   my $style = undef;
-  my $url = $tr_req->request->uri;
-  my $location = $tr_req->request->location;
+  my $url = $tr_req->uri;
+  my $location = $tr_req->location;
   $url =~ s/^$location\/?//gmx;
   ($url,@params) = split("/",$url);
   if (!$url)
@@ -146,9 +146,9 @@ sub handler
   if (ref $style && ref $content && $style->title && $content->title) { $title .= " - "; $title .= $content->title; }
   if (!$title && ref $content && $content->title) { $title = $content->title; }
 
-  $location = $request->location;
+  $location = $tr_req->location;
   if ($location !~ /\/$/mx) { $location .= "/"; }
-  my $servername = $request->dir_config("servername") || $ENV{SERVER_NAME};
+  my $servername = $tr_req->dir_config("servername") || $ENV{SERVER_NAME};
   
   $body =~ s/<\?SPINE_Title\?>/$title/gmx;
 
