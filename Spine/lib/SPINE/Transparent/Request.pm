@@ -35,10 +35,23 @@ sub new {
  if (ref($self->{REQUEST}) eq "Apache::Request")
  { eval qq|use Apache::Cookie; \$self->{COOKIES} = Apache::Cookie->fetch; |; 
    eval qq|use Apache::Request; \$self->{REMOTE_HOST} = \$self->{REQUEST}->get_remote_host(); |; 
+   eval qq|use Apache::Request; \$self->{LOCATION} = \$self->{REQUEST}->location(); |; 
+   eval qq|use Apache::Request; \$self->{DIR_CONFIG} = sub { \$self->{REQUEST}->dir_config(\@_); } |; 
+   eval qq|use Apache::Request; \$self->{URI} = \$self->{REQUEST}->uri; |; 
   }
  if (ref($self->{REQUEST}) eq "Apache2::Request")
  { eval qq|use Apache2::Cookie; \$self->{COOKIES} = scalar Apache2::Cookie->fetch; |; 
    eval qq|use Apache2::Request; \$self->{REMOTE_HOST} = \$self->{REQUEST}->connection->get_remote_host(); |; 
+   eval qq|use Apache2::Request; \$self->{LOCATION} = \$self->{REQUEST}->location(); |; 
+   eval qq|use Apache2::Request; \$self->{DIR_CONFIG} = sub { \$self->{REQUEST}->dir_config(\@_); } |; 
+   eval qq|use Apache2::Request; \$self->{URI} = \$self->{REQUEST}->uri; |; 
+ }
+ if (ref($self->{REQUEST}) eq "CGI")
+ { eval qq|use CGI; \$self->{COOKIES} = scalar CGI::Cookie->fetch; |; 
+    eval qq|use CGI; \$self->{REMOTE_HOST} = \$self->{REQUEST}->url(); |; 
+    $self->{DIR_CONFIG} = sub { return "index.html"; }; 
+    $self->{LOCATION} =  "/"; 
+    eval qq|use CGI; \$self->{URI} = "\\/".\$self->{REQUEST}->param("page"); |;
  }
  bless $self,$class;
  return $self;
@@ -59,6 +72,20 @@ sub remote_host
   return $self->{REMOTE_HOST};
 }
 
+sub dir_config
+{ my $self = shift;
+   return $self->{DIR_CONFIG}(@_);
+}
+
+sub uri
+{ my $self = shift;
+   return $self->{URI};
+}
+
+sub location
+{ my $self = shift;
+   return $self->{LOCATION};
+}
 1;
 
 __END__
