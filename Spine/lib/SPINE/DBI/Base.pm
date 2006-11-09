@@ -338,6 +338,9 @@ sub remove
   return;
 }
 
+sub table
+{ my $self = shift; return $self->{TABLE}; }
+
 sub fields
 { my $self = shift; return @{$self->{FIELDS}}; }
 
