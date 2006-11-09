@@ -55,26 +55,32 @@ sub handler
   my $messagegroup_dbi = SPINE::DBI::Messagegroup->new($dbh);
   my $body = qq(Type: <form method="post" action="admin/export"><select name="type"><option>attribute<option>adminaccess<option>content<option>style<option>navbar<option>message<option>messagegroup<option>button</select><input type="submit"></form>);
   my $type = $request->param('type');
+  my $table = undef;
   my  @list = ();
+  my $dbi = undef;
   if ($type eq "attribute")
-  { @list = @{ $attribute_dbi->get() }; }
+  { $dbi = $attribute_dbi; }
   if ($type eq "adminaccess")
-  { @list = @{ $adminaccess_dbi->get() }; }
+  { $dbi = $adminaccess_dbi; }
   if ($type eq "content")
-  { @list = @{ $content_dbi->get() }; }
+  { $dbi = $content_dbi; }
   if ($type eq "style")
-  { @list = @{ $style_dbi->get() }; }
+  { $dbi = $style_dbi; }
   if ($type eq "navbar")
-  { @list = @{ $navbar_dbi->get() }; }
+  { $dbi = $navbar_dbi; }
   if ($type eq "message")
-  { @list = @{ $message_dbi->get() }; }
+  { $dbi = $message_dbi; }
   if ($type eq "messagegroup")
-  { @list = @{ $messagegroup_dbi->get() }; }
+  { $dbi = $messagegroup_dbi; }
   if ($type eq "button")
-  { @list = @{ $button_dbi->get() }; }
+  { $dbi = $button_dbi; }
+  if ($dbi)
+  { @list = @{ $dbi->get() }; 
+     $table = $dbi->table; 
+  }
   for(@list)
   { my %hash = $_->tohash;
-    $body .= "insert into $type (";
+     $body .= "insert into $table (";
     my @keys = sort keys %hash;
     while ($_ = shift(@keys))
     { $body .= $_;
