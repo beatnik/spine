@@ -219,7 +219,7 @@ sub handler
 }
 
 sub save
-{ my $macro = shift @{$macro_dbi->get({name=>$request->param('name'), id=>$request->param('id'), count=>1})};
+{ my $macro = $macro_dbi->get({name=>$request->param('name'), id=>$request->param('id'), count=>1});
   $macro->macrovalue($request->param('value')) if ref $macro;
   $macro->macrokey($request->param('key')) if ref $macro;
   $macro_dbi->update($macro) if $macro;
