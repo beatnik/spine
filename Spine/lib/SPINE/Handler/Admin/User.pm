@@ -138,6 +138,8 @@ sub handler
 
   my $body = undef;
   $body = $content->body if ref $content;
+  if ($url eq ".admin-general")
+  { $content->title("User Administration"); }
   
   if ((!$params[0] || $params[0] eq 'remove' || $params[0] eq 'save')  || $error)
   { my @users = @{$user_dbi->get()};

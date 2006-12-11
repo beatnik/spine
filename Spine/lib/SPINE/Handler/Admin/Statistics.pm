@@ -139,6 +139,8 @@ sub handler
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
   my $body = undef;
   $body = $content->body if ref $content;
+  if ($url eq ".admin-general")
+  { $content->title("Statistics Administration"); }
 
   if ($params[0] eq 'view')
   { my $name = $request->param('name');

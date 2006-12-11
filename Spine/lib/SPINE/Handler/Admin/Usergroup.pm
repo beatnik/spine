@@ -119,6 +119,9 @@ sub handler
 
   my $body = undef;
   $body = $content->body if ref $content;
+  if ($url eq ".admin-general")
+  { $content->title("Usergroup Administration"); }
+
   my $list = undef;
   my @groups = @{$usergroup_dbi->get()};
   my @users = @{$user_dbi->getlist(field=>'login')};

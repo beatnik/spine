@@ -218,6 +218,8 @@ sub handler
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
   my $body = undef;
   $body = $content->body if ref $content;
+  if ($url eq ".admin-general")
+  { $content->title("Message Administration"); }
 
   if (!$error && ($params[0] eq 'edit' || $params[0] eq 'new' || $params[0] eq 'savegroup' || $params[0] eq 'save' || $params[0] eq 'create' || ($params[0] eq 'remove' &&  $request->param('id') ) ) )
   { my $message = undef;

@@ -252,6 +252,8 @@ sub handler
   }
   my $body = undef;
   $body = $content->body if ref $content;
+  if ($url eq ".admin-general")
+  { $content->title("Navigation Bar Administration"); }
 
   if ( ($params[0] eq 'edit' || $params[0] eq 'save' || $params[0] eq 'new' || $params[0] eq 'editbutton' || $params[0] eq 'addbutton') && !$error)
   { my $edit_navbar = shift @{$navbar_dbi->get({name=>$page, count=>1})};

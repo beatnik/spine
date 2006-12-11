@@ -185,6 +185,9 @@ sub handler
 
   my $body = undef;
   $body = $content->body if ref $content;
+  if ($url eq ".admin-general")
+  { $content->title("Macro Administration"); }
+
   if ($request->param('name') && ($params[0] eq 'edit' || $params[0] eq 'new' || ($params[0] eq 'remove' && $request->param('id') ) ) && !$error )
   { my @macro = @{$macro_dbi->get({name=>$request->param('name')})};
     my $list = undef;

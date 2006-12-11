@@ -206,6 +206,8 @@ sub handler
   }
   my $body = undef;
   if (ref $content) { $body = $content->body; }
+  if ($url eq ".admin-general")
+  { $content->title("Content Administration"); }
 
   #This part is tricky. This part will merge permissions (r-- in group A and -wx in group B = rwx)
   if ( ($params[0] eq 'edit' || $params[0] eq 'save' || $params[0] eq 'new') && !$error)
