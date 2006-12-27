@@ -142,7 +142,7 @@ sub handler
 }
 
 sub remove
-{ my $usergroup = shift @{$usergroup_dbi->get({id=>$request->param('id'), count=>1})};
+{ my $usergroup = $usergroup_dbi->get({id=>$request->param('id'), count=>1}); 
   $usergroup_dbi->remove($usergroup) if $usergroup;
   return;
 }
