@@ -354,7 +354,7 @@ sub savemessagegroup
 }
 
 sub save
-{ my $message = shift @{$message_dbi->get({id=>scalar($request->param('id')), count=>1})};
+{ my $message = $message_dbi->get({id=>scalar($request->param('id')), count=>1});
   $message->subject($request->param('subject')) if ref $message;
   $message->owner($request->param('owner')) if ref $message;
   $message->body($request->param('body')) if ref $message;
