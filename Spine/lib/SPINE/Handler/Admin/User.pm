@@ -184,7 +184,7 @@ sub handler
 }
 
 sub save
-{ my $user = shift @{$user_dbi->get({id=>$request->param('id'), count=>1})};
+{ my $user = $user_dbi->get({id=>$request->param('id'), count=>1});
   $user->login($request->param('login')) if ref $user;
   $user->fullname($request->param('name')) if ref $user;
   $user->password(md5_hex($request->param('password'))) if ref $user;
