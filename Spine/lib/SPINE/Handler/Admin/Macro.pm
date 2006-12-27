@@ -169,7 +169,6 @@ sub handler
   { $url = '.admin-general'; 
     copy();
   }
-
   my $edit_macro = shift @{$macro_dbi->get({name=>$request->param('name')}, count=>1)};
   if ($edit_macro && $params[0] eq 'new' && !$error)
   { $error = $macroset_exists_string; 
@@ -228,9 +227,14 @@ sub save
 
 sub remove
 { my @param = (); 
-  if ($request->param('id')) { @param = ("id",scalar($request->param('id'))); }
-  my $macro = shift @{$macro_dbi->get({name=>$request->param('name'), @param, count=>1})};
-  $macro_dbi->remove($macro) if $macro;
+  if ($request->param('id')) 
+  { @param = ("id",scalar($request->param('id'))); 
+    my $macro = $macro_dbi->get({name=>$request->param('name'), @param, count=>1});
+    $macro_dbi->remove($macro) if $macro;
+  } else
+  { my $macro = shift @{ $macro_dbi->get({name=>$request->param('name'), count=>1}) };
+    $macro_dbi->remove($macro) if $macro;
+  }
   return;
 }
 
