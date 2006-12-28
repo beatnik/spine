@@ -384,7 +384,7 @@ sub remove
     $messagegroup_dbi->remove($messagegroup);
   }
   if ($request->param('name') && $request->param('id') ) 
-  { my $message = shift @{ $message_dbi->get({mgroup=>scalar $request->param('name'), id=>scalar $request->param('id') }) } ;
+  { my $message = $message_dbi->get({mgroup=>scalar $request->param('name'), id=>scalar $request->param('id') }) ;
     $message_dbi->remove($message);
   }
   return;
