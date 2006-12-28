@@ -37,7 +37,7 @@ sub handler
   my $dbh = shift; #DB Handler
   my $tag = shift; ##!/usr/bin/perl
   my $content_dbi = SPINE::DBI::Content->new($dbh);
-  my $body .= "\n\n--\n-- mysql v3 dump for SPINE 1.1 beta : Table Content\n--\n\n";
+  my $body .= "\n\n--\n-- mysql v3 dump for SPINE 1.1 : Table Content\n--\n\n";
   my @list = @{ $content_dbi->get() };
   for(@list)
   { my %hash = $_->tohash;
@@ -86,7 +86,7 @@ This handler will dump all the Environment variables and is purely for demonstra
 
 =head1 VERSION
 
-This is spine 1.2 beta.
+This is spine 1.2.
 
 =head1 AUTHOR
 

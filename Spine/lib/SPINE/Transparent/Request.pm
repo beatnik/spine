@@ -117,7 +117,7 @@ Perform a bitwise AND on these bitmasks and a variable to retrieve the flags.
 
 =head1 VERSION
 
-This is spine 1.2 beta.
+This is spine 1.2.
 
 =head1 AUTHOR
 

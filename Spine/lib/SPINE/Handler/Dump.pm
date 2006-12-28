@@ -83,7 +83,7 @@ sub toXML
 sub toSQL
 { my $ref = shift(@_);
   my $type = shift(@_);
-  my $body .= "\n\n--\n-- mysql v3 dump for SPINE 1.1 beta : Table $type\n--\n\n";
+  my $body .= "\n\n--\n-- mysql v3 dump for SPINE 1.1 : Table $type\n--\n\n";
   for(@{$ref})
   { my %hash = $_->tohash;
     $body .= "insert into $type (";
@@ -140,7 +140,7 @@ Parameters
 
 =head1 VERSION
 
-This is spine 1.2 beta.
+This is spine 1.2.
 
 =head1 AUTHOR
 
