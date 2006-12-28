@@ -4,12 +4,12 @@ use DBI;
 
 #$table = $ARGV[0];
 
-my $dbh = DBI->connect("dbi:mysql:$ARGV[0]","root","") || die "Can't connect to DB: ".$Mysql::db_errstr;
+my $dbh = DBI->connect("dbi:mysql:$ARGV[0]","beatnik","foobar") || die "Can't connect to DB: ".$Mysql::db_errstr;
 
 for $table (qw(attribute adminaccess content macro message messagegroup navbarbuttons navbars style usergroup users) )
 { $sth = $dbh->prepare("select * from $table") || die "Oops"; 
   $sth->execute(); 
-  print "\n\n--\n-- mysql v3 dump for SPINE 1.2 beta : Table $table\n--\n\n";
+  print "\n\n--\n-- mysql v3 dump for SPINE 1.2 : Table $table\n--\n\n";
   while($ref = $sth->fetchrow_hashref())
   { %hash = %{ $ref };
     print "insert into $table (";
