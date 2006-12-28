@@ -84,7 +84,7 @@ sub handler
   #Pass the DBH to most SPINE::DBI::* modules
   if ($req->param('name') && $req->param('password') && $req->param('button') eq 'login') 
   #Pressed login button??
-  { my $user = shift @{$user_dbi->get({login=>$req->param('name'),password=>md5_hex($req->param('password'))})};
+  { my $user = $user_dbi->get({login=>$req->param('name'),password=>md5_hex($req->param('password'))});
     if ($user)
     { my @chars = ("a".."z","A".."Z",0..9);
       my $randid = join("",@chars[map{ rand @chars} (1..64)]);
