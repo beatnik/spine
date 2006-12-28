@@ -1,0 +1,43 @@
+HOW SPINE WORKS
+---------------
+
+Apache::SPINE::Index
+--------------------
+Apache::SPINE::Index is a mod_perl content handler. By calling /path the handler is called.
+The handler uses Apache::Request and handles the authentication and sets the appropriate HTTP headers.
+
+Apache::SPINE::Index instanciates the DB handler with the details specified in the Apache configuration file.
+
+The content handler calls handler method in the SPINE::Handler::Content class and 
+passes the instance of Apache::Request, the database handler and the session (instance of SPINE::Base::Session).
+The instance of SPINE::Handler::Content handler will return an instance of SPINE::Base::Content.
+
+The instance SPINE::Base::Content is used to print out the body and the content type of the content.
+
+Each plugin tag is evaluated. Whichever tags are not handled by the content handler, are handled by the plugin handler.
+Each tag calls the class method handler in the handler package in the SPINE::Handler:: namespace.
+<?SPINE_Plugin?> will call the SPINE::Handler::Plugin::handler method. 
+It passes the Apache::Request instance, the database handler, the entire tag parameter and the SPINE::Base::Content instance.
+<?SPINE_Plugin("foo")?> will result in "foo" being passed to the handler.
+<?SPINE_Plugin("foo",'','',"1")?> will result in "foo",'','',"1" being passed to the handler.
+The handler will have to make sure the parameters are parsed properly.
+
+
+Apache::SPINE::Log
+------------------
+This is a classic mod_perl log handler. All requests are stored in the database. 
+
+
+SPINE::DBI::Base
+----------------
+This is the DBI base class used for inheriting purposes. 
+
+In the inheriting module, redefine the following variables :
+
+  $self->{TABLE} = ""; #This is the table name
+  $self->{MODULE} = ""; #This is the module name -> SPINE::Base::MODULENAME
+  $self->{ORDER} = 'name'; #Order the output by this field
+  $self->{GROUP} = 'name'; #Group the output by this field
+  $self->{NUMERIC} = []; #The numeric fields
+  $self->{NON_NUMERIC} = []; #The alphanumeric fields
+  $self->{FIELDS} = []; #The fields in insert order..
