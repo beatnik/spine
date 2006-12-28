@@ -1,20 +1,43 @@
 ChangeLog
 =========
+Release - 1.2 - Stable
+- Added in Package : 8 new styles
+- Added in Admin : Forced POST access (prevent XSS)
+- Added to Core : Code documentation
+- Updated in Admin : Cosmetic fixes (Thanks Tielman)
+- Updated in Package : New style screenshots
+- Updated in Core : Cleaned up code.. ALOT
+- Updated in Core : Updated and optimized database handler code
+- Fixed in Core : Placeholders in database handler : security fix
+- Fixed in Core : Cleaned up Apache 2 handler
+- Fixed in Core : True versus Virtual file precedence fix
+- Fixed in Core : here-doc quote bug
+- Fixed in Core : Apache 2 document root bug
+- Fixed in Core : main document bug
+- Fixed in Core : Extra trailing separator in Navbar fix (Thanks Tielman)
+- Fixed in Admin : Macro admin security bug fix
+- Fixed in Admin : Unexisting admin panel fix
+- Fixed in Admin : Title bug in admin panel
+- Fixed in Admin : Adminaccess save and delete bug
+- Fixed in Admin : Small HTTP status fix (Forbidden vs Not Found)
+- Fixed in Package : Added (finally) support for logging : enable/disable access logging
+- Updated in Documentation : Added Style quickstart
+
 Release - 1.2 beta
-- Added in Package : new 4 styles
-- Added in Package :  support for mod_perl 2
-- Added in Package : initial support to change message order (TODO: Add this to GUI)
+- Added in Package : 4 new styles
+- Added in Package : Support for mod_perl 2
+- Added in Package : Initial support to change message order (TODO: Add this to GUI)
 - Fixed in Package : Postgres permission issues
-- Fixed in Package : document root bug (SF bug ticket 1450821)
+- Fixed in Package : Document root bug (SF bug ticket 1450821)
 - Fixed in Package : File Manager 'delete' message bug (SF bug ticket 1450814)
 - Fixed in Package : File Manager upload filename bug (SF bug ticket 1460304)
 - Added in Package : support for native HTTP status for 404 and 403
-- Updated in Documentation :  database setup
+- Updated in Documentation : database setup
 - Updated in Documentation : example on using Databases in plugin
 - Fixed in Admin : Wiki administration and fixed initial bugs
 - Fixed in Admin : Radio button bug in IE ; Root path actions
-- Added in Admin : basic support for internationalization
-- Fixed in Plugins : small bug in ImageGallery plugin
+- Added in Admin : Basic support for internationalization
+- Fixed in Plugins : Small bug in ImageGallery plugin
 
 Release - 1.1 - Stable
 - Fixed in Package : Updated MANIFEST (some handlers were missing)
