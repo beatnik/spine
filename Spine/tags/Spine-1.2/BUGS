@@ -1,4 +1,0 @@
-BUGS:
-
-Uploading in File Manager breaks sometimes on older Apache versions. It works fine on Apache 1.3.33.
-
