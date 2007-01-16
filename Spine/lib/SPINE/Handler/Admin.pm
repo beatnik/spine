@@ -48,7 +48,7 @@ sub handler
   my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
   my %cookies = $th_req->cookies;
-
+  my $ref = $th_req->referer;
   my $url = $request->uri;
   my $location = $request->location;
   $url =~ s/^$location\/?//mx;
@@ -75,7 +75,13 @@ sub handler
   }
 
   $params[0] ||= 'content';
-
+  my $badref = $ref !~ /$ENV{SERVER_NAME}$location/ && $ref;
+  if ($badref)
+  { my $status = $SPINE::Transparent::Constant::OK;
+    my $c = SPINE::Base::Content->new({body=>"Something went wrong while loading Administration: Bad refering page! Please contact your server administrator if the problem persists."});
+    carp $@;
+    return ($c,$status);
+  }
   if ($url eq 'admin' && $params[0])
   { my $module = ucfirst $params[0];
     my $value;
