@@ -38,6 +38,7 @@ sub new {
    eval qq|use Apache::Request; \$self->{LOCATION} = \$self->{REQUEST}->location(); |; 
    eval qq|use Apache::Request; \$self->{DIR_CONFIG} = sub { \$self->{REQUEST}->dir_config(\@_); } |; 
    eval qq|use Apache::Request; \$self->{URI} = \$self->{REQUEST}->uri; |; 
+   eval qq|use Apache::Request; \$self->{REFERER} = \$self->{REQUEST}->header_in("Referer"); |; 
   }
  if (ref($self->{REQUEST}) eq "Apache2::Request")
  { eval qq|use Apache2::Cookie; \$self->{COOKIES} = scalar Apache2::Cookie->fetch; |; 
@@ -45,6 +46,7 @@ sub new {
    eval qq|use Apache2::Request; \$self->{LOCATION} = \$self->{REQUEST}->location(); |; 
    eval qq|use Apache2::Request; \$self->{DIR_CONFIG} = sub { \$self->{REQUEST}->dir_config(\@_); } |; 
    eval qq|use Apache2::Request; \$self->{URI} = \$self->{REQUEST}->uri; |; 
+   eval qq|use Apache2::Request; my \$in = \$self->{REQUEST}->headers_in(); \$self->{REFERER} = \$in->{"Referer"}; |; 
  }
  if (ref($self->{REQUEST}) eq "CGI")
  { eval qq|use CGI; \$self->{COOKIES} = scalar CGI::Cookie->fetch; |; 
@@ -86,6 +88,12 @@ sub location
 { my $self = shift;
    return $self->{LOCATION};
 }
+
+sub referer
+{ my $self = shift;
+   return $self->{REFERER};
+}
+
 1;
 
 __END__
