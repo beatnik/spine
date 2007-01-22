@@ -126,17 +126,18 @@ sub handler
   my $execperms = $adminaccess & EXECACCESS;
   $execperms =~ s/0//gmx;
 
-  $path =~ s/\/+$//mx;
-  $path =~ s/^\/+//mx;
+  $path =~ s/\/+$//gmx;
+  $path =~ s/^\/+//gmx;
+  $path =~ s/\.\.//gmx;
   $path =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//gmx;   
   $path = "/$path" if $path;
   
-  $target =~ s/\/+$//mx;
-  $target =~ s/^\/+//mx;
+  $target =~ s/\/+$//gmx;
+  $target =~ s/^\/+//gmx;
   $target =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//gmx;
 
-  $foldername =~ s/\/+$//mx;
-  $foldername =~ s/^\/+//mx;
+  $foldername =~ s/\/+$//gmx;
+  $foldername =~ s/^\/+//gmx;
   if ($foldername =~ /^.*[\/\\](.*)$/mx)
   { $foldername = $1 if $1; }
 
@@ -399,7 +400,7 @@ How to set up Apache::SPINE::Index in your Apache config file...
 
 =head1 VERSION
 
-This is spine 1.2.
+This is spine 1.22.
 
 =head1 AUTHOR
 

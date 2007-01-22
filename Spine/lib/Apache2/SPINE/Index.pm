@@ -38,6 +38,9 @@ use SPINE::Handler::Content;
 use SPINE::DBI::User;
 use SPINE::Constant;
 
+use SPINE::Transparent::Request;
+use SPINE::Transparent::Constant;
+
 use Carp;
 use Digest::MD5 qw(md5_hex);
 
@@ -80,6 +83,8 @@ sub handler
   if (!$dbh) { $dbh = &initialise($r); }
   my $cookie = undef;
   my $req = Apache2::Request->new($r);
+  my $th_req = SPINE::Transparent::Request->new($req);
+  SPINE::Transparent::Constant->new($req); 
   #Just go ahead and use Apache::Request from now on
   my $user_dbi = SPINE::DBI::User->new($dbh);
   my $session_dbi = SPINE::DBI::Session->new($dbh);
@@ -132,6 +137,7 @@ sub handler
   my $type = $content->type || 'text/html';
   my $body = $content->body;
   $location = $req->location;
+  my $servername = $th_req->dir_config("servername") || $ENV{SERVER_NAME};  
   $req->no_cache(1);
   $req->content_type($type);
   $req->rflush; # instead of send_http_header;
@@ -139,7 +145,7 @@ sub handler
   return OK if $req->header_only;
   while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$req,$content)/gmxe) 
   { $body =~ s/<\?SPINE_Location\?>/$location/mxg;
-    $body =~ s/<\?SPINE_Servername\?>/$ENV{SERVER_NAME}/mxg; 
+    $body =~ s/<\?SPINE_Servername\?>/$servername/mxg; 
   }
   #I hope this doesn't come back to hunt me
   $req->print($body);
@@ -189,7 +195,7 @@ Most of the installation process takes place in the Apache configuration file.
 
 =head1 VERSION
 
-This is spine 1.2
+This is spine 1.22
 
 =head1 AUTHOR
 

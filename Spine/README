@@ -1,7 +1,7 @@
-SPINE v1.2 - Stable
+SPINE v1.22 - Stable
 -------------------
 
-This is a development release SPINE.
+This is a stable release SPINE.
 You need access to mod_perl and a database. Consult the server administrator if you have questions about these issues.
 
 Any function, layout, database structure is subject to change if needed.
@@ -11,9 +11,6 @@ Comments, suggestions and contributions/patches are always welcome.
 See INSTALL for more info on installation
 
 See LICENSE for more info on licensing issues.
-
-Since this is a developers release, tons of things are yet unfinished. I test this application on mysql and usually 
-then port the data to postgres. In this case, it's been a while since the last postgres port (same goes for SQLite).
 
 Comments? Patches? Suggestions? 
 Send em to  beatnik@users.sf.net

@@ -75,7 +75,8 @@ sub handler
   }
 
   $params[0] ||= 'content';
-  my $badref = $ref !~ /$ENV{SERVER_NAME}$location/ && $ref;
+  my $servername = $th_req->dir_config("servername") || $ENV{SERVER_NAME};    
+  my $badref = $ref !~ /https?\:\/\/$servername$location/ && $ref;
   if ($badref)
   { my $status = $SPINE::Transparent::Constant::OK;
     my $c = SPINE::Base::Content->new({body=>"Something went wrong while loading Administration: Bad refering page! Please contact your server administrator if the problem persists."});
@@ -127,7 +128,7 @@ We assume the module will return all the valid data so we print it.
 
 =head1 VERSION
 
-This is spine 1.2.
+This is spine 1.22.
 
 =head1 AUTHOR
 

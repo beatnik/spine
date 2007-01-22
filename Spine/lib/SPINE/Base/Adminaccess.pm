@@ -146,7 +146,7 @@ Permissions bitmask is usually defined as RWX. 100 is Read set and write and exe
 
 =head1 VERSION
 
-This is spine 1.2.
+This is spine 1.22.
 
 =head1 AUTHOR
 

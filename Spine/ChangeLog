@@ -1,5 +1,9 @@
 ChangeLog
 =========
+Release - 1.22 - Fixes
+ - Fixed in Admin : Referer check
+ - Fixed in Admin : Arbitrary password 
+
 Release - 1.2 - Stable
 - Added in Package : 8 new styles
 - Added in Admin : Forced POST access (prevent XSS)

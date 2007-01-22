@@ -86,7 +86,7 @@ This handler will dump all the Environment variables and is purely for demonstra
 
 =head1 VERSION
 
-This is spine 1.2.
+This is spine 1.22.
 
 =head1 AUTHOR
 

@@ -245,7 +245,7 @@ insert into content (body,breaks,icomment,keywords,logging,macros,modified,name,
 -- mysql v3 dump for SPINE 1.2 : Table macro
 --
 
-insert into macro (macrokey,macrovalue,name) values ('SPINE_Version','1.2','main');
+insert into macro (macrokey,macrovalue,name) values ('SPINE_Version','1.22','main');
 
 
 --
@@ -494,4 +494,4 @@ insert into usergroup (usergroup,username) values ('users','admin');
 -- mysql v3 dump for SPINE 1.2 : Table users
 --
 
-insert into users (email,fullname,login,password,usergroup) values ('root@localhost','Administrator','admin','d41d8cd98f00b204e9800998ecf8427e','admin');
+insert into users (email,fullname,login,password,usergroup) values ('root@localhost','Administrator','admin','acbd18db4cc2f85cedef654fccc4a4d8','admin');

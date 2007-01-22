@@ -20,7 +20,7 @@ package SPINE::Handler::Admin::Macro;
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org        
 
-## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.27 $
+## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.227 $
 
 use SPINE::DBI::Session;
 use SPINE::DBI::User;
@@ -269,7 +269,7 @@ Most of the installation process takes place in the Apache configuration file.
 
 =head1 VERSION
 
-This is spine 1.2.
+This is spine 1.22.
 
 =head1 AUTHOR
 
