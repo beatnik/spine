@@ -126,9 +126,10 @@ sub handler
   my $execperms = $adminaccess & EXECACCESS;
   $execperms =~ s/0//gmx;
 
+  $path =~ s/\.\.//gmx;
   $path =~ s/\/+$//gmx;
   $path =~ s/^\/+//gmx;
-  $path =~ s/\.\.//gmx;
+
   $path =~ s/[;\`'!\?\@\|\"\*~<>\^\(\)\[\]\{\}\$\n\f\a\r\0\t\s]+//gmx;   
   $path = "/$path" if $path;
   

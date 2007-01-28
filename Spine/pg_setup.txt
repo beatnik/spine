@@ -3,27 +3,35 @@ Setting up initial user accounts in Postgresql
 
 Although quite trivial, the following might help you setting up the database and user permissions for Spine. 
 
-root@lua:/tmp/Spine-1.1$ su - postgres
-postgres@lua:~1$ cd /tmp/Spine-1.1
-postgres@lua:/tmp/Spine-1.1$ createdb $database
+root@lua:/tmp/Spine-1.22$ su - postgres
+postgres@lua:~$ cd /tmp/Spine-1.22
+postgres@lua:~$ export database=spine
+postgres@lua:~$ export username=spine
+
+postgres@lua:/tmp/Spine-1.22$ createdb $database
+
 CREATE DATABASE
-postgres@lua:/tmp/Spine-1.1$ psql $database < /tmp/Spine-1.1/psql-struct.sql
+postgres@lua:/tmp/Spine-1.22$ psql $database < /tmp/Spine-1.22/psql-struct.sql
 ...
 
 
-postgres@lua:/tmp/Spine-1.1$ psql $database < /tmp/Spine-1.1/mysql3-data.sql
+postgres@lua:/tmp/Spine-1.22$ psql $database < /tmp/Spine-1.22/mysql3-data.sql
 ...
 
-postgres@lua:/tmp/Spine-1.1$ createuser -D -A -E -P $username
+postgres@lua:/tmp/Spine-1.22$ createuser -D -A -E -P $username
 Enter password for new user:
 Enter it again:
 CREATE USER
-postgres@lua:/tmp/Spine-1.1$
+postgres@lua:/tmp/Spine-1.22$
 
-postgres@lua:/tmp/Spine-1.1$ perl -e'for(qw(adminaccess attribute content macro message messagegroup navbarbuttons navbars revision session statistics style usergroup users wiki)) { print "GRANT ALL ON $_ to $ARGV[0];\nGRANT ALL ON ".$_."_id_seq to $ARGV[0];\n" }' $username | psql $database
+postgres@lua:/tmp/Spine-1.22$ perl -e'for(qw(adminaccess attribute content macro message messagegroup navbarbuttons navbars revision session statistics style usergroup users wiki)) { print "GRANT ALL ON $_ to $ARGV[0];\nGRANT ALL ON ".$_."_id_seq to $ARGV[0];\n" }' $username | psql $database
+
+In the postgresql shell, in the mysql shell, insert the generated SQL statement for the user account.
+
+postgres@lua:/tmp/Spine-1.22$ psql $database
 
 The following variables are used: 
  
 $database : The database name. This value is used in the httpd.conf 'dbname' value.  
 $username : The username. This value is used in the httpd.conf 'dbuser' value. 
-$password : The password. This value is used in the httpd.conf 'dbpwd' value. 
+$password : The password. This value is used in the httpd.conf 'dbpwd' value.

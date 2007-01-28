@@ -9,7 +9,7 @@ my $dbh = DBI->connect("dbi:mysql:$ARGV[0]","beatnik","foobar") || die "Can't co
 for $table (qw(attribute adminaccess content macro message messagegroup navbarbuttons navbars style usergroup users) )
 { $sth = $dbh->prepare("select * from $table") || die "Oops"; 
   $sth->execute(); 
-  print "\n\n--\n-- mysql v3 dump for SPINE 1.2 : Table $table\n--\n\n";
+  print "\n\n--\n-- mysql v3 dump for SPINE 1.22 : Table $table\n--\n\n";
   while($ref = $sth->fetchrow_hashref())
   { %hash = %{ $ref };
     print "insert into $table (";

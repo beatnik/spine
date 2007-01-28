@@ -24,6 +24,17 @@ Spine has very few dependencies:
       of
       Postgresql (development is based on 7.4)
 
+Generating SQL statements for users
+-----------------------------------
+
+Use the on-line tool to generate the correct SQL statements for the admin user. 
+By default, version 1.22 does not include a default password.
+
+Visit 
+
+   http://spine.sourceforge.net/createuser.html
+
+to generate a custom SQL statement to create the admin account. 
 
 Installation on Debian (mod_perl 1)
 ----------------------
@@ -39,8 +50,8 @@ On Debian, install the following packages :
 
 TODO: Complete debian installation notes for Apache2
 
-Mysql Configuration
-----------------
+Mysql Configuration (Installation only)
+-------------------
 
 Development is based on mysql. Support for other RDBMSs is a bonus.
 
@@ -62,8 +73,14 @@ Once the database structure is set-up, insert the data:
 
 Database permissions might have to be defined. Consult the mysql documentation.
 
-Perl Modules Installation
------------------------
+Open the mysql shell again
+
+  bash# mysql spine -p 
+
+In the mysql shell, insert the generated SQL statement for the user account.
+
+Perl Modules Installation (Including Upgrade)
+-------------------------
 
 There is a perl makefile included. Install the modules in the default perl location with:
 
@@ -75,6 +92,26 @@ and as root (superuser)
   bash# make install
 
 Make sure you have Apache::Request installed. If you have questions about installing this, consult the administrator.
+
+Upgrade from 1.2 installations
+------------------------------
+
+Resetting the password is the only update needed in the database. 
+See pg_setup.txt for instructions on how to this in Postgresql.
+
+Generate the User SQL statement, as described above.
+
+Open the mysql shell again
+
+  bash# mysql spine -p 
+
+In the mysql shell, insert the following statements: 
+
+  delete from users where login = "admin";
+  delete from session;
+
+Insert the generated SQL statement for the user account.
+
 
 Apache Configuration
 --------------------
