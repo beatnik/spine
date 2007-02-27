@@ -66,10 +66,10 @@ sub handler
   my $url = $tr_req->uri;
   my $location = $tr_req->location;
   $url =~ s/^$location\/?//gmx;
-  ($url,@params) = split("/",$url);
+  #($url,@params) = split("/",$url);
   if (!$url)
   { $url = $main; }
-  if ($url eq 'admin')
+  if ($url =~ /^admin/)
   { ($content,$status) = SPINE::Handler::Admin::handler($request,$dbh);
     if (!ref $content)
     { $content = SPINE::Base::Content::default(body=>"Something is terribly wrong"); }
@@ -149,9 +149,9 @@ sub handler
   $location = $tr_req->location;
   if ($location !~ /\/$/mx) { $location .= "/"; }
   my $servername = $tr_req->dir_config("servername") || $ENV{SERVER_NAME};
-  
+  my $images = $request->dir_config("images") || "/images/";
   $body =~ s/<\?SPINE_Title\?>/$title/gmx;
-
+  $body =~ s/<\?SPINE_Images\?>/$images/gmx;
   $body =~ s/<\?SPINE_Webmaster\?>/$request->dir_config("webmaster")/gmxe;
   $body =~ s/<\?SPINE_Sitename\?>/$request->dir_config("sitename")/gemx;
   $body =~ s/<\?SPINE_Referer\?>/$request->header_in("referer")/gmxe; #Undocumented Feature? Add to DOCS!!
