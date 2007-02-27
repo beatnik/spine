@@ -95,11 +95,11 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_adminaccess_string = $i18n{'create_adminaccess'} || "Add new admin access permissions<br>";
-  $remove_adminaccess_string = $i18n{'remove_adminaccess'} || "Remove admin access permissions<br>";
-  $save_adminaccess_string = $i18n{'save_adminaccess'} || "Save admin access permissions<br>";
-  $adminaccess_exists_string = $i18n{'adminaccess_exists'} || "These admin access permissions already exist!<br>";
-  $adminaccess_notexists_string = $i18n{'adminaccess_not_exists'} || "These admin access permissions does not exist!<br>";
+  $create_adminaccess_string = $i18n{'create_adminaccess'} || "Add new admin access permissions";
+  $remove_adminaccess_string = $i18n{'remove_adminaccess'} || "Remove admin access permissions";
+  $save_adminaccess_string = $i18n{'save_adminaccess'} || "Save admin access permissions";
+  $adminaccess_exists_string = $i18n{'adminaccess_exists'} || "These admin access permissions already exist!";
+  $adminaccess_notexists_string = $i18n{'adminaccess_not_exists'} || "These admin access permissions does not exist!";
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -185,6 +185,7 @@ sub handler
     $list .= qq(<tr bgcolor="#ffffff"><form action="<?SPINE_Location?>admin/adminaccess/save/" method="post"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="text" name="section" class="input" value="$hash{section}" size="30">\n</td><td><select name="usergroup">$group</select>\n</td><td>$permissions\n</td>\n<td><input type="submit" value="Save" class="button" name="action"></td>\n</form><form action="<?SPINE_Location?>admin/adminaccess/remove/" method="post"><input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="submit" value="Delete" class="button" name="action"></td>\n</form></tr>\n); 
   }
   $body =~ s/\$list/$list/gmx;
+  if ($error) { $error = qq(<p class="error">$error</p>); }
   $body =~ s/\$error/$error/gmx;
   $content->body($body);
   return $content;

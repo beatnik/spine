@@ -102,16 +102,16 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_navbar_string = $i18n{'create_navbar'} || "Create a new navigation bar<br>";
-  $remove_navbar_string = $i18n{'remove_navbar'} || "Remove a navigation bar<br>";
-  $edit_navbar_string = $i18n{'edit_navbar'} || "Edit a navigation bar<br>";
-  $save_navbar_string = $i18n{'save_navbar'} || "Save a navigation bar<br>";
-  $copy_navbar_string = $i18n{'copy_navbar'} || "Copy a navigation bar<br>";
-  $add_button_string = $i18n{'add_button'} || "Add a button to the navigation bar<br>";
-  $edit_button_string = $i18n{'edit_button'} || "Edit a button in the navigation bar<br>";
-  $delete_button_string = $i18n{'delete_button'} || "Delete a button from the navigation bar<br>";
-  $navbar_exists_string = $i18n{'navbar_exists'} || "This navigation bar already exists!<br>";
-  $navbar_notexists_string = $i18n{'navbar_not_exists'} || "This navigation bar does not exist!<br>";
+  $create_navbar_string = $i18n{'create_navbar'} || "Create a new navigation bar";
+  $remove_navbar_string = $i18n{'remove_navbar'} || "Remove a navigation bar";
+  $edit_navbar_string = $i18n{'edit_navbar'} || "Edit a navigation bar";
+  $save_navbar_string = $i18n{'save_navbar'} || "Save a navigation bar";
+  $copy_navbar_string = $i18n{'copy_navbar'} || "Copy a navigation bar";
+  $add_button_string = $i18n{'add_button'} || "Add a button to the navigation bar";
+  $edit_button_string = $i18n{'edit_button'} || "Edit a button in the navigation bar";
+  $delete_button_string = $i18n{'delete_button'} || "Delete a button from the navigation bar";
+  $navbar_exists_string = $i18n{'navbar_exists'} || "This navigation bar already exists!";
+  $navbar_notexists_string = $i18n{'navbar_not_exists'} || "This navigation bar does not exist!";
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -315,6 +315,7 @@ sub handler
     $body =~ s/\$style/$stylelist/gmx if ref $edit_navbar;
     $body =~ s/\$separator/$separator/gmx;
     $body =~ s/\$position/$lastposition/gmx;
+    if ($ierror) { $ierror = qq(<p class="error">$ierror</p>); }    
     $body =~ s/\$error/$ierror/gmx;
     my $buttons = "";
     my $button_content = shift @{$content_dbi->get({name=>".admin-navbar-button", count=>1})};
@@ -374,6 +375,7 @@ sub handler
     $body =~ s/\$type/navbar/gmx;
     $body =~ s/\$label/navigation bar/gmx;
   } 
+  if ($error) { $error = qq(<p class="error">$error</p>); }
   $body =~ s/\$error/$error/gmx;
   $content->body($body);
   return $content;

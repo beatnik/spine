@@ -184,6 +184,7 @@ sub handler
     my $cbody = undef;    
 
     $cbody = $edit_wiki->body if ref $edit_wiki;
+    if ($ierror) { $ierror = qq(<p class="error">$ierror</p>); }
     my @selected = ('',' checked');
     my @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
     my $group = undef;

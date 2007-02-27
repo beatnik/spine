@@ -95,15 +95,15 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_macroset_string = $i18n{'create_macroset'} || "Add a new macroset<br>";
-  $create_macro_string = $i18n{'create_macro'} || "Add a new macro<br>";
-  $remove_macroset_string = $i18n{'remove_macroset'} || "Remove a macroset<br>";
-  $remove_macroset_string = $i18n{'remove_macro'} || "Remove a macro<br>";
-  $edit_macroset_string = $i18n{'edit_macroset'} || "Edit a macroset<br>";
-  $save_macro_string = $i18n{'save_macro'} || "Save a macro<br>";
-  $copy_macroset_string = $i18n{'copy_macroset'} || "Copy a macroset<br>";
-  $macroset_exists_string = $i18n{'macroset_exists'} || "This macroset already exists!<br>";
-  $macroset_notexists_string = $i18n{'macroset_not_exists'} || "This macroset does not exist!<br>";
+  $create_macroset_string = $i18n{'create_macroset'} || "Add a new macroset";
+  $create_macro_string = $i18n{'create_macro'} || "Add a new macro";
+  $remove_macroset_string = $i18n{'remove_macroset'} || "Remove a macroset";
+  $remove_macroset_string = $i18n{'remove_macro'} || "Remove a macro";
+  $edit_macroset_string = $i18n{'edit_macroset'} || "Edit a macroset";
+  $save_macro_string = $i18n{'save_macro'} || "Save a macro";
+  $copy_macroset_string = $i18n{'copy_macroset'} || "Copy a macroset";
+  $macroset_exists_string = $i18n{'macroset_exists'} || "This macroset already exists!";
+  $macroset_notexists_string = $i18n{'macroset_not_exists'} || "This macroset does not exist!";
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -208,6 +208,7 @@ sub handler
     my $list = "";
     my $c = undef;
     for(@list) { $list .= qq(<option value="$_">$_\n); }
+    if ($error) { $error = qq(<p class="error">$error</p>); }
     $body =~ s/\$list/$list/gmx;
     $body =~ s/\$type/macro/gmx;
     $body =~ s/\$label/macro/gmx;

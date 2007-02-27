@@ -92,11 +92,11 @@ sub handler
 
    $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $new_upload_string = $i18n{'new_upload'} || "Upload a file<br>";
-  $new_folder_string = $i18n{'new_folder'} || "Create a folder<br>";
-  $copy_file_string = $i18n{'copy_file'} || "Copy a file<br>";
-  $rename_file_string = $i18n{'rename_file'} || "Rename a file<br>";
-  $read_folder_string = $i18n{'read_folder'} || "Read folder contents<br>";
+  $new_upload_string = $i18n{'new_upload'} || "Upload a file";
+  $new_folder_string = $i18n{'new_folder'} || "Create a folder";
+  $copy_file_string = $i18n{'copy_file'} || "Copy a file";
+  $rename_file_string = $i18n{'rename_file'} || "Rename a file";
+  $read_folder_string = $i18n{'read_folder'} || "Read folder contents";
   $mkdir_failed_string = $i18n{'mkdir_failed'} || "Unable to create folder.";
   $copy_failed_string = $i18n{'copy_failed'} || "Unable to copy file.";
   $remove_failed_string = $i18n{'remove_failed'} || "Unable to remove file.";
@@ -105,10 +105,10 @@ sub handler
   $docroot_permissions_string = $i18n{'docroot_permissions'} || "Does the document root directory have correct permissions?";
   $upload_failed_string = $i18n{'upload_failed'} || "File could not be uploaded. If this problem persists, submit a bug report.";
   $upload_unknown_string = $i18n{'upload_unknown'} || "Error creating file:";
-  $file_exists_string = $i18n{'file_exists'} || "This file already exists!<br>";
-  $file_notexists_string = $i18n{'file_not_exists'} || "This file does not exists!<br>";
-  $folder_exists_string = $i18n{'folder_exists'} || " This folder already exists!<br>";
-  $folder_notexists_string = $i18n{'folder_not_exists'} || " This folder does not exist!<br>";
+  $file_exists_string = $i18n{'file_exists'} || "This file already exists!";
+  $file_notexists_string = $i18n{'file_not_exists'} || "This file does not exists!";
+  $folder_exists_string = $i18n{'folder_exists'} || " This folder already exists!";
+  $folder_notexists_string = $i18n{'folder_not_exists'} || " This folder does not exist!";
 
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -245,7 +245,7 @@ sub handler
     my $datesort = $sort ne "date" ? "date" : "dater";
     my $sizesort = $sort ne "size" ? "size" : "sizer";
     my $filenamesort = $sort ne "filename" ? "filename" : "filenamer";
-  
+    if ($error) { $error = qq(<p class="error">$error</p>); } 
     $list = <<"EOF";
 <div class="dialog" id="upload"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('upload').style.display='none';"><br><form name="uploadform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Upload in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="upload"><input type="file" name="filename">&nbsp;<input type="submit" class="button" value="Upload"></form></div>
 <div class="dialog" id="createfolder"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('createfolder').style.display='none';"><br><form name="createform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Create Folder in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="createfolder"><input type="hidden" name="filename" value=""><input type="text" name="foldername">&nbsp;<input type="submit" class="button" value="Create"></form></div>

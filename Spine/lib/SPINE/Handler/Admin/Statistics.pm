@@ -93,8 +93,8 @@ sub handler
   }
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
-  $view_stats_string = $i18n{'view_stats'} || " View statistics<br>";
-  $remove_stats_string = $i18n{'remove_stats'} || "Remove statistics<br>";
+  $view_stats_string = $i18n{'view_stats'} || " View statistics";
+  $remove_stats_string = $i18n{'remove_stats'} || "Remove statistics";
 
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -182,7 +182,8 @@ sub handler
     for my $name (sort keys %counters)
     { $namelist .= qq(<tr><td>$name</td><td><img src="/images/dot.jpg" width="$counters{$name}" height="10">&nbsp;$counters{$name}</td></tr>\n);
     }
-
+    if ($error) { $error = qq(<p class="error">$error</p>); }
+    $body =~ s/\$error/$error/gmx;
     $body =~ s/\$list/$list/gmx;
     $body =~ s/\$namelist/$namelist/gmx;
     $body =~ s/\$type/statistics/gmx;

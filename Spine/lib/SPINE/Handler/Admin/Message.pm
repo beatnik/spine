@@ -104,15 +104,15 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_message_string = $i18n{'create_message'} || "Create a new message<br>";
-  $remove_message_string = $i18n{'remove_message'} || "Remove a message<br>";
-  $remove_messagegroup_string = $i18n{'remove_messagegroup'} || "Remove a messagegroup<br>";
-  $edit_message_string = $i18n{'edit_message'} || "Edit a message<br>";
-  $save_message_string = $i18n{'save_message'} || "Save a message<br>";
-  $save_messagegroup_string = $i18n{'save_messagegroup'} || "Save a messagegroup<br>";
-  $copy_messagegroup_string = $i18n{'copy_messagegroup'} || "Copy a messagegroup<br>";
-  $messagegroup_exists_string = $i18n{'messagegroup_exists'} || "This messagegroup already exists!<br>";
-  $messagegroup_notexists_string = $i18n{'messagegroup_not_exists'} || "This messagegroup does not exist!<br>";
+  $create_message_string = $i18n{'create_message'} || "Create a new message";
+  $remove_message_string = $i18n{'remove_message'} || "Remove a message";
+  $remove_messagegroup_string = $i18n{'remove_messagegroup'} || "Remove a messagegroup";
+  $edit_message_string = $i18n{'edit_message'} || "Edit a message";
+  $save_message_string = $i18n{'save_message'} || "Save a message";
+  $save_messagegroup_string = $i18n{'save_messagegroup'} || "Save a messagegroup";
+  $copy_messagegroup_string = $i18n{'copy_messagegroup'} || "Copy a messagegroup";
+  $messagegroup_exists_string = $i18n{'messagegroup_exists'} || "This messagegroup already exists!";
+  $messagegroup_notexists_string = $i18n{'messagegroup_not_exists'} || "This messagegroup does not exist!";
 
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user, count=>1}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -331,6 +331,7 @@ sub handler
     my $list = undef;
     @list = sort { $a cmp $b } @list;
     for(@list) { $list .= "<option value=\"$_\">$_\n"; }
+    if ($error) { $error = qq(<p class="error">$error</p>); }
     $body =~ s/\$list/$list/gmx;
     $body =~ s/\$type/message/gmx;
     $body =~ s/\$label/message group/gmx;

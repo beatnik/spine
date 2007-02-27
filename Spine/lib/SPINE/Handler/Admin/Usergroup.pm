@@ -135,6 +135,7 @@ sub handler
     for(@groups) { my $sel = $hash{"usergroup"} eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
     $list .= qq(<tr bgcolor="#ffffff"><td>$hash{username}\n</td><td>$hash{usergroup}\n</td>\n</form><form action="<?SPINE_Location?>admin/usergroup/remove/" method="post"><input type="hidden" name="usergroup" value="$hash{usergroup}"><input type="hidden" name="username" value="$hash{username}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="submit" value="Delete" class="button" name="action"></td>\n</form></tr>\n); 
   }
+  if ($error) { $error = qq(<p class="error">$error</p>); }
   $body =~ s/\$list/$list/gmx;
   $body =~ s/\$error/$error/gmx;
   $content->body($body);

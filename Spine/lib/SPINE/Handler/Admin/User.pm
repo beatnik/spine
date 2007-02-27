@@ -88,22 +88,22 @@ sub handler
   shift @params;
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Adding new users<br>'; 
+  { $error = 'You do not have valid permissions for this operation : Adding new users'; 
     $url = '.admin-user'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Removing users<br>'; 
+  { $error = 'You do not have valid permissions for this operation : Removing users'; 
     $url = '.admin-user'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
-  { $error = 'You do not have valid permissions for this operation : Editing users<br>'; 
+  { $error = 'You do not have valid permissions for this operation : Editing users'; 
     $url = '.admin-user'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Saving users<br>'; 
+  { $error = 'You do not have valid permissions for this operation : Saving users'; 
     $url = '.admin-user'; 
   }
 
@@ -112,7 +112,7 @@ sub handler
 
   my $edit_user = shift @{ $user_dbi->get({login=>$request->param("login"), count=>1}) };
   if ($edit_user && $params[0] eq 'new' && !$error)
-  { $error = 'This User already exists!<br>'; 
+  { $error = 'This User already exists!'; 
     $url = '.admin-general'; 
   }
 
@@ -148,6 +148,7 @@ sub handler
     { my %hash = $_->tohash;
       $list .= qq(<tr bgcolor="#ffffff"><form action="<?SPINE_Location?>admin/user/edit/" method="post"><input type="hidden" name="login" value="$hash{login}">\n<td>$hash{fullname}</td>\n<td>$hash{login}</td>\n<td><input type="submit" value="edit" class="button" name="action"></td>\n</form><form action="<?SPINE_Location?>admin/user/remove/" method="post"><input type="hidden" name="login" value="$hash{login}">\n<td><input type="submit" value="delete" class="button" name="action"></td>\n</form><td>&nbsp;</td></tr>\n); 
     }
+    if ($error) { $error = qq(<p class="error">$error</p>); }
     $body =~ s/\$userdata/$list/gmx;
     $body =~ s/\$error/$error/gmx;        
   } 
