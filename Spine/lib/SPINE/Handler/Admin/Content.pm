@@ -55,6 +55,7 @@ sub handler
   my $page = $request->param('name');
   my $url = $request->uri;
   my $location = $request->location;
+  my $readonly = undef;
   $error = '';
   $ierror = '';
   %default = ();
@@ -97,13 +98,13 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_content_string = $i18n{'create_content'} || "Create a new content<br>";
-  $remove_content_string = $i18n{'remove_content'} || "Remove a content<br>";
-  $edit_content_string = $i18n{'edit_content'} || "Edit a content<br>";
-  $save_content_string = $i18n{'save_content'} || "Save a content<br>";
-  $copy_content_string = $i18n{'copy_content'} || "Copy a content<br>";
-  $content_exists_string = $i18n{'content_exists'} || "This content already exists!<br>";
-  $content_notexists_string = $i18n{'content_not_exists'} || "This content does not exist!<br>";
+  $create_content_string = $i18n{'create_content'} || "Create a new content";
+  $remove_content_string = $i18n{'remove_content'} || "Remove a content";
+  $edit_content_string = $i18n{'edit_content'} || "Edit a content";
+  $save_content_string = $i18n{'save_content'} || "Save a content";
+  $copy_content_string = $i18n{'copy_content'} || "Copy a content";
+  $content_exists_string = $i18n{'content_exists'} || "This content already exists!";
+  $content_notexists_string = $i18n{'content_not_exists'} || "This content does not exist!";
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user, count=>1}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -140,7 +141,7 @@ sub handler
   { $error = $valid_perms_string.$edit_content_string; 
     $url = '.admin-general'; 
   }
-  
+
   if ($params[0] eq 'save' && !$writeperms)
   { $error = $valid_perms_string.$save_content_string;
     $url = '.admin-general'; 
@@ -248,6 +249,9 @@ sub handler
     for(@groups) { my $sel = $edit_content->usergroup eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
     my @perms = $edit_content->permissions =~ /^(\d)(\d)(\d)(\d)/mx;
     my @checked = (""," checked");
+    if ($user ne 'admin' && $edit_content->owner ne $user && $edit_content->permissions !~ /^\d1/mx && $edit_content->permissions !~ /\d1$/mx)
+    { $readonly = 1; }
+    my $lock = qq(<img src="<?SPINE_Images?>lock.png">) if $readonly;
     my $logging = qq(<input type="checkbox" value="1"$selected[0] name="logging">);
     my $gpermissions = qq(Read: <input type="checkbox" name="groupr" value="1"$checked[$perms[0]]>);
     $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
@@ -256,6 +260,7 @@ sub handler
     $cbody =~ s/\&/\&amp\;/gmx; 
     $cbody =~ s/\</\&lt\;/gmx;
     $cbody =~ s/\>/\&gt\;/gmx;
+    if ($ierror) { $ierror = qq(<p class="error">$ierror</p>); }
     $body =~ s/\$title/$edit_content->title/gemx if ref $edit_content;
     $body =~ s/\$filename/$edit_content->name/gmxe if ref $edit_content;
     $body =~ s/\$owner/$edit_content->owner/gmxe if ref $edit_content;
@@ -272,6 +277,7 @@ sub handler
     $body =~ s/\$gpermissions/$gpermissions/mxg;
     $body =~ s/\$wpermissions/$wpermissions/mxg;
     $body =~ s/\$error/$ierror/gmx; 
+    $body =~ s/\$lock/$lock/gmx;     
     $body =~ s/\$body/$cbody/gmx;
   } 
 
@@ -299,6 +305,7 @@ sub handler
          )
        { push(@list,$c->name); next; }
     }
+    if ($error) { $error = qq(<p class="error">$error</p>); }
     for(@list) { $list .= qq(<option value="$_">$_\n); }
     $body =~ s/\$list/$list/gmx;
     $body =~ s/\$type/content/gmx;
