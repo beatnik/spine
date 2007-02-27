@@ -59,7 +59,7 @@ sub handler
   $ierror = '';
   %i18n = ();
   %default = ();
-
+  my $readonly = undef;
   my $url = $request->uri;
   my $location = $request->location;
   $url =~ s/^$location\/?//mx;
@@ -101,13 +101,13 @@ sub handler
   
   $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
   $enter_name_string = $i18n{'enter_name'} || "Enter name";
-  $create_style_string = $i18n{'create_style'} || "Create new style<br>";
-  $remove_style_string = $i18n{'remove_style'} || "Remove style<br>";
-  $edit_style_string = $i18n{'edit_style'} || "Edit style<br>";
-  $save_style_string = $i18n{'save_style'} || "Save style<br>";
-  $copy_style_string = $i18n{'copy_style'} || "Copy style<br>";
-  $style_exists_string = $i18n{'style_exists'} || "This style already exists!<br>";
-  $style_notexists_string = $i18n{'style_not_exists'} || "This style does not exist!<br>";
+  $create_style_string = $i18n{'create_style'} || "Create new style";
+  $remove_style_string = $i18n{'remove_style'} || "Remove style";
+  $edit_style_string = $i18n{'edit_style'} || "Edit style";
+  $save_style_string = $i18n{'save_style'} || "Save style";
+  $copy_style_string = $i18n{'copy_style'} || "Copy style";
+  $style_exists_string = $i18n{'style_exists'} || "This style already exists!";
+  $style_notexists_string = $i18n{'style_not_exists'} || "This style does not exist!";
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -233,7 +233,10 @@ sub handler
     my $group = undef;
     for(@groups) { my $sel = $edit_style->usergroup eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
     my @perms = $edit_style->permissions =~ /^(\d)(\d)(\d)(\d)/mx;
-    my @checked = (""," checked");
+    my @checked = (""," checked");    
+	if ($user ne 'admin' && $edit_style->owner ne $user && $edit_style->permissions !~ /^\d1/mx && $edit_style->permissions !~ /\d1$/mx)
+    { $readonly = 1; }
+    my $lock = qq(<img src="<?SPINE_Images?>lock.png">) if $readonly;
     my $gpermissions = qq(Read: <input type="checkbox" name="groupr" value="1"$checked[$perms[0]]>);
     $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
     my $wpermissions = qq(Read: <input type="checkbox" name="worldr" value="1"$checked[$perms[2]]>);
@@ -244,7 +247,9 @@ sub handler
     $body =~ s/\$icomment/$icomment/gmx;
     $body =~ s/\$gpermissions/$gpermissions/gmx;
     $body =~ s/\$wpermissions/$wpermissions/gmx;
+    if ($ierror) { $ierror = qq(<p class="error">$ierror</p>); }
     $body =~ s/\$error/$ierror/gmx;
+    $body =~ s/\$lock/$lock/gmx;     
     $body =~ s/\$body/$sbody/gmx;
   } 
 
@@ -272,6 +277,7 @@ sub handler
     }  
     my $list = undef;
     for(@list) { $list .= "<option value=\"$_\">$_\n"; }
+    if ($error) { $error = qq(<p class="error">$error</p>); }    
     $body =~ s/\$list/$list/gmx;
     $body =~ s/\$type/style/gmx;
     $body =~ s/\$label/style/gmx;
