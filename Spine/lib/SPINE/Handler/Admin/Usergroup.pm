@@ -26,6 +26,7 @@ use SPINE::DBI::Session;
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
 use SPINE::DBI::Adminaccess;
+use SPINE::DBI::Attribute;
 use SPINE::DBI::Content;
 use SPINE::Constant;
 
@@ -36,7 +37,8 @@ use strict;
 use SPINE::Transparent::Constant;
 use SPINE::Transparent::Request;
 
-use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $macro_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms);
+use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $macro_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms %i18n %default $attribute_dbi);
+use vars qw($valid_perms_string $enter_name_string $create_usergroup_string $remove_usergroup_string $edit_usergroup_string $save_usergroup_string $usergroup_exists_string $usergroup_notexists_string);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -51,6 +53,8 @@ sub handler
   my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
   my %cookies = $th_req->cookies;
+  %default = ();
+  %i18n = ();
 
   my $url = $request->uri;
   my $location = $request->location;
@@ -64,6 +68,7 @@ sub handler
   $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
+  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);   
   $url = '.admin-usergroup'; 
 
   my $session = undef;
@@ -79,6 +84,30 @@ sub handler
   my %permissions = ();
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = ();
+    if ($_) { %hash = %{$_}; }
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
+  for(@i18n_hash)
+  { my %hash = undef;
+    if ($_) { %hash = %{$_}; }
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  $create_usergroup_string = $i18n{'create_usergroup'} || "Add a user to a usergroup";
+  $remove_usergroup_string = $i18n{'remove_usergroup'} || "Remove a user from a usergroup";
+  $usergroup_exists_string = $i18n{'usergroup_exists'} || "This user is already part of this usergroup!";
+  
   $readperms = $adminaccess & READACCESS;
   $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
@@ -91,12 +120,12 @@ sub handler
   $error = "";
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Defining new Usergroups<br>'; 
+  { $error = $valid_perms_string.$create_usergroup_string; 
     $url = '.admin-usergroup'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Remove Usergroups<br>'; 
+  { $error = $valid_perms_string.$remove_usergroup_string; 
     $url = '.admin-usergroup'; 
   }
   
@@ -106,7 +135,7 @@ sub handler
 
   my $edit_usergroup = shift @{$usergroup_dbi->get({usergroup=>$request->param('usergroup'),username=>$request->param('username')}, count=>1)};
   if ($edit_usergroup && $params[0] eq 'new' && !$error)
-  { $error = 'This user is already part of this usergroup!<br>'; 
+  { $error = $usergroup_exists_string; 
     $url = '.admin-usergroup';  
   }
 
@@ -114,7 +143,7 @@ sub handler
   if (!ref $content)
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
 
-  if ($params[0] eq 'new' && $request->param("usergroup") && $request->param("username") && $request->method eq "POST")
+  if (!$error && $params[0] eq 'new' && $request->param("usergroup") && $request->param("username") && $request->method eq "POST")
   { $usergroup_dbi->add(SPINE::Base::Usergroup->new({usergroup=>$request->param('usergroup'), username=>$request->param('username')})); }
 
   my $body = undef;

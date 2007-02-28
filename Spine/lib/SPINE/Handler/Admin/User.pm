@@ -25,6 +25,7 @@ package SPINE::Handler::Admin::User;
 use SPINE::DBI::User;
 use SPINE::DBI::Usergroup;
 use SPINE::DBI::Adminaccess;
+use SPINE::DBI::Attribute;
 use SPINE::DBI::Content;
 use SPINE::DBI::Session;
 use SPINE::Constant;
@@ -35,7 +36,8 @@ use SPINE::Transparent::Constant;
 use SPINE::Transparent::Request;
 use Digest::MD5 qw(md5_hex);
 
-use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $adminaccess_dbi $session_dbi $request $readperms $writeperms $execperms $user $adminaccess $error);
+use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $adminaccess_dbi $session_dbi $request $readperms $writeperms $execperms $user $adminaccess $error %i18n %default $attribute_dbi);
+use vars qw($valid_perms_string $enter_name_string $create_user_string $remove_user_string $edit_user_string $save_user_string $user_exists_string $user_notexists_string);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -50,7 +52,9 @@ sub handler
   my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
   my %cookies = $th_req->cookies;
-  
+  %default = ();
+  %i18n = ();
+
   my $url = $request->uri;
   my $location = $request->location;
   
@@ -62,7 +66,8 @@ sub handler
   $user_dbi = SPINE::DBI::User->new($dbh);
   $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
-  $session_dbi = SPINE::DBI::Session->new($dbh);  
+  $session_dbi = SPINE::DBI::Session->new($dbh);
+  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);  
   $url = '.admin-user'; 
   
   my $session = undef;
@@ -78,6 +83,33 @@ sub handler
   my %permissions = ();
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
+  my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
+  for(@default_hash)
+  { my %hash = ();
+    if ($_) { %hash = %{$_}; }
+    $default{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+
+  my $lang = $default{'lang'} || "";
+  $lang = ".$lang" if $lang;
+  $lang = "" if $lang eq ".en";
+
+  my (@i18n_hash) = @{$attribute_dbi->get(section=>"i18n",attr=>$lang)};
+  for(@i18n_hash)
+  { my %hash = undef;
+    if ($_) { %hash = %{$_}; }
+    $i18n{$hash{'NAME'}} = $hash{'VALUE'};
+  }
+  
+  $valid_perms_string = $i18n{'valid_perms'} || "You do not have valid permissions for this operation : ";
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  $create_user_string = $i18n{'create_user'} || "Add a new user";
+  $remove_user_string = $i18n{'remove_user'} || "Remove a user";
+  $edit_user_string = $i18n{'edit_user'} || "Edit a user";
+  $save_user_string = $i18n{'save_user'} || "Save a user";
+  $user_exists_string = $i18n{'user_exists'} || "This user already exists!";
+  $user_notexists_string = $i18n{'user_not_exists'} || "This user does not exist!";
+    
   $readperms = $adminaccess & READACCESS;
   $readperms =~ s/0//gmx;
   $writeperms = $adminaccess & WRITEACCESS;
@@ -88,22 +120,22 @@ sub handler
   shift @params;
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Adding new users'; 
+  { $error = $valid_perms_string.$create_user_string; 
     $url = '.admin-user'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = 'You do not have valid permissions for this operation : Removing users'; 
+  { $error = $valid_perms_string.$remove_user_string; 
     $url = '.admin-user'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
-  { $error = 'You do not have valid permissions for this operation : Editing users'; 
+  { $error = $valid_perms_string.$edit_user_string; 
     $url = '.admin-user'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
-  { $error = 'You do not have valid permissions for this operation : Saving users'; 
+  { $error = $valid_perms_string.$save_user_string; 
     $url = '.admin-user'; 
   }
 
@@ -112,13 +144,13 @@ sub handler
 
   my $edit_user = shift @{ $user_dbi->get({login=>$request->param("login"), count=>1}) };
   if ($edit_user && $params[0] eq 'new' && !$error)
-  { $error = 'This User already exists!'; 
-    $url = '.admin-general'; 
+  { $error = $user_exists_string; 
+    $url = '.admin-user'; 
   }
 
   if (!$edit_user && ($params[0] eq 'save' || $params[0] eq 'edit' || $params[0] eq 'copy' || $params[0] eq 'remove')&& !$error)
-  { $error = 'This User set does not exist!<br>'; 
-    $url = '.admin-general'; 
+  { $error = $user_notexists_string; 
+    $url = '.admin-user'; 
   }
 
   if ($params[0] eq 'new'  && !$error && $request->method eq "POST")
@@ -138,7 +170,7 @@ sub handler
 
   my $body = undef;
   $body = $content->body if ref $content;
-  if ($url eq ".admin-general")
+  if ($url eq ".admin-user")
   { $content->title("User Administration"); }
   
   if ((!$params[0] || $params[0] eq 'remove' || $params[0] eq 'save')  || $error)
