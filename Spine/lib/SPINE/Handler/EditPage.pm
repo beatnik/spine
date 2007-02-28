@@ -28,6 +28,8 @@ use strict;
 use vars qw($VERSION);
 
 use SPINE::Constant;
+use SPINE::DBI::Content;
+use SPINE::DBI::Session;
 use SPINE::Transparent::Request;
 
 $VERSION = $SPINE::Constant::VERSION;
@@ -37,13 +39,25 @@ sub handler
   my $dbh = shift; #DB Handler
   my $tag = shift; #
   my $body = undef;
-  my $tr_req = SPINE::Transparent::Request->new($request);
-  my $url = $tr_req->uri;
-  my $location = $tr_req->location;
+  my $th_req = SPINE::Transparent::Request->new($request);
+  my $readonly = undef;
+  my $th_req = SPINE::Transparent::Request->new($request);
+  my $content_dbi = SPINE::DBI::Content->new($dbh);
+  my $url = $th_req->uri;
+  my $location = $th_req->location;
   $url =~ s/^$location\/?//gmx;
-  $body = qq(<form name="adminform" method="post" action="<?SPINE_Location?>/admin/content/edit/"><input type="hidden" name="name" value="$url"></form><a href="javascript: document.adminform.submit();">Edit Page</a>);  
+  my %cookies = $th_req->cookies;
+  my $session_dbi = SPINE::DBI::Session->new($dbh);
+  my $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
+  my $user = "admin";
+  $user = $session->username if $session;
+  my $edit_content = shift @{$content_dbi->get({name=>$url}, count=>1)};
+  if ($user ne 'admin' && $edit_content->owner ne $user && $edit_content->permissions !~ /^\d1/mx && $edit_content->permissions !~ /\d1$/mx)
+  { $readonly = 1; }
+  if (!$readonly)
+  { $body = qq(<form name="adminform" method="post" action="<?SPINE_Location?>/admin/content/edit/"><input type="hidden" name="name" value="$url"></form><a href="javascript: document.adminform.submit();">Edit Page</a>);   }
   return $body;
-}
+ }
 
 1;
 __END__
