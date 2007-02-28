@@ -108,7 +108,8 @@ sub handler
   { @narrow = ();
     push(@narrow,"limit",$limit) if $limit ne '';
     push(@narrow,"offset",$offset) if $offset ne ''; 
-    @messages = @ { $message_dbi->get( { "id"=>$id, "mgroup"=>$group, @narrow } ) }; }
+    @messages = @ { $message_dbi->get( { "id"=>$id, "mgroup"=>$group, @narrow } ) }; 
+  }
   else 
   { @messages = @{ $message_dbi->get(@narrow) } ; }
   for my $message (@messages)
