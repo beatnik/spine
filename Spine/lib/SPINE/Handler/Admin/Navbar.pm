@@ -36,7 +36,6 @@ use SPINE::Constant;
 
 use strict;
 
-use SPINE::Transparent::Request;
 use SPINE::Transparent::Constant;
 
 #Apache::Request Handler
@@ -48,12 +47,11 @@ use vars qw($valid_perms_string $enter_name_string $create_navbar_string $remove
 $VERSION = $SPINE::Constant::VERSION;
 
 sub handler 
-{ $request = shift; #Apache::Request
+{ $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
-  my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
-  my %cookies = $th_req->cookies;
+  my %cookies = $request->cookies;
   my $page = $request->param('name');
   my $url = $request->uri;
   my $location = $request->location;

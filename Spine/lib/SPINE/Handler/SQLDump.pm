@@ -33,9 +33,9 @@ use SPINE::DBI::Content;
 $VERSION = $SPINE::Constant::VERSION;
 
 sub handler 
-{ my $request = shift; #Apache::Request
+{ my $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
-  my $tag = shift; ##!/usr/bin/perl
+  my $tag = shift; #
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $body .= "\n\n--\n-- mysql v3 dump for SPINE 1.1 : Table Content\n--\n\n";
   my @list = @{ $content_dbi->get() };
