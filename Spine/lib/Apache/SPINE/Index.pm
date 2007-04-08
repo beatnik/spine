@@ -65,23 +65,23 @@ sub initialise #Hope this subroutine does not get called constantly
 
 sub handler 
 { my $r = shift;
-  my $page = $r->uri;
-  my $location = $r->location;
+  my $areq = Apache::Request->new($r);
+  my $req = SPINE::Transparent::Request->new($areq);
+  my $page = $req->uri;
+  my $location = $req->location;
   $page =~ s/$location//mx;
-  my $file = $r->filename; 
-  my $uri = $r->uri; 
+  my $file = $req->request->filename; 
+  my $uri = $req->uri; 
   my $dbh = undef;
-  my $main = $r->dir_config("main");
+  my $main = $req->dir_config("main");
   if (!$page) { $page = "/"; }
   if ($page eq "/") { $page .= $main; $file .= $page; $uri .= $page; }
-  if ($uri and -e $r->document_root.$uri and $page ne '/' and $location ne "/") { return DECLINED; }
+  if ($uri and -e $req->request->document_root.$uri and $page ne '/' and $location ne "/") { return DECLINED; }
   if (length($uri) > 1 and -e $file and $location eq "/") { return DECLINED; } # root directory fix
   #We pretend to know how to handle files that actually exist!!
-  if (!$dbh) { $dbh = &initialise($r); }
+  if (!$dbh) { $dbh = &initialise($req); }
   my $cookie = undef;
-  my $req = Apache::Request->new($r);
-  my $th_req = SPINE::Transparent::Request->new($req);
-  SPINE::Transparent::Constant->new($req);
+  SPINE::Transparent::Constant->new($areq);
   #Just go ahead and use Apache::Request from now on
   my $user_dbi = SPINE::DBI::User->new($dbh);
   my $session_dbi = SPINE::DBI::Session->new($dbh);
@@ -101,7 +101,7 @@ sub handler
                              #-path    =>  $req->location,
                              -secure  =>  0 
                             ); 
-      $req->header_out('Set-Cookie'=>$cookie->as_string);
+      $areq->header_out('Set-Cookie'=>$cookie->as_string);
       my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
       $year += 1900; $mon++;
       my $sdate = "$year-$mon-$mday $hour:$min:$sec";
@@ -132,17 +132,17 @@ sub handler
   my $type = $content->type || 'text/html';
   my $body = $content->body;
   $location = $req->location;
-  my $servername = $th_req->dir_config("servername") || $ENV{SERVER_NAME};  
-  $req->no_cache(1);
-  $req->content_type($type);
-  $req->send_http_header;
-  return OK if $req->header_only;
+  my $servername = $req->dir_config("servername") || $ENV{SERVER_NAME};  
+  $req->request->no_cache(1);
+  $req->request->content_type($type);
+  $req->request->send_http_header;
+  return OK if $req->request->header_only;
   while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$req,$content)/mxge) 
   { $body =~ s/<\?SPINE_Location\?>/$location/mxg;
     $body =~ s/<\?SPINE_Servername\?>/$servername/mxg; 
   }
   #I hope this doesn't come back to hunt me
-  $req->print($body);
+  $req->request->print($body);
   return OK;
 }
 
