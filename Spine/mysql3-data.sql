@@ -103,25 +103,26 @@ insert into attribute (attr,name,section,value) values ('nl','view_stats','i18n'
 insert into attribute (attr,name,section,value) values ('nl','remove_stats','i18n','Statistieken verwijderen<br>');
 insert into attribute (attr,name,section,value) values ('admin','lang','default','en');
 insert into attribute (attr,name,section,value) values ('order','news','message','desc');
-insert into attribute (attr,name,section,value) values ('login.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('screenshots.html','counter','stats','4');
-insert into attribute (attr,name,section,value) values ('developers.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('tips.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('sourceforge.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('alternate.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('developing.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('faq.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('quickstart.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('tags.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('postgresqldb.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('mysqldb.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('panel.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('plugins.html','counter','stats','1');
-insert into attribute (attr,name,section,value) values ('styles.html','counter','stats','12');
-insert into attribute (attr,name,section,value) values ('quickstart2.html','counter','stats','4');
-insert into attribute (attr,name,section,value) values ('spine.css','counter','stats','178');
-insert into attribute (attr,name,section,value) values ('docs.html','counter','stats','18');
-insert into attribute (attr,name,section,value) values ('_admin.css','counter','stats','100');
+insert into attribute (attr,name,section,value) values ('txt','content','mimetype','text/plain');
+insert into attribute (attr,name,section,value) values ('shtml','content','mimetype','text/html');
+insert into attribute (attr,name,section,value) values ('css','content','mimetype','text/css');
+insert into attribute (attr,name,section,value) values ('svgz','content','mimetype','image/svg+xml');
+insert into attribute (attr,name,section,value) values ('svg','content','mimetype','image/svg+xml');
+insert into attribute (attr,name,section,value) values ('png','content','mimetype','image/png');
+insert into attribute (attr,name,section,value) values ('gif','content','mimetype','image/gif');
+insert into attribute (attr,name,section,value) values ('jpe','content','mimetype','image/jpeg');
+insert into attribute (attr,name,section,value) values ('jpeg','content','mimetype','image/jpeg');
+insert into attribute (attr,name,section,value) values ('jpg','content','mimetype','image/jpeg');
+insert into attribute (attr,name,section,value) values ('js','content','mimetype','application/x-javascript');
+insert into attribute (attr,name,section,value) values ('xsl','content','mimetype','application/xml');
+insert into attribute (attr,name,section,value) values ('xml','content','mimetype','application/xml');
+insert into attribute (attr,name,section,value) values ('xhtml','content','mimetype','application/xhtml+xml');
+insert into attribute (attr,name,section,value) values ('xht','content','mimetype','application/xhtml+xml');
+insert into attribute (attr,name,section,value) values ('rdf','content','mimetype','application/rdf+xml');
+insert into attribute (attr,name,section,value) values ('rss','content','mimetype','application/rss+xml');
+insert into attribute (attr,name,section,value) values ('xml','content','mimetype','text/xml');
+insert into attribute (attr,name,section,value) values ('htm','content','mimetype','text/html');
+insert into attribute (attr,name,section,value) values ('html','content','mimetype','text/html');
 
 
 --
