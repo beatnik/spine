@@ -35,7 +35,6 @@ use Data::Dumper;
 use strict;
 
 use SPINE::Transparent::Constant;
-use SPINE::Transparent::Request;
 
 use vars qw($VERSION $content_dbi $user_dbi $usergroup_dbi $session_dbi $user $adminaccess_dbi $session_dbi $macro_dbi $request $user $adminaccess $adminaccess_dbi $request $error $readperms $writeperms $execperms %i18n %default $attribute_dbi);
 use vars qw($valid_perms_string $enter_name_string $create_usergroup_string $remove_usergroup_string $edit_usergroup_string $save_usergroup_string $usergroup_exists_string $usergroup_notexists_string);
@@ -46,13 +45,12 @@ $VERSION = $SPINE::Constant::VERSION;
 #DB Handler
 
 sub handler 
-{ $request = shift; #Apache::Request
+{ $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
 
-  my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
-  my %cookies = $th_req->cookies;
+  my %cookies = $request->cookies;
   %default = ();
   %i18n = ();
 

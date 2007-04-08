@@ -37,7 +37,7 @@ use Data::Dumper;
 $VERSION = $SPINE::Constant::VERSION;
 
 sub handler 
-{ my $request = shift; #Apache::Request
+{ my $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift; #
   my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
@@ -45,7 +45,7 @@ sub handler
   my $page = $ENV{PATH_INFO};
   $page =~ s/^\\+//gmx;
   $page =~ s/^\/+//gmx;
-  my %cookies = Apache::Cookie->fetch;
+  my %cookies = $request->cookies;
   my @params = split(/,/,$params);
   my $body = "";
   my $wiki_dbi = SPINE::DBI::Wiki->new($dbh);

@@ -43,7 +43,7 @@ use SPINE::Base::Content;
 $VERSION = $SPINE::Constant::VERSION;
 
 sub handler 
-{ my $request = shift; #Apache::Request
+{ my $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   my $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);

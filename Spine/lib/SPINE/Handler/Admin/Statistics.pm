@@ -32,7 +32,6 @@ use SPINE::Constant;
 
 use strict;
 
-use SPINE::Transparent::Request;
 use SPINE::Transparent::Constant;
 
 #Apache::Request Handler
@@ -52,9 +51,8 @@ sub handler
   my $url = $request->uri;
   my $location = $request->location;
 
-  my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
-  my %cookies = $th_req->cookies;
+  my %cookies = $request->cookies;
     
   $url =~ s/^$location\/?//mx;
 

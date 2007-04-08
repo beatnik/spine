@@ -32,7 +32,6 @@ use SPINE::DBI::Session;
 use SPINE::Constant;
 
 use SPINE::Transparent::Constant;
-use SPINE::Transparent::Request;
 
 use Data::Dumper;
 
@@ -43,18 +42,17 @@ use vars qw($VERSION);
 $VERSION = $SPINE::Constant::VERSION;
 
 sub handler 
-{ my $request = shift; #Apache::Request
+{ my $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my $s = shift; #Session
-  my $tr_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
-  my $main = $tr_req->dir_config("main") || "main";
+  my $main = $request->dir_config("main") || "index.html";
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $style_dbi = SPINE::DBI::Style->new($dbh);
   my $user_dbi = SPINE::DBI::User->new($dbh);
   my $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   my $session_dbi = SPINE::DBI::Session->new($dbh);
-  my %cookies = $tr_req->cookies;
+  my %cookies = $request->cookies;
   my $login_info = shift @{$content_dbi->get({name=>".login", count=>1})}; 
   if (!ref $login_info) { $login_info = SPINE::Base::Content::default(); }
   my $username = undef;
@@ -63,8 +61,8 @@ sub handler
   my $content = undef;
   my $status = undef;
   my $style = undef;
-  my $url = $tr_req->uri;
-  my $location = $tr_req->location;
+  my $url = $request->uri; # /foo
+  my $location = $request->location;
   $url =~ s/^$location\/?//gmx;
   #($url,@params) = split("/",$url);
   if (!$url)
@@ -96,14 +94,14 @@ sub handler
     $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
     if (($session && !$session->username) || !$session)
     { $session = $s if ($s && $s->username); }
-    if ($session && $session->host eq scalar($tr_req->remote_host()) && $session->username)
+    if ($session && $session->host eq scalar($request->remote_host()) && $session->username)
     { $login_info = shift @{$content_dbi->get({name=>".login_info", count=>1})} || SPINE::Base::Content::default(); }
     my $loadpage = 0;
     my $readwperms = $page->permissions & READWPERMISSIONS;
     $readwperms =~ s/0//gmx;
     $loadpage = $readwperms; 
     
-    if ($session && $user && $session->username eq $user->login && $session->host eq scalar($tr_req->remote_host()) && !$loadpage)
+    if ($session && $user && $session->username eq $user->login && $session->host eq scalar($request->remote_host()) && !$loadpage)
     { my @usergroups =  @{ $usergroup_dbi->get({username=>$session->username}) };
       @usergroups = map { $_ = $_->usergroup } @usergroups;
       my $readgperms = $page->permissions & READGPERMISSIONS;
@@ -146,9 +144,9 @@ sub handler
   if (ref $style && ref $content && $style->title && $content->title) { $title .= " - "; $title .= $content->title; }
   if (!$title && ref $content && $content->title) { $title = $content->title; }
 
-  $location = $tr_req->location;
+  $location = $request->location;
   if ($location !~ /\/$/mx) { $location .= "/"; }
-  my $servername = $tr_req->dir_config("servername") || $ENV{SERVER_NAME};
+  my $servername = $request->dir_config("servername") || $ENV{SERVER_NAME};
   my $images = $request->dir_config("images") || "/images/";
   $body =~ s/<\?SPINE_Title\?>/$title/gmx;
   $body =~ s/<\?SPINE_Images\?>/$images/gmx;

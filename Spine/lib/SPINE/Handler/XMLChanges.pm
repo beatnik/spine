@@ -35,7 +35,7 @@ use SPINE::DBI::Content;
 $VERSION = $SPINE::Constant::VERSION;
 
 sub handler
-{ my $request = shift; #Apache::Request
+{ my $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift; #
   my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;

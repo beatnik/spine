@@ -33,14 +33,13 @@ use SPINE::DBI::Content;
 $VERSION = $SPINE::Constant::VERSION;
 
 sub handler 
-{ my $request = shift; #Apache::Request
+{ my $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift; #
   my $body = undef;
-  my $th_req = SPINE::Transparent::Request->new($request);
   my $content_dbi = SPINE::DBI::Content->new($dbh);
-  my $url = $th_req->uri;
-  my $location = $th_req->location;
+  my $url = $request->uri;
+  my $location = $request->location;
   $url =~ s/^$location\/?//gmx;
   my $edit_content = shift @{$content_dbi->get({name=>$url}, count=>1)};
   $body = $edit_content->keywords;

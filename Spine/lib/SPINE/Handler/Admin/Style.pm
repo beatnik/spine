@@ -34,7 +34,6 @@ use SPINE::Constant;
 
 use strict;
 
-use SPINE::Transparent::Request;
 use SPINE::Transparent::Constant;
 
 use vars qw($VERSION $content_dbi $style_dbi $user_dbi $macro_dbi $attribute_dbi $request $user $error $ierror $readperms $writeperms $execperms $adminaccess %i18n %default);
@@ -46,13 +45,12 @@ $VERSION = $SPINE::Constant::VERSION;
 #DB Handler
 
 sub handler 
-{ $request = shift; #Apache::Request
+{ $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
 
-  my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
-  my %cookies = $th_req->cookies;
+  my %cookies = $request->cookies;
 
   my $page = $request->param('name');
   $error = '';

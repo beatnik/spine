@@ -37,7 +37,6 @@ use SPINE::DBI::Usergroup;
 
 use File::Copy qw(copy);
 
-use SPINE::Transparent::Request;
 use SPINE::Transparent::Constant;
 
 $VERSION = $SPINE::Constant::VERSION;
@@ -46,7 +45,7 @@ $VERSION = $SPINE::Constant::VERSION;
 #DB Handler
 
 sub handler 
-{ my $request = shift; #Apache::Request
+{ my $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my $chroot = $request->dir_config("chroot") || $request->document_root;
   my $action = $request->param("action"); # The file operation, eg copy, delete, etc
@@ -54,9 +53,8 @@ sub handler
   my $foldername = $request->param("foldername"); # Folder name used with create folder
   my $path = $request->param("path") || "/"; # Current virtual working directory (based on chroot)
   my $target = $request->param("target"); # used with copy as target filename
-  my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
-  my %cookies = $th_req->cookies;
+  my %cookies = $request->cookies;
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $user_dbi = SPINE::DBI::User->new($dbh);
