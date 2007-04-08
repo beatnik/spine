@@ -34,6 +34,8 @@ sub new {
  my $class  = ref($proto) || $proto;
  my $self = {};
  $self->{REQUEST} = shift;
+ if (ref($self->{REQUEST}) eq "SPINE::Transparent::Request")
+ { $self->{REQUEST} = $self->{REQUEST}->request; }
  if (ref($self->{REQUEST}) eq "Apache::Request")
  { eval qq|use Apache::Constants qw(OK FORBIDDEN NOT_FOUND); \$OK = Apache::Constants::OK; \$FORBIDDEN = Apache::Constants::FORBIDDEN; \$NOT_FOUND = Apache::Constants::NOT_FOUND; |; }
  if (ref($self->{REQUEST}) eq "Apache2::Request")
