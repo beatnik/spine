@@ -30,34 +30,46 @@ $VERSION = $SPINE::Constant::VERSION;
 sub new {
  my $proto  = shift;
  my $class  = ref($proto) || $proto;
+ #return $proto if $class eq "SPINE::Transparent::Request";
  my $self = {};
+ $self->{CONFIG} = ();
  $self->{REQUEST} = shift;
  if (ref($self->{REQUEST}) eq "Apache::Request")
  { eval qq|use Apache::Cookie; \$self->{COOKIES} = Apache::Cookie->fetch; |; 
-   eval qq|use Apache::Request; \$self->{REMOTE_HOST} = \$self->{REQUEST}->get_remote_host(); |; 
-   eval qq|use Apache::Request; \$self->{LOCATION} = \$self->{REQUEST}->location(); |; 
-   eval qq|use Apache::Request; \$self->{DIR_CONFIG} = sub { \$self->{REQUEST}->dir_config(\@_); } |; 
-   eval qq|use Apache::Request; \$self->{URI} = \$self->{REQUEST}->uri; |; 
-   eval qq|use Apache::Request; \$self->{REFERER} = \$self->{REQUEST}->header_in("Referer"); |; 
+   $self->{REMOTE_HOST} = $self->{REQUEST}->get_remote_host();
+   $self->{LOCATION} = $self->{REQUEST}->location(); 
+   $self->{DIR_CONFIG} = sub { $self->{REQUEST}->dir_config(@_); } ;
+   $self->{URI} = $self->{REQUEST}->uri;
+   $self->{REFERER} = $self->{REQUEST}->header_in("Referer");
+   $self->{DOCUMENT_ROOT} = $self->{REQUEST}->document_root;
+   $self->{METHOD} = $self->{REQUEST}->method;
   }
  if (ref($self->{REQUEST}) eq "Apache2::Request")
  { eval qq|use Apache2::Cookie; \$self->{COOKIES} = scalar Apache2::Cookie->fetch; |; 
-   eval qq|use Apache2::Request; \$self->{REMOTE_HOST} = \$self->{REQUEST}->connection->get_remote_host(); |; 
-   eval qq|use Apache2::Request; \$self->{LOCATION} = \$self->{REQUEST}->location(); |; 
-   eval qq|use Apache2::Request; \$self->{DIR_CONFIG} = sub { \$self->{REQUEST}->dir_config(\@_); } |; 
-   eval qq|use Apache2::Request; \$self->{URI} = \$self->{REQUEST}->uri; |; 
-   eval qq|use Apache2::Request; my \$in = \$self->{REQUEST}->headers_in(); \$self->{REFERER} = \$in->{"Referer"}; |; 
+   $self->{REMOTE_HOST} = $self->{REQUEST}->connection->get_remote_host();
+   $self->{LOCATION} = $self->{REQUEST}->location(); 
+   $self->{DIR_CONFIG} = sub { $self->{REQUEST}->dir_config(@_); };
+   $self->{URI} = $self->{REQUEST}->uri;
+   my $in = $self->{REQUEST}->headers_in(); $self->{REFERER} = $in->{"Referer"};
+   $self->{DOCUMENT_ROOT} = $self->{REQUEST}->document_root;
+   $self->{METHOD} = $self->{REQUEST}->method;
  }
  if (ref($self->{REQUEST}) eq "CGI")
- { eval qq|use CGI; \$self->{COOKIES} = scalar CGI::Cookie->fetch; |; 
-    eval qq|use CGI; \$self->{REMOTE_HOST} = \$self->{REQUEST}->url(); |; 
-    $self->{DIR_CONFIG} = sub { return "index.html"; }; 
-    $self->{LOCATION} =  "/"; 
-    eval qq|use CGI; \$self->{URI} = "\\/".\$self->{REQUEST}->param("page"); |;
+ {  eval qq|use CGI::Cookie; \$self->{COOKIES} = scalar CGI::Cookie->fetch; |; 
+    $self->{REMOTE_HOST} = $self->{REQUEST}->url();
+    #$self->{URI} = $self->{LOCATION}."\/".$self->{REQUEST}->param("page");
+	$self->{URI} = $self->{REQUEST}->path_info;
+    $self->{DOCUMENT_ROOT} = $ENV{DOCUMENT_ROOT};
+    $self->{METHOD} = $self->{REQUEST}->request_method();
  }
  bless $self,$class;
  return $self;
 } 
+
+sub param
+{ my $self = shift;
+  return $self->{REQUEST}->param(@_);
+}
 
 sub request
 { my $self = shift;
@@ -74,26 +86,48 @@ sub remote_host
   return $self->{REMOTE_HOST};
 }
 
+sub document_root
+{ my $self = shift;
+  return $self->{DOCUMENT_ROOT};
+}
+
 sub dir_config
 { my $self = shift;
-   return $self->{DIR_CONFIG}(@_);
+  if ($self->{CONFIG})
+  { my %v = %{ $self->{CONFIG} };
+    return $self->{CONFIG}{@_};
+  }
+  return $self->{DIR_CONFIG}(@_);
 }
 
 sub uri
 { my $self = shift;
-   return $self->{URI};
+  if (ref($self->{REQUEST}) eq "CGI")
+  { $self->{URI} = $self->{REQUEST}->path_info; $self->{URI} =~ s/^\///; }
+  return $self->{URI};
 }
 
 sub location
 { my $self = shift;
-   return $self->{LOCATION};
+  if (@_)
+  { $self->{LOCATION} = shift(@_); }
+  return $self->{LOCATION};
 }
 
 sub referer
 { my $self = shift;
-   return $self->{REFERER};
+  return $self->{REFERER};
 }
 
+sub method
+{ my $self = shift;
+  return $self->{METHOD};
+}
+
+sub setconfig
+{ my $self = shift;
+  $self->{CONFIG} = {@_};
+}
 1;
 
 __END__
@@ -102,26 +136,13 @@ __END__
 
 =head1 NAME
 
-SPINE::Constant
+SPINE::Transparent::Request
 
 =head1 DESCRIPTION
 
-These are all the constants defined for SPINE.
-
-Most of the constants defined in here are bitmasks.
-Perform a bitwise AND on these bitmasks and a variable to retrieve the flags.
+This package handles the transparency between requests to Apache::Request, Apache2::Request and CGI.pm
 
 =head1 SYNOPSIS
-
- use SPINE::Constant;
-
- print $SPINE::Constant::VERSION;
-
- #Get $permissions from somwhere
- my $permissions = .... #Assume it contains 1010
- my $readgperms = $permissions & READPERMISSIONS;
- $readgperms =~ y/0//d;
- if($readperms) { print "You have read permissions"; }
 
 =head1 VERSION
 
