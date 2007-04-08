@@ -1,4 +1,8 @@
 #!/usr/bin/perl
+#!/usr/bin/perl -d:ptkdb
+sub BEGIN {
+    $ENV{DISPLAY} = ":0.0";
+}
 
 ## This module is part of SPINE
 ## Copyright 2000-2005 Hendrik Van Belleghem
@@ -24,11 +28,8 @@
 #This is the ONLY content handler for mod_spine... for now
 
 use strict;
-use Apache::Constants qw(:common REDIRECT);
-use Apache::Request; #This one is SWEEEEEEEEEEET!!
-use Apache::Cookie;
-use Apache::Log;
 
+use SPINE::Transparent::Request;
 use SPINE::DBI::Session; 
 use SPINE::Base::Session;
 use SPINE::Handler::Content;
@@ -36,7 +37,10 @@ use SPINE::DBI::User;
 use SPINE::Constant;
 
 use CGI;
+use CGI::Cookie;
 use Carp;
+use Data::Dumper;
+use CGI::Carp qw(fatalsToBrowser);
 use Digest::MD5 qw(md5_hex);
 
 use vars qw($VERSION $dbh);
@@ -45,25 +49,29 @@ $VERSION = $SPINE::Constant::VERSION;
 
 use constant DBD=>'mysql'; #This is the default database type
 use constant DB=>'spine'; #This is the default database
-use constant DBUSER=>'spine'; #This is the default database user
-use constant DBPWD=>'spine'; #This is the default database user password
+use constant DBUSER=>'beatnik'; #This is the default database user
+use constant DBPWD=>'foobar'; #This is the default database user password
 #See the POD on how to change this stuff without editing this code
 
 sub initialise #Hope this subroutine does not get called constantly
 { my $DBD_ = DBD;
-   my $DB_ = DB;
-   my $DBUSER_ = DBUSER;
-   my $DBPWD_ = DBPWD;  
-   my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or croak "Could not connect to Database:$!"; 
-   return $dbh;
+  my $DB_ = DB;
+  my $DBUSER_ = DBUSER;
+  my $DBPWD_ = DBPWD;  
+  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or croak "Could not connect to Database:$!"; 
+  return $dbh;
 }
 
 # uri: /spine/   or /spine/foo.html
+# uri = $location + / $page
 # location: /spine 
 # filename: /var/www/spine  or /var/www/spine/
 
 sub handler 
-{my $r = CGI->new;
+{ my $cgi = CGI->new;
+  my $req = SPINE::Transparent::Request->new($cgi);
+  $req->setconfig("main" => "index.html", "images"=>"/images/");
+  my $location = $req->location("/rewrite");	
   $dbh = &initialise(); 
   my $cookie = undef;
   #Just go ahead and use Apache::Request from now on
@@ -71,15 +79,52 @@ sub handler
   my $session_dbi = SPINE::DBI::Session->new($dbh);
   my $session = undef; #Store generated Session here
   #Pass the DBH to most SPINE::DBI::* modules
-  my $content = SPINE::Handler::Content::handler($r,$dbh,"");
+  my $content = SPINE::Handler::Content::handler($req,$dbh,"");
   if (ref($content) ne "SPINE::Base::Content") { return $content; }
   my $type = $content->type || 'text/html';
   my $body = $content->body;
-  my $location = "/spine";
-  print $r->header(-type=>$type,
-                         -expires=>'now',
-                         -Pragma=>'no-cache');
-  while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$r,$content)/mxge) 
+  my $cookie;
+  if ($req->param('name') && $req->param('password') && $req->param('button') eq 'login') 
+  #Pressed login button??
+  { my $user = shift @{$user_dbi->get({login=>scalar($req->param('name')),password=>md5_hex(scalar($req->param('password')))})};
+    if ($user)
+    { my @chars = ("a".."z","A".."Z",0..9);
+      my $randid = join("",@chars[map{ rand @chars} (1..64)]);
+      $cookie = CGI::Cookie->new(
+                             -name    =>  'key', 
+                             -value   =>  $randid,
+                             -expires =>  '+3M', 
+                             #-domain  =>  $req->hostname,
+                             #-path    =>  $req->location,
+                             -secure  =>  0 
+                            ); 
+      my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
+      $year += 1900; $mon++;
+      my $sdate = "$year-$mon-$mday $hour:$min:$sec";
+      $session = SPINE::Base::Session->new({id=>$randid,username=>scalar($req->param('name')),expires=>'',sessiondate=>$sdate,host=>$req->remote_host});
+      $session_dbi->add($session);
+    }
+  }
+  if ($req->param('button') && $req->param('button') eq 'logout')
+  #Log out??
+  { my %cookies = CGI::Cookie->fetch;
+    $session_dbi->remove($cookies{'key'}->value) if $cookies{'key'};
+    #Check if a cookie exists with key key.. Delete the session if it does
+    $cookie = CGI::Cookie->new(
+                             -name    =>  'key', 
+                             -value   =>  '',
+                             -expires =>  '-1M', 
+                             #-domain  =>  $req->hostname,
+                             #-path    =>  $req->location,
+                             -secure  =>  0 
+                            ); 
+  }
+
+  print $cgi->header(-type=>$type,
+                     -expires=>'now',
+	                 -cookie=>$cookie,
+                     -Pragma=>'no-cache');
+  while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$req,$content)/mxge) 
   { $body =~ s/<\?SPINE_Location\?>/$location/mxg;
     $body =~ s/<\?SPINE_Servername\?>/$ENV{SERVER_NAME}/mxg; 
   }
