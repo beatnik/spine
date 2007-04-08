@@ -34,7 +34,6 @@ use SPINE::Constant;
 
 use strict;
 
-use SPINE::Transparent::Request;
 use SPINE::Transparent::Constant;
 
 #Apache::Request Handler
@@ -46,12 +45,11 @@ use vars qw($valid_perms_string $enter_name_string $create_content_string $remov
 $VERSION = $SPINE::Constant::VERSION;
 
 sub handler 
-{ $request = shift; #Apache::Request
+{ $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
-  my $th_req = SPINE::Transparent::Request->new($request);
   SPINE::Transparent::Constant->new($request);
-  my %cookies = $th_req->cookies;
+  my %cookies = $request->cookies;
   my $page = $request->param('name');
   my $url = $request->uri;
   my $location = $request->location;
@@ -120,6 +118,11 @@ sub handler
   $writeperms =~ s/0//gmx;
   $execperms = $adminaccess & EXECACCESS;
   $execperms =~ s/0//gmx;
+
+  my ($extension) = $page =~ /^.*\.(.*)$/;
+  
+  my $mimetype = shift @{$attribute_dbi->get(section=>"mimetype",attr=>$extension)};
+  if (!$mimetype) { $mimetype = SPINE::Base::Attribute->new; $mimetype->value("text/html"); }
 
   shift @params;
   #@params is something like qw(content new);
@@ -265,6 +268,7 @@ sub handler
     $body =~ s/\$filename/$edit_content->name/gmxe if ref $edit_content;
     $body =~ s/\$owner/$edit_content->owner/gmxe if ref $edit_content;
     $body =~ s/\$type/$edit_content->type/gemx if ref $edit_content;
+    $body =~ s/\$mimetype/$mimetype->value/gemx if ref $mimetype;		
     $body =~ s/\$stylelist/$stylelist/gmx;
     $body =~ s/\$breaks/$breaks/mxg;
     $body =~ s/\$logging/$logging/mxg;
