@@ -28,7 +28,6 @@ use SPINE::DBI::Content;
 use SPINE::DBI::Message;
 use SPINE::DBI::Messagegroup;
 use SPINE::DBI::Attribute;
-use SPINE::Transparent::Request;
 use SPINE::Constant;
 
 use Data::Dumper;
@@ -43,7 +42,7 @@ $VERSION = $SPINE::Constant::VERSION;
 @months = qw(January February March April May June July August September October November December);
 
 sub handler 
-{ my $r = shift; #Apache::Request
+{ my $tr_req = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my $tag = shift;
   my ($params) = $tag =~ m/\(([^\)]*)\)/gmx;
@@ -52,7 +51,6 @@ sub handler
   my $messagegroup_dbi = SPINE::DBI::Messagegroup->new($dbh);
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
-  my $tr_req = SPINE::Transparent::Request->new($r);
   my $message = undef;
   my $group = shift @params;
   my $url = $tr_req->uri;
@@ -85,10 +83,10 @@ sub handler
   my $tbody = $content->body;
   my $body = undef;
   #The message ID is the second parameter.
-  my $parent = $r->param('parent') || 0;
-  my $limit = $r->param('limit');
+  my $parent = $tr_req->param('parent') || 0;
+  my $limit = $tr_req->param('limit');
   ($limit) = $limit =~ /^(\d*)$/mx;
-  my $offset = $r->param('offset');
+  my $offset = $tr_req->param('offset');
   my ($order_hash) = shift @{$attribute_dbi->get(section=>"message",attr=>"order",name=>"$group")};
   my %order_hash = ();
   %order_hash = %{ $order_hash} if $order_hash;
@@ -103,7 +101,7 @@ sub handler
   push(@narrow,"sort","mdate $order_hash{VALUE}") if $order_hash{VALUE};
   my @messages = ();
   if (!$id && !$group) { return ""; }
-  if (!$id) { $id = $r->param('id'); }
+  if (!$id) { $id = $tr_req->param('id'); }
   if ($id && $group)
   { @narrow = ();
     push(@narrow,"limit",$limit) if $limit ne '';
