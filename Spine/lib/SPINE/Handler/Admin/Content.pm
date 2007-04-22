@@ -330,7 +330,7 @@ sub save
     $content->macros($request->param('macros')) if ref $content;
     my $logging = undef;
     $logging = $request->param('logging') || 0 if ref $content;
-    $content->logging($request->param($logging)) if ref $content;
+    $content->logging($logging) if ref $content;
     my $breaks = undef;
     $breaks = $request->param('breaks') || 0 if ref $content;
     $content->breaks($breaks) if ref $content;
