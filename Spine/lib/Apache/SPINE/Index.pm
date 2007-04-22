@@ -93,7 +93,7 @@ sub handler
     if ($user)
     { my @chars = ("a".."z","A".."Z",0..9);
       my $randid = join("",@chars[map{ rand @chars} (1..64)]);
-      $cookie = Apache::Cookie->new($req,
+      $cookie = Apache::Cookie->new($areq,
                              -name    =>  'key', 
                              -value   =>  $randid,
                              -expires =>  '+3M', 
@@ -101,11 +101,11 @@ sub handler
                              #-path    =>  $req->location,
                              -secure  =>  0 
                             ); 
-      $areq->header_out('Set-Cookie'=>$cookie->as_string);
+      $r->header_out('Set-Cookie'=>$cookie->as_string);
       my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
       $year += 1900; $mon++;
       my $sdate = "$year-$mon-$mday $hour:$min:$sec";
-      $session = SPINE::Base::Session->new({id=>$randid,username=>scalar($req->param('name')),expires=>'',sessiondate=>$sdate,host=>$req->get_remote_host});
+      $session = SPINE::Base::Session->new({id=>$randid,username=>scalar($req->param('name')),expires=>'',sessiondate=>$sdate,host=>$req->remote_host});
       $session_dbi->add($session);
       #User exists?? Generate session and set cookie
     }
@@ -115,7 +115,7 @@ sub handler
   { my %cookies = Apache::Cookie->fetch;
     $session_dbi->remove($cookies{'key'}->value) if $cookies{'key'};
     #Check if a cookie exists with key key.. Delete the session if it does
-    $cookie = Apache::Cookie->new($req,
+    $cookie = Apache::Cookie->new($areq,
                              -name    =>  'key', 
                              -value   =>  '',
                              -expires =>  '-1M', 
@@ -123,7 +123,7 @@ sub handler
                              #-path    =>  $req->location,
                              -secure  =>  0 
                             ); 
-      $req->header_out('Set-Cookie'=>$cookie->as_string);
+      $r->header_out('Set-Cookie'=>$cookie->as_string);
       #Ofcourse, we should delete the cookie as well
   }
   #Only header is required???
