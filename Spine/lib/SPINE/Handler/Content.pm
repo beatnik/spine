@@ -152,7 +152,7 @@ sub handler
   $body =~ s/<\?SPINE_Images\?>/$images/gmx;
   $body =~ s/<\?SPINE_Webmaster\?>/$request->dir_config("webmaster")/gmxe;
   $body =~ s/<\?SPINE_Sitename\?>/$request->dir_config("sitename")/gemx;
-  $body =~ s/<\?SPINE_Referer\?>/$request->header_in("referer")/gmxe; #Undocumented Feature? Add to DOCS!!
+  $body =~ s/<\?SPINE_Referer\?>/$request->referer/gmxe; #Undocumented Feature? Add to DOCS!!
   $body =~ s/<\?SPINE_Login\?>/$login_info->body/gmxe; #This will load either login on login_info
   $body =~ s/<\?SPINE_Page\?>/$url/gmx;
   $body =~ s/<\?SPINE_Servername\?>/$servername/gmx; 

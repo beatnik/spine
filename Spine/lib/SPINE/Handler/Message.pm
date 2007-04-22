@@ -106,16 +106,17 @@ sub handler
   { @narrow = ();
     push(@narrow,"limit",$limit) if $limit ne '';
     push(@narrow,"offset",$offset) if $offset ne ''; 
-    @messages = @ { $message_dbi->get( { "id"=>$id, "mgroup"=>$group, @narrow } ) }; 
+    @messages = ( $message_dbi->get( { "id"=>$id, "mgroup"=>$group, @narrow } ) ); 
   }
   else 
   { @messages = @{ $message_dbi->get(@narrow) } ; }
+  return $body if !@messages;
   for my $message (@messages)
   { next if ref($message) ne "SPINE::Base::Message";
     my $mbody = $tbody;
     my $mdate = $message->mdate; #First date eh??
     my ($year,$month,$day,$hour,$minute,$second) = $mdate =~ /^(\d{4})\-(\d{2})\-(\d{2}) (\d{2})\:(\d{2})\:(\d{2})$/;
-    $month--;
+    if ($month > 0) { $month--; }
     my $id = $message->id;
     my @comments = ();
     @comments = @{ $message_dbi->get({ mgroup=>$group, parent=>$id }) } if $id;
