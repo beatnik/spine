@@ -236,6 +236,9 @@ sub handler
     my $macrolist = undef;
     my $icomment = undef;
     my $cbody = undef;    
+    my ($binary_rec) = shift @{$attribute_dbi->get(section=>"content",attr=>"binary",name=>$edit_content->name)};  
+    my $binary = $binary_rec->value if $binary_rec;
+    $binary ||= "0";
 
     for(@list) { my $sel = $edit_content->style eq $_ ? ' selected' : ''; $stylelist .= qq(<option value="$_"$sel>$_\n); }
     my @macros = @{$macro_dbi->getlist()};
@@ -260,9 +263,11 @@ sub handler
     $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
     my $wpermissions = qq(Read: <input type="checkbox" name="worldr" value="1"$checked[$perms[2]]>);
     $wpermissions .= qq(Write: <input type="checkbox" name="worldw" value="1"$checked[$perms[3]]>);
-    $cbody =~ s/\&/\&amp\;/gmx; 
-    $cbody =~ s/\</\&lt\;/gmx;
-    $cbody =~ s/\>/\&gt\;/gmx;
+    if (!$binary)
+    { $cbody =~ s/\&/\&amp\;/gmx; 
+      $cbody =~ s/\</\&lt\;/gmx;
+      $cbody =~ s/\>/\&gt\;/gmx;
+    }
     if ($ierror) { $ierror = qq(<p class="error">$ierror</p>); }
     $body =~ s/\$title/$edit_content->title/gemx if ref $edit_content;
     $body =~ s/\$filename/$edit_content->name/gmxe if ref $edit_content;
@@ -282,7 +287,7 @@ sub handler
     $body =~ s/\$wpermissions/$wpermissions/mxg;
     $body =~ s/\$error/$ierror/gmx; 
     $body =~ s/\$lock/$lock/gmx;     
-    $body =~ s/\$body/$cbody/gmx;
+    if (!$binary) { $body =~ s/\$body/$cbody/gmx; } else { $body =~ s/\$body/Content Body is binary data and cannot be displayed correctly./gmx; } 
   } 
 
   if ( ( (!$params[0] || $params[0] eq 'copy' || $params[0] eq 'remove') && $params[0] ne 'edit' ) || $error )
@@ -332,10 +337,15 @@ sub save
     $logging = $request->param('logging') || 0 if ref $content;
     $content->logging($logging) if ref $content;
     my $breaks = undef;
+    my ($binary_rec) = shift @{$attribute_dbi->get(section=>"content",attr=>"binary",name=>$content->name)};  
+    my $binary = $binary_rec->value if $binary_rec;
+    $binary ||= "0";
     $breaks = $request->param('breaks') || 0 if ref $content;
     $content->breaks($breaks) if ref $content;
     $content->type($request->param('type')) if ref $content;
-    $content->body($request->param('body')) if ref $content;
+    warn $binary;
+    warn $request->param('body');
+    if (!$binary) { $content->body($request->param('body')) if ref $content; }
     my $permissions = scalar $request->param('groupr') ? "1" : 0;
     $permissions .= scalar $request->param('groupw') ? "1" : 0;
     $permissions .= scalar $request->param('worldr') ? "1" : 0;
