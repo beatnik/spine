@@ -1,0 +1,20 @@
+<IfModule mod_perl.c>
+ # PerlModule Apache::DBI
+ # Remove the # above if you have Apache::DBI installed and you wish to use it
+
+  <Location /spine>
+           SetHandler perl-script
+           PerlResponseHandler Apache2::SPINE::Index
+           PerlSetVar dbd mysql
+           PerlSetVar dbname spine
+           PerlSetVar dbuser spine
+           PerlSetVar dbpwd spine
+           PerlSetVar main index.html
+           PerlSetVar webmaster 'John Doe'
+	   #perlSetVar servername 'servername:8080'
+           PerlSetVar sitename 'SPINE Example site' 
+           PerlSetVar chroot /var/www/
+           PerlLogHandler Apache2::SPINE::Log
+  </Location>
+
+</IfModule>
