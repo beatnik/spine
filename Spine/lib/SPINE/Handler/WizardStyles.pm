@@ -55,8 +55,9 @@ sub handler
   my $user = "admin";
   $user = $session->username if $session;
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user, count=>1}) };
-  @usergroups = map { $_ = $_->usergroup } @usergroups;
-  
+  @usergroups = map { $_ = $_->usergroup } @usergroups;  
+  my $images = $request->dir_config("images") || "/images/";
+
   for my $c (@li)
   { my $readgperms = $c->permissions & READGPERMISSIONS;
     $readgperms =~ s/0//gmx;
@@ -75,8 +76,8 @@ sub handler
   for my $style (@list)
   { $body .= <<STYLE;
 	  <div class="thumbnail">
-<img src="images/${style}_thumb.jpg" alt="" width="91" height="105"><br>
-<input type="radio" name="style" value="$style">&nbsp;$style</div>
+<img src="$images${style}_thumb.jpg" alt="" width="91" height="105"><br>
+<input type="radio" name="style" value="$style"> $style</div>
 STYLE
   }
   return $body;
