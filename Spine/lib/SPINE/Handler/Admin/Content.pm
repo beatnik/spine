@@ -239,7 +239,8 @@ sub handler
     my ($binary_rec) = shift @{$attribute_dbi->get(section=>"content",attr=>"binary",name=>$edit_content->name)};  
     my $binary = $binary_rec->value if $binary_rec;
     $binary ||= "0";
-
+    my $disabled = "";
+    $disabled = " disabled" if $binary;
     for(@list) { my $sel = $edit_content->style eq $_ ? ' selected' : ''; $stylelist .= qq(<option value="$_"$sel>$_\n); }
     my @macros = @{$macro_dbi->getlist()};
     for(@macros) { my $sel = $edit_content->macros eq $_ ? ' selected' : ''; $macrolist .= qq(<option value="$_"$sel>$_\n); }
@@ -286,8 +287,10 @@ sub handler
     $body =~ s/\$gpermissions/$gpermissions/mxg;
     $body =~ s/\$wpermissions/$wpermissions/mxg;
     $body =~ s/\$error/$ierror/gmx; 
-    $body =~ s/\$lock/$lock/gmx;     
-    if (!$binary) { $body =~ s/\$body/$cbody/gmx; } else { $body =~ s/\$body/Content Body is binary data and cannot be displayed correctly./gmx; } 
+    $body =~ s/\$lock/$lock/gmx;
+    $body =~ s/\$disabled/$disabled/gmx;     
+    if (!$binary) { $body =~ s/\$body/$cbody/gmx; } else 
+    { $body =~ s/\$body/Content Body is binary data and cannot be displayed correctly./gmx; } 
   } 
 
   if ( ( (!$params[0] || $params[0] eq 'copy' || $params[0] eq 'remove') && $params[0] ne 'edit' ) || $error )
