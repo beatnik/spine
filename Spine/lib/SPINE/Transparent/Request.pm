@@ -71,6 +71,11 @@ sub param
   return $self->{REQUEST}->param(@_);
 }
 
+sub upload
+{ my $self = shift;
+  return $self->{REQUEST}->upload(@_);
+}
+
 sub request
 { my $self = shift;
   return $self->{REQUEST};
