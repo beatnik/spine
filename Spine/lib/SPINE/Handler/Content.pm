@@ -65,6 +65,7 @@ sub handler
   my $location = $request->location;
   $url =~ s/^$location\/?//gmx;
   #($url,@params) = split("/",$url);
+  my $cookie_style = $cookies{'style'}->value if $cookies{'style'};
   if (!$url)
   { $url = $main; }
   if ($url =~ /^admin/)
@@ -118,8 +119,8 @@ sub handler
     else { return $SPINE::Transparent::Constant::FORBIDDEN; }
 
     $username = $session->username if $session;
-
-    $style = shift @{$style_dbi->get({name=>$content->style, count=>1})} || SPINE::Base::Style::default(); 
+    my $content_style = $cookie_style || $content->style;
+    $style = shift @{$style_dbi->get({name=>$content_style, count=>1})} || SPINE::Base::Style::default(); 
   }
 
   my $body = undef;
