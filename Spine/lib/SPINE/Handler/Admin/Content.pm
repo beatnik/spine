@@ -264,6 +264,13 @@ sub handler
     $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
     my $wpermissions = qq(Read: <input type="checkbox" name="worldr" value="1"$checked[$perms[2]]>);
     $wpermissions .= qq(Write: <input type="checkbox" name="worldw" value="1"$checked[$perms[3]]>);
+    my @attr = @{$attribute_dbi->get(section=>"content",name=>$edit_content->name)};
+    my $attrlist = "";
+    my $filename = $edit_content->name;
+    for my $attr (@attr)
+    { my ($name,$value) = ($attr->attr, $attr->value); 
+      $attrlist .= qq(<form method="post" action="<?SPINE_Location?>admin/attribute/save/"><input type="hidden" name="name" value="$filename"><input type="hidden" name="section" value="content"><input type="text" size="25" name="attr" class="input" value="$name"><input type="text" size="25" name="value" class="input" value="$value"><input type="image" src="/images/save.png" alt="Save"></form>);
+    }
     if (!$binary)
     { $cbody =~ s/\&/\&amp\;/gmx; 
       $cbody =~ s/\</\&lt\;/gmx;
@@ -284,6 +291,7 @@ sub handler
     $body =~ s/\$lastmod/$edit_content->modified/mxge if ref $edit_content;
     $body =~ s/\$size/length($cbody)/mxge;
     $body =~ s/\$icomment/$icomment/mxg;
+    $body =~ s/\$attrlist/$attrlist/mxg;
     $body =~ s/\$gpermissions/$gpermissions/mxg;
     $body =~ s/\$wpermissions/$wpermissions/mxg;
     $body =~ s/\$error/$ierror/gmx; 
