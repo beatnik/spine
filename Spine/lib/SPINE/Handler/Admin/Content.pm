@@ -267,9 +267,21 @@ sub handler
     my @attr = @{$attribute_dbi->get(section=>"content",name=>$edit_content->name)};
     my $attrlist = "";
     my $filename = $edit_content->name;
+
     for my $attr (@attr)
-    { my ($name,$value) = ($attr->attr, $attr->value); 
-      $attrlist .= qq(<form method="post" action="<?SPINE_Location?>admin/attribute/save/"><input type="hidden" name="name" value="$filename"><input type="hidden" name="section" value="content"><input type="text" size="25" name="attr" class="input" value="$name"><input type="text" size="25" name="value" class="input" value="$value"><input type="image" src="/images/save.png" alt="Save"></form>);
+    { my %hash = $attr->tohash; 
+      $attrlist .= <<"EOF";
+<form action="<?SPINE_Location?>admin/attr/" method="post"><tr>
+<input type="hidden" name="id" value="$hash{id}">
+<input type="hidden" name="name" value="$filename">
+<input type="hidden" name="section" value="content">
+<td><input type="text" class="input" name="attr" value="$hash{attr}" size="25"></td>
+<td><input type="text" class="input" name="value" value="$hash{value}" size="25"></td>
+<td><input type="image" name="save" src="/images/save.png"></td>
+<td><input type="image" name="delete" src="/images/delete.png"></td></tr>
+</form>\n
+
+EOF
     }
     if (!$binary)
     { $cbody =~ s/\&/\&amp\;/gmx; 
@@ -354,8 +366,6 @@ sub save
     $breaks = $request->param('breaks') || 0 if ref $content;
     $content->breaks($breaks) if ref $content;
     $content->type($request->param('type')) if ref $content;
-    warn $binary;
-    warn $request->param('body');
     if (!$binary) { $content->body($request->param('body')) if ref $content; }
     my $permissions = scalar $request->param('groupr') ? "1" : 0;
     $permissions .= scalar $request->param('groupw') ? "1" : 0;
