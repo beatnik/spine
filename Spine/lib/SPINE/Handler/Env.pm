@@ -39,8 +39,12 @@ sub handler
   my @params = split(/,/,$params);
   my $body = undef;
   #If there are parameters, they're stored in @params
-  for(keys(%ENV) )
-  { $body .= "$_ => $ENV{$_}\n<br>"; }
+  if (@params)
+  { $params[0] =~ s/['"]//g; $body = $ENV{$params[0]}; }
+  else
+  { for(keys(%ENV) )
+    { $body .= "$_ => $ENV{$_}\n<br>"; }
+  }
   return $body;
 }
 
