@@ -271,6 +271,7 @@ sub handler
     for my $attr (@attr)
     { my %hash = $attr->tohash; 
       $attrlist .= <<"EOF";
+<div id="attrlist" style="width: 590px; height: 1.75em;">
 <form action="<?SPINE_Location?>admin/attr/" method="post"><tr>
 <input type="hidden" name="id" value="$hash{id}">
 <input type="hidden" name="name" value="$filename">
@@ -280,7 +281,7 @@ sub handler
 <td><input type="image" name="save" src="/images/save.png"></td>
 <td><input type="image" name="delete" src="/images/delete.png"></td></tr>
 </form>\n
-
+</div>
 EOF
     }
     if (!$binary)

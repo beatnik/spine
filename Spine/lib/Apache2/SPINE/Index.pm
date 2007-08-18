@@ -32,7 +32,8 @@ use Apache2::Connection;
 use Apache2::Cookie;
 use Apache2::Log;
 
-use SPINE::DBI::Session; 
+use SPINE::DBI::Session;
+use SPINE::DBI::Attribute; 
 use SPINE::Base::Session;
 use SPINE::Handler::Content;
 use SPINE::DBI::User;
@@ -44,7 +45,7 @@ use SPINE::Transparent::Constant;
 use Carp;
 use Digest::MD5 qw(md5_hex);
 
-use vars qw($VERSION);
+use vars qw($VERSION %CACHE);
 
 $VERSION = $SPINE::Constant::VERSION;
 
@@ -85,6 +86,7 @@ sub handler
   my $req = Apache2::Request->new($r);
   my $th_req = SPINE::Transparent::Request->new($req);
   SPINE::Transparent::Constant->new($req); 
+  my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);  
   #Just go ahead and use Apache::Request from now on
   my $user_dbi = SPINE::DBI::User->new($dbh);
   my $session_dbi = SPINE::DBI::Session->new($dbh);
@@ -132,6 +134,15 @@ sub handler
       #Ofcourse, we should delete the cookie as well
   }
   #Only header is required???
+  my ($ppage) = $page =~ /^\/(.*)$/;
+  my ($cache) = shift @{$attribute_dbi->get(attr=>"cache",section=>"content",name=>$ppage)};
+  if ($cache && $CACHE{$page})
+  { $req->no_cache(1);
+    $req->content_type($CACHE{$page}{"type"});
+    $req->rflush; # instead of send_http_header;
+    $req->print($CACHE{$page}{"body"});
+    return OK;
+  }  
   my $content = SPINE::Handler::Content::handler($req,$dbh,$session);
   if (ref($content) ne "SPINE::Base::Content") { return $content; }
   my $type = $content->type || 'text/html';
@@ -149,6 +160,7 @@ sub handler
   }
   #I hope this doesn't come back to hunt me
   $req->print($body);
+  if ($cache) { $CACHE{$page} = {"type",$type, "body",$body}; }  
   return OK;
 }
 
