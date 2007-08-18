@@ -4,7 +4,7 @@ use DBI;
 
 #$table = $ARGV[0];
 
-my $dbh = DBI->connect("dbi:mysql:$ARGV[0]","beatnik","foobar") || die "Can't connect to DB: ".$Mysql::db_errstr;
+my $dbh = DBI->connect("dbi:mysql:$ARGV[0]","root","foobar") || die "Can't connect to DB: ".$Mysql::db_errstr;
 
 for $table (qw(attribute adminaccess content macro message messagegroup navbarbuttons navbars style usergroup users) )
 { $sth = $dbh->prepare("select * from $table") || die "Oops"; 
