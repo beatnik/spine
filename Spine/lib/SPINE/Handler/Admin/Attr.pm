@@ -66,7 +66,7 @@ sub handler
   my $delete = $request->param('delete.x') ? "delete" : "";    
   $action = $action || $save || $delete; 
   if ($request->method eq "POST" && $action eq "new")
-  { newattr(); warn "Check #1"; }
+  { newattr(); }
   if ($request->method eq "POST" && $action eq "save")
   { saveattr(); }
   if ($request->method eq "POST" && $action eq "delete")
@@ -74,25 +74,34 @@ sub handler
   my $content = SPINE::Base::Content::default;
   $content->style("blank");
   my @attr = @{$attribute_dbi->get(section=>"content",name=>$filename)};
-  my $attrlist = "";
+  my $attrlist = <<"EOF";
+<form method="post" name="attrform" style="margin: 0px" action="<?SPINE_Location?>admin/attr/new/">
+<input type="hidden" name="name" value="$filename">
+<input type="hidden" name="section" value="content">
+<input type="text" size="25" name="attr" class="input" value="attribute name">
+<input type="text" size="25" name="value" class="input" value="attribute value">
+<a onClick="
+makeRequest('POST','<?SPINE_Location?>admin/attr/new/', 'name=' + encodeURI( document.attrform.name.value )+'&section=' + encodeURI( document.attrform.section.value )+ '&attr=' + encodeURI( document.attrform.attr.value )+'&value=' + encodeURI( document.attrform.value.value )); return false;"><img border="0" src="/images/save.png" alt="Save" ></a>
+</form>
+EOF
+
   my $i = 0;
   for my $attr (@attr)
   { my %hash = $attr->tohash; 
     $attrlist .= <<"EOF";
-<form name="attrform$i" action="<?SPINE_Location?>admin/attr/" method="post">
+<form name="attrform$i" action="<?SPINE_Location?>admin/attr/" method="post" style="margin: 0px">
 <input type="hidden" name="id" value="$hash{id}">
 <input type="hidden" name="name" value="$hash{name}">
 <input type="hidden" name="section" value="content">
 <input type="text" class="input" name="attr" value="$hash{attr}" size="25">
 <input type="text" class="input" name="value" value="$hash{value}" size="25">
-<a onClick="makeRequest('POST','<?SPINE_Location?>admin/attr/save/', 'name=' + encodeURI( document.attrform$i.name.value )+'&section=' + encodeURI( document.attrform$i.section.value )+ '&attr=' + encodeURI( document.attrform$i.attr.value )+'&value=' + encodeURI( document.attrform$i.value.value )); return false;"><img border="0" src="/images/save.png" alt="Save" ></a>
+<a onClick="makeRequest('POST','<?SPINE_Location?>admin/attr/save/', 'id=' + encodeURI( document.attrform$i.id.value ) +'&name=' + encodeURI( document.attrform$i.name.value )+'&section=' + encodeURI( document.attrform$i.section.value )+ '&attr=' + encodeURI( document.attrform$i.attr.value )+'&value=' + encodeURI( document.attrform$i.value.value )); return false;"><img border="0" src="/images/save.png" alt="Save" ></a>
 <a onClick="makeRequest('POST','<?SPINE_Location?>admin/attr/delete/', 'id=' + encodeURI( document.attrform$i.id.value ) + '&name=' + encodeURI( document.attrform$i.name.value )); return false;"><img border="0" src="/images/delete.png" alt="Delete" ></a>
 </form>\n
 EOF
 
 $i++;
     }
-
   $content->body($attrlist);
   return $content;
 }
@@ -108,14 +117,15 @@ sub newattr
 }
 
 sub saveattr
-{ my $attr = $attribute_dbi->get({id => $request->param('id')});
-  $attr->value($request->param('value')) if ref $attr;
+{ my $attr = $attribute_dbi->get({id => scalar $request->param('id')});
+  $attr->attr(scalar $request->param('attr')) if ref $attr;
+  $attr->value(scalar $request->param('value')) if ref $attr;
   $attribute_dbi->update($attr) if $attr;
   return;
 }
 
 sub deleteattr
-{ my $attr = $attribute_dbi->get({id => $request->param('id')});
+{ my $attr = $attribute_dbi->get({id => scalar $request->param('id')});
   $attribute_dbi->remove($attr) if $attr;
   return;
 }
