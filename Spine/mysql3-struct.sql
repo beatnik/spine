@@ -26,23 +26,6 @@ CREATE TABLE `attribute` (
 );
 
 --
--- Table structure for table `calevent`
---
-
-DROP TABLE IF EXISTS `calevent`;
-CREATE TABLE `calevent` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  `description` mediumtext NOT NULL,
-  `eventstamp` datetime default NULL,
-  `owner` varchar(255) default NULL,
-  `usergroup` varchar(255) default NULL,
-  `permissions` varchar(6) default NULL,
-  `public` int(1) default '1',
-  PRIMARY KEY  (`id`)
-);
-
---
 -- Table structure for table `content`
 --
 

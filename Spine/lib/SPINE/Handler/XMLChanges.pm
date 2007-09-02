@@ -97,7 +97,7 @@ Pass the date as a parameter to show changes since that specific date.
 
 =head1 VERSION
 
-This is spine 1.22.
+This is spine 1.3 beta.
 
 =head1 AUTHOR
 

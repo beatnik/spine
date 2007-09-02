@@ -69,7 +69,7 @@ In the next release, this module will be linked to SPINE::Base::Macro.
 
 =head1 VERSION
 
-This is spine 1.22.
+This is spine 1.3 beta.
 
 =head1 AUTHOR
 

@@ -1,7 +1,7 @@
-SPINE v1.22 - Stable
--------------------
+SPINE v1.3 - Beta 
+-----------------
 
-This is a stable release SPINE.
+This is a beta release SPINE.
 You need access to mod_perl and a database. Consult the server administrator if you have questions about these issues.
 
 Any function, layout, database structure is subject to change if needed.

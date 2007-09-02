@@ -1,4 +1,4 @@
-Installation Notes for Spine v1.22
+Installation Notes for Spine v1.3 beta
 
 Requirements
 ------------
@@ -28,7 +28,7 @@ Generating SQL statements for users
 -----------------------------------
 
 Use the on-line tool to generate the correct SQL statements for the admin user. 
-By default, version 1.22 does not include a default password.
+By default, version 1.3 beta does not include a default password.
 
 Visit 
 
@@ -213,14 +213,15 @@ Copy Images
 -----------
 Copy the images from the images subdir to your main images directory (eg  /var/www/images)
 
+The location of the images can be defined in the Apache configuration file as follows:
+
+          PerlSetVar images /img
+
+This is the URL relative to the location. If the images are located in /images and your site is in /spine, use ../images. 
+
 Start using Spine
 ------------------
 
-Go to
+Go to http://www.yoursite.com/yourlocation/login.html
 
-http://SERVERNAME/LOCATION/login.html and use the credentials below:
-
-Default login info:
-
-   1. User: admin
-   2. Password: foo
+Use the password as defined when generating the SQL statements in  http://spine.sourceforge.net/createuser.html

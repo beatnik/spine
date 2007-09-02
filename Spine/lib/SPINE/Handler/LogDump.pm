@@ -70,7 +70,7 @@ This is a Log Dumper plugin for SPINE.
 
 =head1 VERSION
 
-This is spine 1.22.
+This is spine 1.3 beta.
 
 =head1 AUTHOR
 

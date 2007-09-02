@@ -95,7 +95,7 @@ This handler will return general page statistics, like page visits or last modif
 
 =head1 VERSION
 
-This is spine 1.22.
+This is spine 1.3 beta.
 
 =head1 AUTHOR
 

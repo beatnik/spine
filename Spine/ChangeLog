@@ -1,8 +1,31 @@
 ChangeLog
 =========
+Release - 1.3 beta
+- Added to Package : Wizard and style thumbnails
+- Added to Package : Advanced caching
+- Added to Package : initial code for CGI backport
+- Added in Admin : Locked content in Content Administration panel
+- Added to Admin : Upload as plugin
+- Added to Admin : Attributes in content admin panel
+- Added in Admin : binary content body support
+- Added in Admin : Addd MIME type detection in content
+- Added to Core :  Picasa gallery plugin
+- Added to Core : Added plugin: Edit Page
+- Added to Core : Added plugin: Tags
+- Added to Core : Added plugin: Slideshow
+- Added to Core : WizardStyles (for Wizard)
+- Added to Core : Messages as RSS plugin
+- Added to Core : Configurable images path
+- Fixed in Admin : logging bug
+- Fixed in Core : small bugs
+- Updated in Core : Code cleanup
+- Updated in Admin : Administration GUI changes
+- Updated in Core : More i18n preparation
+- Updated in Database : Mime types and statistics
+
 Release - 1.22 - Fixes
- - Fixed in Admin : Referer check
- - Fixed in Admin : Arbitrary password 
+- Fixed in Admin : Referer check
+- Fixed in Admin : Arbitrary password 
 
 Release - 1.2 - Stable
 - Added in Package : 8 new styles
