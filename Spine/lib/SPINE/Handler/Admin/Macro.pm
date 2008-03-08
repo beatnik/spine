@@ -30,7 +30,7 @@ use SPINE::DBI::Adminaccess;
 use SPINE::DBI::Attribute;
 use SPINE::DBI::Content;
 use SPINE::Constant;
-
+use Data::Dumper;
 use strict;
 
 use SPINE::Transparent::Constant;
@@ -148,8 +148,7 @@ sub handler
   { $error = $valid_perms_string.$copy_macroset_string;
     $url = '.admin-general'; 
   }
-
-  if (($params[0] eq 'save')  && !$error && $request->method eq "POST")
+  if ($params[0] eq 'new' && !$error && $request->param("action") eq "save" && $request->param("key") && $request->param("name") && $request->method eq "POST")
   { save();
     $url = '.admin-macro';
     $params[0] = "edit";
@@ -167,8 +166,9 @@ sub handler
   { $url = '.admin-general'; 
     copy();
   }
+  
   my $edit_macro = shift @{$macro_dbi->get({name=>$request->param('name')}, count=>1)};
-  if ($edit_macro && $params[0] eq 'new' && !$error)
+  if ($edit_macro && $params[0] eq 'new' && !$error && !$request->param('action'))
   { $error = $macroset_exists_string; 
     $url = '.admin-general'; 
   }
@@ -177,7 +177,7 @@ sub handler
   if (!ref $content)
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
   
-  if ($params[0] eq 'new' && $request->param("key") && $request->param("name") && !$error && $request->method eq "POST")
+  if ($params[0] eq 'new' && $request->param("action") eq "create" && $request->param("key") && $request->param("name") && !$error && $request->method eq "POST")
   { $macro_dbi->add(SPINE::Base::Macro->new({name=>$request->param('name'), macrokey=>$request->param('key'), macrovalue=>$request->param('value')})); }
 
   my $body = undef;
@@ -196,7 +196,7 @@ sub handler
       $hash{macrovalue} =~ s/</&lt;/gmx;
       $hash{macrovalue} =~ s/>/&gt;/gmx;
       $hash{macrovalue} =~ s/\"/&quot;/gmx;
-      $list .= qq(<tr bgcolor="#ffffff"><form action="<?SPINE_Location?>admin/macro/save/" method="post"><input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="text" name="key" class="input" value="$hash{macrokey}" size="30">\n</td><td><input type="text" name="value" class="input" value="$hash{macrovalue}" size="30">\n</td>\n<td><input type="submit" value="save" class="button" name="action"></td>\n</form><form action="<?SPINE_Location?>admin/macro/remove/" method="post"><input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="submit" value="delete" class="button" name="action"></td>\n</form></tr>\n); 
+      $list .= qq(<tr bgcolor="#ffffff"><form action="<?SPINE_Location?>admin/macro/save/" method="post"><input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="text" name="key" class="input" value="$hash{macrokey}" size="30">\n</td><td><input type="text" name="value" class="input" value="$hash{macrovalue}" size="30">\n</td>\n<td><input type="submit" value="save" class="button" name="action"></td>\n</form><form action="<?SPINE_Location?>admin/macro/remove/" method="post"><input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="submit" value="Delete" class="button" name="action"></td>\n</form></tr>\n); 
     }
     $body =~ s/\$name/$request->param('name')/gmxe;
     $body =~ s/\$list/$list/gmx;
