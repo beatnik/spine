@@ -42,6 +42,7 @@ use SPINE::Constant;
 use SPINE::Transparent::Request;
 use SPINE::Transparent::Constant;
 
+use Data::Dumper;
 use Carp;
 use Digest::MD5 qw(md5_hex);
 
@@ -61,7 +62,7 @@ sub initialise #Hope this subroutine does not get called constantly
   my $DB_ = $r->dir_config("dbname") || DB;
   my $DBUSER_ = $r->dir_config("dbuser") || DBUSER;
   my $DBPWD_ = $r->dir_config("dbpwd") || DBPWD;  
-  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or croak "Could not connect to Database:$!"; 
+  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or croak "Could not connect to Database:$!";
   return $dbh;
   #But yes, I do recommend using Apache::DBI
   #Ofcourse, mod_spine wouldn't notice if you didn't
@@ -143,7 +144,7 @@ sub handler
     $req->print($CACHE{$page}{"body"});
     return OK;
   }  
-  my $content = SPINE::Handler::Content::handler($req,$dbh,$session);
+  my $content = SPINE::Handler::Content::handler($th_req,$dbh,$session);
   if (ref($content) ne "SPINE::Base::Content") { return $content; }
   my $type = $content->type || 'text/html';
   my $body = $content->body;
@@ -154,7 +155,7 @@ sub handler
   $req->rflush; # instead of send_http_header;
   #$req->send_http_header;
   return OK if $req->header_only;
-  while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$req,$content)/gmxe) 
+  while ($body =~ s/(<\?SPINE_([^\?]*)\?>)/process_handler($1,$2,$dbh,$th_req,$content)/gmxe) 
   { $body =~ s/<\?SPINE_Location\?>/$location/mxg;
     $body =~ s/<\?SPINE_Servername\?>/$servername/mxg; 
   }
