@@ -45,7 +45,8 @@ sub new {
    $self->{METHOD} = $self->{REQUEST}->method;
   }
  if (ref($self->{REQUEST}) eq "Apache2::Request")
- { eval qq|use Apache2::Cookie; \$self->{COOKIES} = scalar Apache2::Cookie->fetch; |; 
+ { eval qq|use Apache2::Cookie; \$self->{COOKIES} = scalar Apache2::Cookie->fetch; |;
+   eval qq|use Apache2::Upload;|;
    $self->{REMOTE_HOST} = $self->{REQUEST}->connection->get_remote_host();
    $self->{LOCATION} = $self->{REQUEST}->location(); 
    $self->{DIR_CONFIG} = sub { $self->{REQUEST}->dir_config(@_); };
@@ -58,7 +59,7 @@ sub new {
  {  eval qq|use CGI::Cookie; \$self->{COOKIES} = scalar CGI::Cookie->fetch; |; 
     $self->{REMOTE_HOST} = $self->{REQUEST}->url();
     #$self->{URI} = $self->{LOCATION}."\/".$self->{REQUEST}->param("page");
-	$self->{URI} = $self->{REQUEST}->path_info;
+    $self->{URI} = $self->{REQUEST}->path_info;
     $self->{DOCUMENT_ROOT} = $ENV{DOCUMENT_ROOT};
     $self->{METHOD} = $self->{REQUEST}->request_method();
  }
