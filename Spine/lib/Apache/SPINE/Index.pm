@@ -57,9 +57,11 @@ sub initialise #Hope this subroutine does not get called constantly
   my $DBD_ = $r->dir_config("dbd") || DBD;
   my $DB_ = $r->dir_config("dbname") || DB;
   my $DBUSER_ = $r->dir_config("dbuser") || DBUSER;
-  my $DBPWD_ = $r->dir_config("dbpwd") || DBPWD;  
-  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_) or croak "Could not connect to Database:$!"; 
-  return $dbh;
+  my $DBPWD_ = $r->dir_config("dbpwd") || DBPWD;
+  my $dbh = DBI->connect("dbi:$DBD_:dbname=$DB_",$DBUSER_,$DBPWD_, { PrintError => 0 } ) or carp "Could not connect to Database:$!";
+  my $error_result = undef;
+  if (!$dbh) { $error_result = handle_error($r,"Unable to connect to database: $DBI::errstr\nPlease consult the configuration and installation procedures to fix this issue."); }
+  return ($dbh,$error_result);
   #But yes, I do recommend using Apache::DBI
   #Ofcourse, mod_spine wouldn't notice if you didn't
 }
@@ -74,13 +76,15 @@ sub handler
   my $file = $req->request->filename; 
   my $uri = $req->uri; 
   my $dbh = undef;
+  my $error_value; 
   my $main = $req->dir_config("main");
   if (!$page) { $page = "/"; }
   if ($page eq "/") { $page .= $main; $file .= $page; $uri .= $page; }
   if ($uri and -e $req->request->document_root.$uri and $page ne '/' and $location ne "/") { return DECLINED; }
   if (length($uri) > 1 and -e $file and $location eq "/") { return DECLINED; } # root directory fix
   #We pretend to know how to handle files that actually exist!!
-  if (!$dbh) { $dbh = &initialise($req); }
+  if (!$dbh) { ($dbh,$error_value) = &initialise($r); }
+  if (!$dbh) { return $error_value; }
   my $cookie = undef;
   SPINE::Transparent::Constant->new($areq);
   my $attribute_dbi = SPINE::DBI::Attribute->new($dbh);  
@@ -177,6 +181,13 @@ sub process_handler #Ofcourse I could've done this pure inline, but I'm lazy
   };
   carp $@ if $@; #Warn if necessary
   return $value;
+}
+
+sub handle_error # Handler DB errors by spitting out a friendly message instead of the default Internal Server Error
+{ my $req = shift;
+  my $error = shift;
+  $req->print($error);
+  return OK;
 }
 
 1;
