@@ -270,10 +270,13 @@ sub handler
     }
     for(@clist) { my $sel = $messagegroup->content eq $_ ? ' selected' : ''; $contentlist .= qq(<option value="$_"$sel>$_\n); }
     $contentlist = qq(<select name="content">$contentlist</select>);
-    $data .= qq(<tr bgcolor="#ffffff">\n<form method="post" action="<?SPINE_Location?>admin/message/create/">\n<input type="hidden" name="mgroup" value=").$messagegroup->name.qq(">\n<input type="hidden" name="parent" value="$parent">);
-    $data .= qq(<td>\n<input type="text" name="subject" class="input" value="Subject" size="25">\n</td>\n<td>\n<input type="text" name="owner" value="Owner" class="input" size="25">\n</td><td>&nbsp;</td>\n);
-    $data .= qq(<td width="5">\n<input type="image" name="save" src="/images/save.png" title="Create Message">\n</td>\n</form>\n<td>&nbsp;</td>\n</tr>\n\n);
 
+    $data .= qq(<div name="adminpanel" class="fullpanel"><form method="post" action="<?SPINE_Location?>admin/message/create/" style="padding: 0; margin: 0; display: inline;">\n<input type="hidden" name="mgroup" value=").$messagegroup->name.qq(">\n<input type="hidden" name="parent" value="$parent">);
+    $data .= qq(<div class="panelcel" style="width: 25%"><input type="text" name="subject" class="input" value="Subject" size="35"></div>\n);
+    $data .= qq(<div class="panelcel" style="width: 15%"><input type="text" name="owner" value="Owner" class="input" size="25"></div>);
+    $data .= qq(<div class="panelcel" style="width: 15%">&nbsp;</div>);
+    $data .= qq(<div class="panelcel" style="width: 5%"><input type="image" name="save" src="/images/save.png" title="Create Message"></div></form>);
+    $data .= qq(<div class="spacercel"></div></div>);
     if ( ($user eq 'admin' || #User is admin
         $messagegroup->owner eq $user || #User is owner of content
         $readwperms) || #Style is world readable
@@ -285,18 +288,20 @@ sub handler
       my @replies = @{ $message_dbi->get({mgroup=>$hash{mgroup},parent=>$hash{id}}) } ; 
       my $count = @replies;
       $count ||= 0;
-      $data .= qq(<form action="<?SPINE_Location?>admin/message/save/" method="post"><tr bgcolor="#ffffff">\<td><input type="text" name="subject" class="input" size="25" value="$hash{subject}"></td>\n<td><input type="text" name="owner" class="input" size="25" value="$hash{owner}"></td>\n);
-      $data .= qq(<td>$hash{mdate}</td>\n\n<input type="hidden" name="id" value="$hash{id}">\n<input type="hidden" name="name" value="$hash{mgroup}">);
-      $data .= qq(<input type="hidden" name="parent" value="$hash{parent}">\n<td width="5">\n);
-      $data .= qq(<input type="image" name="save" src="/images/save.png" title="Save Message">\n</td>);
-      $data .= qq(<td width="50"><input type="image" name="delete" src="/images/delete.png" title="Delete Message">\n<img src="/images/preferences.png" onclick="o=document.getElementById('messagerow$hash{id}'); if(o.style.display=='inline'){o.style.display='none';}else{o.style.display='inline';}"></td>\n</tr>\n\n); 
+      $data .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/message/save/" method="post" style="padding: 0; margin: 0; display: inline;">);
+      $data .= qq(<div class="panelcel" style="width: 25%"><input type="text" name="subject" class="input" size="35" value="$hash{subject}"></div>);
+      $data .= qq(<div class="panelcel" style="width: 15%"><input type="text" name="owner" class="input" size="25" value="$hash{owner}"></div>);
+      $data .= qq(<div class="panelcel" style="width: 15%">$hash{mdate}</div><input type="hidden" name="id" value="$hash{id}">\n<input type="hidden" name="name" value="$hash{mgroup}">);
+      $data .= qq(<input type="hidden" name="parent" value="$hash{parent}"><div class="panelcel" style="width: 10%"><input type="image" name="save" src="/images/save.png" style="padding-left: 2px" title="Save Message">);
+      $data .= qq(<input type="image" name="delete" src="/images/delete.png" title="Delete Message" style="padding-left: 2px">\n<img src="/images/preferences.png" style="padding-left: 2px" onclick="o=document.getElementById('messagerow$hash{id}'); if(o.style.display=='inline'){o.style.display='none';}else{o.style.display='inline';}"></div>\n); 
+      $data .= qq(<div class="spacercel"></div></div>);
       my $parentbit = "";
       my $parentmessage = shift @{ $message_dbi->get({mgroup=>$hash{mgroup},id=>$hash{parent}, count=>1}) } ;
       if ($parentmessage)
       { my %hash = $parentmessage->tohash; 
         $parentbit = qq(<br>Reply to message by <a href="<?SPINE_Location?>admin/message/edit/?name=$hash{mgroup}&id=$hash{id}">$hash{owner} : $hash{subject}</a>);
       }
-      $data .= qq(<tr bgcolor="#ffffff">\n<td colspan="5"><table width="100%" border="0" bgcolor="#ffffff" cellpadding="0" cellspacing="0" id="messagerow$hash{id}" style="display:none"><tr><td><textarea cols="80" rows="15" class="input" name="body">$hash{body}</textarea><br>Message Replies : <a href="<?SPINE_Location?>admin/message/edit/?name=$hash{mgroup}&parent=$hash{id}">$count</a>$parentbit</td></tr></table></td></tr></form>);
+      $data .= qq(<div name="adminpanel" class="fullpanel" id="messagerow$hash{id}" style="height: auto; display:none"><textarea cols="120" rows="20" class="input" name="body">$hash{body}</textarea><br>Message Replies : <a href="<?SPINE_Location?>admin/message/edit/?name=$hash{mgroup}&parent=$hash{id}">$count</a>$parentbit</form></div>);
       
     }
    my $mgroup = $messagegroup->name;

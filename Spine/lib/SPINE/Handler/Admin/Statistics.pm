@@ -147,7 +147,10 @@ sub handler
       for(@{$stats_dbi->get($stat,$name)})
       { my %hash = %{$_};
         my $number = $hash{number};
-        $list .= qq(<tr><td>$hash{$stat}</td><td><img src="/images/dot.jpg" width="$number" height="10">&nbsp;$hash{number}</td></tr>\n);
+        $hash{$stat} ||= "-";
+        #$list .= qq(<tr><td>$hash{$stat}</td><td><img src="/images/dot.jpg" width="$number" height="10">&nbsp;$hash{number}</td></tr>\n);
+        $list .= qq(<div name="adminpanel" class="fullpanel"><div class="panelcel" style="width: 45%; height: auto">$hash{$stat}</div>\n);
+        $list .= qq(<div class="panelcel" style="width: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$number" height="10">&nbsp;$hash{number}</div><div class="spacercel"></div></div>\n);
       }
       $body =~ s/\$${stat}list/$list/gxm;
       $body =~ s/\$name/$name/gmx;
@@ -178,7 +181,8 @@ sub handler
     #Comment these 2 lines if you wish to include the dot-files in the listing..
 
     for my $name (sort keys %counters)
-    { $namelist .= qq(<tr><td>$name</td><td><img src="/images/dot.jpg" width="$counters{$name}" height="10">&nbsp;$counters{$name}</td></tr>\n);
+    { $namelist .= qq(<div name="adminpanel" class="fullpanel"><div class="panelcel" style="width: 20%">$name</div>\n);
+      $namelist .= qq(<div class="panelcel" style="width: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$counters{$name}" height="10">&nbsp;$counters{$name}</div><div class="spacercel"></div></div>\n);
     }
     if ($error) { $error = qq(<p class="error">$error</p>); }
     $body =~ s/\$error/$error/gmx;
