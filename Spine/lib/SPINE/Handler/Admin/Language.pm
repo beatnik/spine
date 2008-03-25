@@ -68,11 +68,10 @@ sub handler
   { $selected .= qq(<option value="$_">$_); }
   
   $body .= <<"EOF";
-<form action="<?SPINE_Location?>admin/language/" method="post"><tr>
-<td><font face=""><b>Change language</b></font><br>&nbsp;&nbsp;
-<input type="submit" value="Load" class="button">&nbsp;<select name="lang">$selected</select></td></tr>
-</form>\n
-</table><hr width="95%"><table>
+<div name="adminpanel" class="fullpanel">\n
+<form action="<?SPINE_Location?>admin/language/" method="post" style="padding: 0; margin: 0; display: inline;">\n
+<b>Change language</b><br><input type="submit" value="Load" class="button">&nbsp;<select name="lang">$selected</select>\n
+</form></div><div name="adminpanel" class="fullpanel"><hr width="95%"></div>\n
 EOF
 
   $lang ||= "en";
@@ -89,21 +88,23 @@ EOF
   for(@attributes)
   { my %hash = $_->tohash; 
   $body .= <<"EOF";
-<form action="<?SPINE_Location?>admin/language/" method="post"><tr>
+<div name="adminpanel" class="fullpanel">
+<form action="<?SPINE_Location?>admin/language/" method="post" style="padding: 0; margin: 0; display: inline;">
 <input type="hidden" name="id" value="$hash{id}">
 <input type="hidden" name="attr" value="$hash{attr}">
-<td><input type="text" class="input" name="name" value="$hash{name}"></td>
-<td><input type="text" class="input" name="value" value="$hash{value}" size="60"></td>
-<td><input type="image" name="save" src="/images/save.png"></td>
-<td><input type="image" name="delete" src="/images/delete.png"></td></tr>
+<div class="panelcel" style="padding-right: 2px"><input type="text" class="input" name="name" value="$hash{name}"></div>
+<div class="panelcel" style="padding-right: 2px"><input type="text" class="input" name="value" value="$hash{value}" size="60"></div>
+<div class="panelcel" style="padding-right: 2px"><input type="image" name="save" src="/images/save.png"></div>
+<div class="panelcel" style="padding-right: 2px"><input type="image" name="delete" src="/images/delete.png"></div>
 </form>\n
-
+ <div class="spacercel"></div>
+</div>
 EOF
 
 }
   my $content = SPINE::Base::Content::default;
   $content->style(".admin_plugin");
-  $content->body("<table>$body</table>");
+  $content->body($body);
   return $content;
 }
 
