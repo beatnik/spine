@@ -258,6 +258,7 @@ sub getlist
 sub update
 { my $self = shift;
   my $record = shift;
+  my $force = shift;
   if(ref $record eq "SPINE::Base::$self->{MODULE}") 
   { my $update = '';
     my %record = $record->tohash;
@@ -269,7 +270,7 @@ sub update
       $update .= "$_ = ?, ";
     }
     for(@{$self->{NON_NUMERIC}})  
-    { if($_ eq 'name') { next; } 
+    { if($_ eq 'name' && !$force) { next; } 
       my $value = $record{$_};
       $value =~ s/^'//mx; $value =~ s/'$//mx;
       push(@placeholders,$value);
