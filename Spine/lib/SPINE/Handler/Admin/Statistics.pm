@@ -181,21 +181,24 @@ sub handler
     #@list = @{$stats_dbi->get("name")};
     #Only show hidden files in the listing if you are admin
     #Comment these 2 lines if you wish to include the dot-files in the listing..
-
+    my $orderf = "";
+    my $orderc = "";
     my $sort = $request->param("sort") || "filename";
     my @sorted = ();
     if ($sort eq "filename")
-    { @sorted = sort keys %counters; }
+    { @sorted = sort keys %counters; $orderf = "r"; }
 
     if ($sort eq "filenamer")
-    { @sorted = sort keys %counters; @sorted = reverse(@sorted); }
+    { @sorted = sort keys %counters; @sorted = reverse(@sorted); $orderf = ""; }
     
     if ($sort eq "counter")
-    { @sorted = sort { $counters{$a} <=> $counters{$b} } keys %counters; 
+    { @sorted = sort { $counters{$a} <=> $counters{$b} } keys %counters;
+      $orderc = "r"; 
     }
 
     if ($sort eq "counterr")
     { @sorted = sort { $counters{$b} <=> $counters{$a} } keys %counters;
+      $orderc = ""; 
     }
 
     for my $name (@sorted)
@@ -206,6 +209,8 @@ sub handler
     if ($error) { $error = qq(<p class="error">$error</p>); }
     $body =~ s/\$error/$error/gmx;
     $body =~ s/\$list/$list/gmx;
+    $body =~ s/\$orderf/$orderf/gmx;
+    $body =~ s/\$orderc/$orderc/gmx;    
     $body =~ s/\$namelist/$namelist/gmx;
     $body =~ s/\$type/statistics/gmx;
     $body =~ s/\$label/statistics/gmx;
