@@ -169,20 +169,39 @@ sub handler
     my $namelist = undef;
     my (@counter) = @{ $attribute_dbi->get({section=>"stats",name=>"counter", order=>"attr"}) } ; 
     my (%counters) = ();
+    my $total = 0;
     for my $attr (@counter) #Take Attributes for Navbar and dump in %attributes
     { next if !$attr;
       my $a = $attr->attr;
       if ($user ne 'admin')
       { $counters{$a} = $attr->value if $a =~ /^[^\.]/mx; }
       else { $counters{$a} = $attr->value; }
+      $total += $counters{$a};
     }
     #@list = @{$stats_dbi->get("name")};
     #Only show hidden files in the listing if you are admin
     #Comment these 2 lines if you wish to include the dot-files in the listing..
 
-    for my $name (sort keys %counters)
+    my $sort = $request->param("sort") || "filename";
+    my @sorted = ();
+    if ($sort eq "filename")
+    { @sorted = sort keys %counters; }
+
+    if ($sort eq "filenamer")
+    { @sorted = sort keys %counters; @sorted = reverse(@sorted); }
+    
+    if ($sort eq "counter")
+    { @sorted = sort { $counters{$a} <=> $counters{$b} } keys %counters; 
+    }
+
+    if ($sort eq "counterr")
+    { @sorted = sort { $counters{$b} <=> $counters{$a} } keys %counters;
+    }
+
+    for my $name (@sorted)
     { $namelist .= qq(<div name="adminpanel" class="fullpanel"><div class="panelcel" style="width: 20%">$name</div>\n);
-      $namelist .= qq(<div class="panelcel" style="width: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$counters{$name}" height="10">&nbsp;$counters{$name}</div><div class="spacercel"></div></div>\n);
+      my $percentage = sprintf("%.2f",( ( $counters{$name} / $total ) * 100 ) );
+      $namelist .= qq(<div class="panelcel" style="width: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$counters{$name}" height="10">&nbsp;$counters{$name} ($percentage%)</div><div class="spacercel"></div></div>\n);
     }
     if ($error) { $error = qq(<p class="error">$error</p>); }
     $body =~ s/\$error/$error/gmx;
