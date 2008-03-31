@@ -38,12 +38,23 @@ sub new
   return $self;
 }
 
+# Method call prototype:
+# get("fieldname","where-statement")
+# eg: get('name','name like ="%foo"')
+# or pass array reference:
+# eg: get(["name","foo"],'name like ="%foo"')
+# Where statement is optional
 sub get
 { my $self = shift;
   my $field = shift;
   my $where = shift;
+  my @fields = ();
+  if (ref($field) eq "ARRAY")
+  { @fields = @{$field}; }
   $where = $where ? "where name = '$where'" : "";
   my $statement = "select $field, count($field) as number from statistics $where group by $field order by $field";
+  if (@fields)
+  { $statement = "select $fields[0], $fields[1], count($fields[0]) as number from statistics $where group by $fields[1], $fields[0] order by $fields[0]"; }
   my $sth = $self->{_HANDLER}->prepare($statement);
   $sth->execute();
   my @records = ();
@@ -52,7 +63,6 @@ sub get
   { push(@records,$hashref); }
   return \@records;
 }
-
 
 sub getlist
 { my $self = shift;
