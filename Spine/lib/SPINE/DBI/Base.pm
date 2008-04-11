@@ -56,7 +56,8 @@ sub get
   my $limit = undef;
   my $offset = undef;  
   my $sortfield = $self->{ORDER}; 
-  my $searchtype = 'AND'; 
+  my $searchtype = 'AND';
+  my %matchlist = ();
   if (@_) 
   { my $ref = shift;
     if (ref $ref eq 'ARRAY') 
@@ -81,6 +82,8 @@ sub get
     $offset = $params{'offset'} || 0;
     delete($params{'offset'});
     $id ||= $params{'id'};
+    %matchlist = %{ $params{'matchlist'} } if ref($params{'matchlist'}) eq "HASH";
+    delete($params{'matchlist'});
   }
   if($id) 
   { ($id) = $id =~ /(\d*)/mx;
@@ -105,14 +108,16 @@ sub get
       if( grep { $field eq $_ } @{$self->{NUMERIC}} ) 
       { ($params{$field}) = $params{$field} =~ /(\d*)/mx;
         push(@placeholders,$params{$field});
-        $narrow .= " $field = ?"; 
+        my $match = $matchlist{$field} || "=";
+        $narrow .= " $field $match ?"; 
         $found++;
       }
       if( grep { $field eq $_ } @{$self->{NON_NUMERIC}} )
       { my $value = $params{$field};
         $value =~ s/^'//mx; $value =~ s/'$//mx;
         push(@placeholders,$value);
-        $narrow .= " $field = ?"; 
+        my $match = $matchlist{$field} || "=";
+        $narrow .= " $field $match ?"; 
         $found++;
       } 
       if($fields[0] && $found) { $narrow .= " $searchtype "; }
@@ -136,6 +141,7 @@ sub get
       if (defined($offset)) { $statement .= " offset $offset"; }
     }
     carp $statement if $SPINE::DBI::Base::DEBUGTABLE eq $self->{TABLE};
+    carp join(" * ",@placeholders) if $SPINE::DBI::Base::DEBUGTABLE eq $self->{TABLE};
     my $sth = $self->{_HANDLER}->prepare($statement); 
     $sth->execute(@placeholders);
     my $record = "";
@@ -309,6 +315,7 @@ sub add
     chop $add; chop $add;
     $add .= " )";
     carp $add if $SPINE::DBI::Base::DEBUGTABLE eq $self->{TABLE};
+    carp join(" * ",@placeholders) if $SPINE::DBI::Base::DEBUGTABLE eq $self->{TABLE};    
     my $sth = $self->{_HANDLER}->prepare($add);
     $sth->execute(@placeholders);
     #Fix this!
