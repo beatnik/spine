@@ -75,13 +75,19 @@ sub handler
   $content->style("blank");
   my @attr = @{$attribute_dbi->get(section=>"content",name=>$filename)};
   my $attrlist = <<"EOF";
+<script language="javascript" src="<?SPINE_Location?>jquery.js"></script>
 <form method="post" name="attrform" style="margin: 0px" action="<?SPINE_Location?>admin/attr/new/">
 <input type="hidden" name="name" value="$filename">
 <input type="hidden" name="section" value="content">
 <input type="text" size="25" name="attr" class="input" value="attribute name">
 <input type="text" size="25" name="value" class="input" value="attribute value">
-<a onClick="
-makeRequest('POST','<?SPINE_Location?>admin/attr/new/', 'name=' + encodeURI( document.attrform.name.value )+'&section=' + encodeURI( document.attrform.section.value )+ '&attr=' + encodeURI( document.attrform.attr.value )+'&value=' + encodeURI( document.attrform.value.value )); return false;"><img border="0" src="/images/save.png" alt="Save" ></a>
+<a onClick="\$.post('<?SPINE_Location?>admin/attr/new/',
+{ name: encodeURI( document.attrform.name.value ),
+  section: encodeURI( document.attrform.section.value ),
+  attr: encodeURI( document.attrform.attr.value ),
+  value: encodeURI( document.attrform.value.value ) },
+function(data)
+{ \$('#attrlist').html(data); }  ); return false;"><img border="0" src="/images/save.png" alt="Save" ></a>
 </form>
 EOF
 
@@ -95,8 +101,24 @@ EOF
 <input type="hidden" name="section" value="content">
 <input type="text" class="input" name="attr" value="$hash{attr}" size="25">
 <input type="text" class="input" name="value" value="$hash{value}" size="25">
-<a onClick="makeRequest('POST','<?SPINE_Location?>admin/attr/save/', 'id=' + encodeURI( document.attrform$i.id.value ) +'&name=' + encodeURI( document.attrform$i.name.value )+'&section=' + encodeURI( document.attrform$i.section.value )+ '&attr=' + encodeURI( document.attrform$i.attr.value )+'&value=' + encodeURI( document.attrform$i.value.value )); return false;"><img border="0" src="/images/save.png" alt="Save" ></a>
-<a onClick="makeRequest('POST','<?SPINE_Location?>admin/attr/delete/', 'id=' + encodeURI( document.attrform$i.id.value ) + '&name=' + encodeURI( document.attrform$i.name.value )); return false;"><img border="0" src="/images/delete.png" alt="Delete" ></a>
+<a onClick="\$.post('<?SPINE_Location?>admin/attr/save',
+{ id: encodeURI( document.attrform$i.id.value ),
+  name: encodeURI( document.attrform$i.name.value ),
+  section: encodeURI( document.attrform$i.section.value ),
+  attr: encodeURI( document.attrform$i.attr.value ),
+  value: encodeURI( document.attrform$i.value.value )
+},
+function(data)
+{ \$('#attrlist').html(data); } ); return false;"><img border="0" src="/images/save.png" alt="Save" ></a>
+<a onClick="\$.post('<?SPINE_Location?>admin/attr/delete/',
+{ id: encodeURI( document.attrform$i.id.value ),
+  name: encodeURI( document.attrform$i.name.value ),
+  section: encodeURI( document.attrform$i.section.value ),
+  attr: encodeURI( document.attrform$i.attr.value ),
+  value: encodeURI( document.attrform$i.value.value )
+},
+function(data)
+{ \$('#attrlist').html(data);  } ); return false;"><img border="0" src="/images/delete.png" alt="Delete" ></a>
 </form>\n
 EOF
 
