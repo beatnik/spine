@@ -1,4 +1,4 @@
-package SPINE::Handler::Dump;
+package SPINE::Handler::DumpXML;
 
 ## This module is part of SPINE
 ## Copyright 2000-2005 Hendrik Van Belleghem
@@ -25,31 +25,37 @@ package SPINE::Handler::Dump;
 
 use strict;
 
-use vars qw($VERSION);
-
 use SPINE::Constant;
+use vars qw($VERSION);
+use base qw(SPINE::Handler::Dump);
 
 $VERSION = $SPINE::Constant::VERSION;
 
-sub handler 
-{ my $request = shift; #SPINE::Transparent::Request ; Apache::Request
-  my $dbh = shift; #DB Handler
-  my $tag = shift; #
-  my $module = "";
-  my $handler_db = "";
-  eval qq{
-    use SPINE::DBI::$module;
-    my \$handler_db = SPINE::DBI::\$module->new(\$dbh);
-  };
-  my @list = ();
-  @list = @{ $handler_db->get() };
-  my $ref = process(\@list);
-  return ${$ref} if ref($ref);
-}
-
 sub process
-{ my $ref = shift(@_);
-  return \$ref;
+{ my $body = "<data>"; 
+  my $ref = shift(@_);
+  my $type = shift(@_);
+  for(@{$ref})
+  { my %hash = $_->tohash;
+    $body .= qq(<$type name="$hash{name}" id="$hash{id}">\n);
+    delete($hash{id});
+    delete($hash{name});
+    my @keys = sort keys %hash;
+    while ($_ = shift(@keys))
+    { my $f = $hash{$_};
+      $f =~ s/&/\&amp;/gmx;
+      $f =~ s/\"/\\\"/gmx;
+      $f =~ s/\'/\\\'/gmx;
+      $f =~ s/\n/\\n/gmx;
+      $f =~ s/\r/\\r/gmx;
+      $f =~ s/</\&lt;/gmx;
+      $f =~ s/>/\&gt;/gmx;
+      $body .= "<$_>$f</$_>\n";
+    }
+    $body .= "</$type>\n";
+  }
+  $body .= "</data>";
+  return \$body;
 }
 
 1;
@@ -59,11 +65,11 @@ __END__
 
 =head1 NAME
 
-SPINE::Handler::Dump
+SPINE::Handler::DumpXML
 
 =head1 DESCRIPTION
 
-This is the Dump plugin for SPINE. This plugin can be used manually but is primarily used by the command line tool.
+This is the DumpXML plugin for SPINE. This plugin can be used manually but is primarily used by the command line tool.
 
 Parameters
 
