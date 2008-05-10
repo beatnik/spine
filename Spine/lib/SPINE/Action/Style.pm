@@ -29,7 +29,6 @@ use vars qw($VERSION);
 use SPINE::Constant;
 use SPINE::DBI::Style;
 use SPINE::Base::Style;
-use SPINE::DBI::Action;
 
 use Data::Dumper;
 
@@ -37,47 +36,39 @@ $VERSION = $SPINE::Constant::VERSION;
 
 sub handler 
 { my $dbh = shift; #DB Handler
+  my $action = shift; #SPINE::Action::Navbar reference
   my $body = undef;
   my $style_dbi = SPINE::DBI::Style->new($dbh);
-  my $action_dbi = SPINE::DBI::Action->new($dbh);
-  my @actions = ();
-  my ($sec,$min,$hour,$day,$mon,$year) = localtime;
-  $mon++; $year += 1900;
-  
-  my $actions_ref = $action_dbi->get( { "datatype" => "style", "actiontime" => "$year-$mon-$day $hour:$min:$sec", "matchlist" => { "actiontime" => "<" } } );
-  @actions = @{ $actions_ref } if $actions_ref;
-  for my $action (@actions)
-  { if ($action->action eq "create")
-    { my %default = SPINE::Base::Style::default->tohash;
-      my $style = SPINE::Base::Style->new( { %default, name => $action->dataname, $action->actionkey => $action->actionvalue } );
-      my ($sec,$min,$hour,$day,$mon,$year) = localtime;
-      $mon++; $year += 1900;
-      $style->modified("$year-$mon-$day $hour:$min:$sec") if ref $style;
-      $style->owner($action->owner);
-      $style_dbi->add($style);
-    }
-    if ($action->action eq "update")
-    { my $style = shift @{ $style_dbi->get( { name => $action->dataname } ); };
-      my %hash = $style->tohash;
-      $hash{$action->actionkey} = $action->actionvalue;
-      $style = SPINE::Base::Style->new(\%hash);
-      $style_dbi->update($style);
-    }
-    if ($action->action eq "copy")
-    { my $style = shift @{ $style_dbi->get( { name => $action->dataname } ); };
-      $style->name($action->actionvalue);
-      $style->id(0);
-      $style_dbi->add($style);
-    }
-    if ($action->action eq "remove")
-    { my $style = shift @{ $style_dbi->get( { name => $action->dataname } ); };
-      $style_dbi->remove($style);
-    }
-    if ($action->action eq "rename")
-    { my $style = shift @{ $style_dbi->get( { name => $action->dataname } ); };
-      $style->name($action->actionvalue);
-      $style_dbi->update($style,1);
-    }
+  if ($action->action eq "create")
+  { my %default = SPINE::Base::Style::default->tohash;
+    my $style = SPINE::Base::Style->new( { %default, name => $action->dataname, $action->actionkey => $action->actionvalue } );
+    my ($sec,$min,$hour,$day,$mon,$year) = localtime;
+    $mon++; $year += 1900;
+    $style->modified("$year-$mon-$day $hour:$min:$sec") if ref $style;
+    $style->owner($action->owner);
+    $style_dbi->add($style);
+  }
+  if ($action->action eq "update")
+  { my $style = shift @{ $style_dbi->get( { name => $action->dataname } ); };
+    my %hash = $style->tohash;
+    $hash{$action->actionkey} = $action->actionvalue;
+    $style = SPINE::Base::Style->new(\%hash);
+    $style_dbi->update($style);
+  }
+  if ($action->action eq "copy")
+  { my $style = shift @{ $style_dbi->get( { name => $action->dataname } ); };
+    $style->name($action->actionvalue);
+    $style->id(0);
+    $style_dbi->add($style);
+  }
+  if ($action->action eq "remove")
+  { my $style = shift @{ $style_dbi->get( { name => $action->dataname } ); };
+    $style_dbi->remove($style);
+  }
+  if ($action->action eq "rename")
+  { my $style = shift @{ $style_dbi->get( { name => $action->dataname } ); };
+    $style->name($action->actionvalue);
+    $style_dbi->update($style,1);
   }
   return $body;
 }

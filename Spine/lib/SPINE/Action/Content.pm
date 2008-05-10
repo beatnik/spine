@@ -29,41 +29,46 @@ use vars qw($VERSION);
 use SPINE::Constant;
 use SPINE::DBI::Content;
 use SPINE::Base::Content;
-use SPINE::DBI::Action;
 
 use Data::Dumper;
 
 $VERSION = $SPINE::Constant::VERSION;
 
 sub handler 
-{ my $dbh = shift; #DB Handler
+{ my $dbh = shift; #Database Handler
+  my $action = shift; #SPINE::Action::Content reference
   my $body = undef;
   my $content_dbi = SPINE::DBI::Content->new($dbh);
-  my $action_dbi = SPINE::DBI::Action->new($dbh);
-  my @actions = ();
-  my ($sec,$min,$hour,$day,$mon,$year) = localtime;
-  $mon++; $year += 1900;
-  
-  my $actions_ref = $action_dbi->get( { "datatype" => "content", "actiontime" => "$year-$mon-$day $hour:$min:$sec", "matchlist" => { "actiontime" => "<" } } );
-  @actions = @{ $actions_ref } if $actions_ref;
-  for my $action (@actions)
-  { warn Dumper $action;
-    if ($action->action eq "create")
-    { my %default = SPINE::Base::Content::default->tohash;
-      my $content = SPINE::Base::Content->new( { %default, name => $action->dataname, $action->actionkey => $action->actionvalue } );
-      my ($sec,$min,$hour,$day,$mon,$year) = localtime;
-      $mon++; $year += 1900;
-      $content->modified("$year-$mon-$day $hour:$min:$sec") if ref $content;
-      $content->owner($action->owner);
-      $content_dbi->add($content);
-    }
-    if ($action->action eq "update")
-    { my $content = shift @{ $content_dbi->get( { name => $action->dataname } ); };
-      my %hash = $content->tohash;
-      $hash{$action->actionkey} = $action->actionvalue;
-      $content = SPINE::Base::Content->new(\%hash);
-      $content_dbi->update($content);
-    }
+  if ($action->action eq "create")
+  { my %default = SPINE::Base::Content::default->tohash;
+    my $content = SPINE::Base::Content->new( { %default, name => $action->dataname, $action->actionkey => $action->actionvalue } );
+    my ($sec,$min,$hour,$day,$mon,$year) = localtime;
+    $mon++; $year += 1900;
+    $content->modified("$year-$mon-$day $hour:$min:$sec") if ref $content;
+    $content->owner($action->owner);
+    $content_dbi->add($content);
+  }
+  if ($action->action eq "update")
+  { my $content = shift @{ $content_dbi->get( { name => $action->dataname } ); };
+    my %hash = $content->tohash;
+    $hash{$action->actionkey} = $action->actionvalue;
+    $content = SPINE::Base::Content->new(\%hash);
+    $content_dbi->update($content);
+  }
+  if ($action->action eq "copy")
+  { my $content = shift @{ $content_dbi->get( { name => $action->dataname } ); };
+    $content->name($action->actionvalue);
+    $content->id(0);
+    $content_dbi->add($content);
+  }
+  if ($action->action eq "remove")
+  { my $content = shift @{ $content_dbi->get( { name => $action->dataname } ); };
+    $content_dbi->remove($content);
+  }
+  if ($action->action eq "rename")
+  { my $content = shift @{ $content_dbi->get( { name => $action->dataname } ); };
+    $content->name($action->actionvalue);
+    $content_dbi->update($content,1);
   }
   return $body;
 }
