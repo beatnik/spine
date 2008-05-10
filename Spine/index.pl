@@ -1,8 +1,4 @@
 #!/usr/bin/perl
-#!/usr/bin/perl -d:ptkdb
-sub BEGIN {
-    $ENV{DISPLAY} = ":0.0";
-}
 
 ## This module is part of SPINE
 ## Copyright 2000-2005 Hendrik Van Belleghem
@@ -23,9 +19,6 @@ sub BEGIN {
 ## See COPYING and LICENSE for more information on the GPL   
 ## http://spine.sourceforge.net                  
 ## beatnik@users.sf.org                       
-
-#This is the main content handler for mod_spine
-#This is the ONLY content handler for mod_spine... for now
 
 use strict;
 
@@ -49,7 +42,7 @@ $VERSION = $SPINE::Constant::VERSION;
 
 use constant DBD=>'mysql'; #This is the default database type
 use constant DB=>'spine'; #This is the default database
-use constant DBUSER=>'beatnik'; #This is the default database user
+use constant DBUSER=>'hendrik'; #This is the default database user
 use constant DBPWD=>'foobar'; #This is the default database user password
 #See the POD on how to change this stuff without editing this code
 
@@ -71,7 +64,7 @@ sub handler
 { my $cgi = CGI->new;
   my $req = SPINE::Transparent::Request->new($cgi);
   $req->setconfig("main" => "index.html", "images"=>"/images/");
-  my $location = $req->location("/rewrite");	
+  my $location = $req->location("/cgi-bin/index.pl");
   $dbh = &initialise(); 
   my $cookie = undef;
   #Just go ahead and use Apache::Request from now on
@@ -83,7 +76,6 @@ sub handler
   if (ref($content) ne "SPINE::Base::Content") { return $content; }
   my $type = $content->type || 'text/html';
   my $body = $content->body;
-  my $cookie;
   if ($req->param('name') && $req->param('password') && $req->param('button') eq 'login') 
   #Pressed login button??
   { my $user = shift @{$user_dbi->get({login=>scalar($req->param('name')),password=>md5_hex(scalar($req->param('password')))})};
@@ -95,7 +87,7 @@ sub handler
                              -value   =>  $randid,
                              -expires =>  '+3M', 
                              #-domain  =>  $req->hostname,
-                             #-path    =>  $req->location,
+                             -path    =>  $req->location,
                              -secure  =>  0 
                             ); 
       my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
@@ -115,7 +107,7 @@ sub handler
                              -value   =>  '',
                              -expires =>  '-1M', 
                              #-domain  =>  $req->hostname,
-                             #-path    =>  $req->location,
+                             -path    =>  $req->location,
                              -secure  =>  0 
                             ); 
   }
