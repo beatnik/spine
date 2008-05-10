@@ -33,7 +33,9 @@ use SPINE::DBI::Session;
 use SPINE::DBI::Attribute;
 use SPINE::Base::Session;
 use SPINE::Handler::Content;
+use SPINE::DBI::Action;
 use SPINE::DBI::User;
+
 use SPINE::Constant;
 
 use SPINE::Transparent::Request;
@@ -91,6 +93,7 @@ sub handler
   #Just go ahead and use Apache::Request from now on
   my $user_dbi = SPINE::DBI::User->new($dbh);
   my $session_dbi = SPINE::DBI::Session->new($dbh);
+  my $action_dbi = SPINE::DBI::Action->new($dbh);  
   my $session = undef; #Store generated Session here
   #Pass the DBH to most SPINE::DBI::* modules
   if ($req->param('name') && $req->param('password') && $req->param('button') eq 'login') 
@@ -142,6 +145,11 @@ sub handler
     $req->request->print($CACHE{$ppage}{"body"});
     return OK;
   }
+  
+  my ($sec,$min,$hour,$day,$mon,$year) = localtime;
+  $mon++; $year += 1900;
+  my $actions_ref = $action_dbi->get( { "actiontime" => "$year-$mon-$day $hour:$min:$sec", "matchlist" => { "actiontime" => "<" }, "sort" => "actiontime" } );
+  process_action($dbh, $actions_ref);
   my $content = SPINE::Handler::Content::handler($req,$dbh,$session);
   if (ref($content) ne "SPINE::Base::Content") { return $content; }
   my $type = $content->type || 'text/html';
@@ -181,6 +189,22 @@ sub process_handler #Ofcourse I could've done this pure inline, but I'm lazy
   };
   carp $@ if $@; #Warn if necessary
   return $value;
+}
+
+sub process_action #Ofcourse I could've done this pure inline, but I'm lazy
+{ my $dbh = shift; #Keep it threadsafe! Retrieve DB Handler from parameter
+  my $actions_ref = shift; #Keep it threadsafe! Retrieve Actions List from parameter
+  $dbh = $dbh; #For some reason, removing this breaks stuff... so don't remove!!
+  $actions_ref = $actions_ref; #For some reason, removing this breaks stuff... so don't remove!!
+  for my $action (@{$actions_ref})
+  { my $module = ucfirst($action->datatype);
+    eval qq{
+    use SPINE::Action::$module;
+    SPINE::Action::$module::handler(\$dbh, \$action);
+    };
+    carp $@ if $@; #Warn if necessary
+  }
+  return;
 }
 
 sub handle_error # Handler DB errors by spitting out a friendly message instead of the default Internal Server Error
