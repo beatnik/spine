@@ -64,7 +64,11 @@ sub handler
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   my $user = undef;
   $user = shift @{$user_dbi->get({login=>$session->username, count=>1})} if $session;
-
+  if (!$user && $session)
+  { my $status = $SPINE::Transparent::Constant::OK;
+    my $c = SPINE::Base::Content->new({body=>"Something went wrong while loading Administration: Bad session! Clear your cookies and try again!<br>Please contact your server administrator if the problem persists."});
+    return ($c,$status);
+   }
   unless($session && $user && $session->username eq $user->login && $session->host eq $request->remote_host)
   { $content = shift @{$content_dbi->get({name=>$main, count=>1})};
     if (!ref $content)
@@ -77,7 +81,7 @@ sub handler
   my $badref = $ref !~ /https?\:\/\/$servername$location/ && $ref;
   if ($badref)
   { my $status = $SPINE::Transparent::Constant::OK;
-    my $c = SPINE::Base::Content->new({body=>"Something went wrong while loading Administration: Bad refering page! Please contact your server administrator if the problem persists."});
+    my $c = SPINE::Base::Content->new({body=>"Something went wrong while loading Administration: Bad refering page!<br>Please contact your server administrator if the problem persists."});
     carp $@;
     return ($c,$status);
   }
