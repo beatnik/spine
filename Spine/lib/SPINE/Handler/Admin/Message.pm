@@ -271,7 +271,7 @@ sub handler
     for(@clist) { my $sel = $messagegroup->content eq $_ ? ' selected' : ''; $contentlist .= qq(<option value="$_"$sel>$_\n); }
     $contentlist = qq(<select name="content">$contentlist</select>);
 
-    $data .= qq(<div name="adminpanel" class="fullpanel"><form method="post" action="<?SPINE_Location?>admin/message/create/" style="padding: 0; margin: 0; display: inline;">\n<input type="hidden" name="mgroup" value=").$messagegroup->name.qq(">\n<input type="hidden" name="parent" value="$parent">);
+    $data .= qq(<div name="adminpanel" class="fullpanel"><form method="post" action="<?SPINE_Location?>admin/message/create/">\n<input type="hidden" name="mgroup" value=").$messagegroup->name.qq(">\n<input type="hidden" name="parent" value="$parent">);
     $data .= qq(<div class="panelcel" style="width: 25%"><input type="text" name="subject" class="input" value="Subject" size="35"></div>\n);
     $data .= qq(<div class="panelcel" style="width: 15%"><input type="text" name="owner" value="Owner" class="input" size="25"></div>);
     $data .= qq(<div class="panelcel" style="width: 15%">&nbsp;</div>);
@@ -288,7 +288,7 @@ sub handler
       my @replies = @{ $message_dbi->get({mgroup=>$hash{mgroup},parent=>$hash{id}}) } ; 
       my $count = @replies;
       $count ||= 0;
-      $data .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/message/save/" method="post" style="padding: 0; margin: 0; display: inline;">);
+      $data .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/message/save/" method="post">);
       $data .= qq(<div class="panelcel" style="width: 25%"><input type="text" name="subject" class="input" size="35" value="$hash{subject}"></div>);
       $data .= qq(<div class="panelcel" style="width: 15%"><input type="text" name="owner" class="input" size="25" value="$hash{owner}"></div>);
       $data .= qq(<div class="panelcel" style="width: 15%">$hash{mdate}</div><input type="hidden" name="id" value="$hash{id}">\n<input type="hidden" name="name" value="$hash{mgroup}">);

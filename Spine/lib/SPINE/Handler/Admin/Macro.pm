@@ -197,12 +197,12 @@ sub handler
       $hash{macrovalue} =~ s/>/&gt;/gmx;
       $hash{macrovalue} =~ s/\"/&quot;/gmx;
       
-      $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/macro/new/" method="post" style="padding: 0; margin: 0; display: inline;"><input type="hidden" name="action" value="save">);
+      $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/macro/new/" method="post"><input type="hidden" name="action" value="save">);
       $list .= qq(<input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">);
       $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="key" class="input" value="$hash{macrokey}" size="30"></div>);
       $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="value" value="$hash{macrovalue}" class="input" size="30"></div>);
       $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="save" class="button" name="action"></form>&nbsp;&nbsp;);
-      $list .= qq(<form action="<?SPINE_Location?>admin/macro/remove/" method="post" style="padding: 0; margin: 0; display: inline;">);
+      $list .= qq(<form action="<?SPINE_Location?>admin/macro/remove/" method="post">);
       $list .= qq(<input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}"><input type="submit" value="Delete" class="button" name="action"></div>);
       $list .= qq(<div class="spacercel"></div></form></div>);
     }

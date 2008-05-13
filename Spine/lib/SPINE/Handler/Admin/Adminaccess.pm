@@ -97,7 +97,7 @@ sub handler
   $remove_adminaccess_string = $i18n{'remove_adminaccess'} || "Remove admin access permissions";
   $save_adminaccess_string = $i18n{'save_adminaccess'} || "Save admin access permissions";
   $adminaccess_exists_string = $i18n{'adminaccess_exists'} || "These admin access permissions already exist!";
-  $adminaccess_notexists_string = $i18n{'adminaccess_not_exists'} || "These admin access permissions does not exist!";
+  $adminaccess_notexists_string = $i18n{'adminaccess_not_exists'} || "These admin access permissions do not exist!";
   
   my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
@@ -172,7 +172,7 @@ sub handler
   my $group = undef;
   for(@groups) { $group .= qq(<option>$_); }
   my $permissions = qq(<input type="checkbox" name="read" value="1"><input type="checkbox" name="write" value="1"><input type="checkbox" name="exec" value="1">);
-  $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/adminaccess/new/" method="post" style="padding: 0; margin: 0; display: inline;">\n);
+  $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/adminaccess/new/" method="post">\n);
   $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="section" class="input" value="" size="30">\n</div>);
   $list .= qq(<div class="panelcel" style="width: 10%"><select name="usergroup">$group</select>\n</div><div class="panelcel" style="width: 10%">$permissions\n</div>);
   $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Create" class="button" name="action"></div>\n</form><div class="spacercel"></div></div>\n); 
@@ -185,10 +185,10 @@ sub handler
     for(@groups) { my $sel = $hash{"usergroup"} eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
     my $permissions = qq(<input type="checkbox" name="read" value="1"$checked[$perms[0]]><input type="checkbox" name="write" value="1"$checked[$perms[1]]><input type="checkbox" name="exec" value="1"$checked[$perms[2]]>);
     # $list .= qq(<tr bgcolor="#ffffff"><form action="<?SPINE_Location?>admin/adminaccess/save/" method="post"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="text" name="section" class="input" value="$hash{section}" size="30">\n</td><td><select name="usergroup">$group</select>\n</td><td>$permissions\n</td>\n<td><input type="submit" value="Save" class="button" name="action"></td>\n</form><form action="<?SPINE_Location?>admin/adminaccess/remove/" method="post"><input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<td><input type="submit" value="Delete" class="button" name="action"></td>\n</form></tr>\n);
-    $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/adminaccess/save/" method="post" style="padding: 0; margin: 0; display: inline;">);
+    $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/adminaccess/save/" method="post">);
     $list .= qq(<input type="hidden" name="id" value="$hash{id}">\n<div class="panelcel" style="width: 20%"><input type="text" name="section" class="input" value="$hash{section}" size="30">\n</div>);
     $list .= qq(<div class="panelcel" style="width: 10%"><select name="usergroup">$group</select>\n</div><div class="panelcel" style="width: 10%">$permissions\n</div>\n);
-    $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Save" class="button" name="action">\n</form><form action="<?SPINE_Location?>admin/adminaccess/remove/" method="post"  style="padding: 0; margin: 0; display: inline;">);
+    $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Save" class="button" name="action">\n</form><form action="<?SPINE_Location?>admin/adminaccess/remove/" method="post">);
     $list .= qq(<input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">\n<input type="submit" value="Delete" class="button" name="action"></div\n</form><div class="spacercel"></div></div>\n); 
   }
   $body =~ s/\$list/$list/gmx;

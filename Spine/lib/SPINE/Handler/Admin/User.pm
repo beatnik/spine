@@ -176,10 +176,10 @@ sub handler
     my $list = undef;
     for(@users)
     { my %hash = $_->tohash;
-      $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/user/edit/" method="post" style="padding: 0; margin: 0; display: inline;">\n);
+      $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/user/edit/" method="post">\n);
       $list .= qq(<input type="hidden" name="login" value="$hash{login}"><div class="panelcel" style="width: 20%">$hash{fullname}</div>\n);
       $list .= qq(<div class="panelcel" style="width: 20%">$hash{login}</div><div class="panelcel" style="width: 20%"><input type="submit" value="edit" class="button" name="action">\n);
-      $list .= qq(</form>&nbsp;<form action="<?SPINE_Location?>admin/user/remove/" method="post" style="padding: 0; margin: 0; display: inline;"><input type="hidden" name="login" value="$hash{login}">\n);
+      $list .= qq(</form>&nbsp;<form action="<?SPINE_Location?>admin/user/remove/" method="post"><input type="hidden" name="login" value="$hash{login}">\n);
       $list .= qq(<input type="submit" value="delete" class="button" name="action"></div></form></div><div class="spacercel"></div>\n);
     }
     if ($error) { $error = qq(<p class="error">$error</p>); }

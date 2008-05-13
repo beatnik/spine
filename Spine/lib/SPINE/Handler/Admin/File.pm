@@ -245,51 +245,22 @@ sub handler
     my $filenamesort = $sort ne "filename" ? "filename" : "filenamer";
     if ($error) { $error = qq(<p class="error">$error</p>); } 
     $list = <<"EOF";
-<div class="dialog" id="upload"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('upload').style.display='none';"><br><form name="uploadform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Upload in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="upload"><input type="file" name="filename">&nbsp;<input type="submit" class="button" value="Upload"></form></div>
-<div class="dialog" id="createfolder"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('createfolder').style.display='none';"><br><form name="createform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Create Folder in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="createfolder"><input type="hidden" name="filename" value=""><input type="text" name="foldername">&nbsp;<input type="submit" class="button" value="Create"></form></div>
-<div class="dialog" id="copy"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('copy').style.display='none';"><br><form name="copyform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Copy <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="copy"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Copy" onClick='document.copyform.filename.value = document.myform.filename.value; return true;'></form></div>
-<div class="dialog" id="rename"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('rename').style.display='none';"><br><form name="renameform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Rename <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="rename"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Rename" onClick='document.renameform.filename.value = document.myform.filename.value; return true;'></form></div>
-<div class="dialog" id="delete"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="document.getElementById('delete').style.display='none';"><br><form name="deleteform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Delete <input type="text" name="filefield" value="" disabled><input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="delete"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Delete" onClick='document.deleteform.filename.value = document.myform.filename.value; return true;'></form></div>
+<div class="dialog" id="upload"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#upload').hide();"><br><form name="uploadform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Upload in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="upload"><input type="file" name="filename">&nbsp;<input type="submit" class="button" value="Upload"></form></div>
+<div class="dialog" id="createfolder"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#createfolder').hide();"><br><form name="createform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Create Folder in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="createfolder"><input type="hidden" name="filename" value=""><input type="text" name="foldername">&nbsp;<input type="submit" class="button" value="Create"></form></div>
+<div class="dialog" id="copy"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#copy').hide();"><br><form name="copyform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Copy <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="copy"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Copy" onClick='document.copyform.filename.value = document.myform.filename.value; return true;'></form></div>
+<div class="dialog" id="rename"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#rename').hide();"><br><form name="renameform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Rename <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="rename"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Rename" onClick='document.renameform.filename.value = document.myform.filename.value; return true;'></form></div>
+<div class="dialog" id="delete"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#delete').hide();"><br><form name="deleteform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Delete <input type="text" name="filefield" value="" disabled><input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="delete"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Delete" onClick='document.deleteform.filename.value = document.myform.filename.value; return true;'></form></div>
 
 $error
 <div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 30%"><form name="myform" method="post"  style="padding: 0; margin: 0; display: inline;">Path : $path
+<div class="panelcel" style="width: 30%"><form name="myform" method="post">Path : $path
 <input type="hidden" name="path" value="$path"><input type="hidden" name="filename" value=""></div>
 <div class="panelcel" style="width: 40%">
-<a href="#" onclick="
-a=document.getElementById('createfolder'); if(a.style.display=='inline'){a.style.display='none';} 
-a=document.getElementById('rename'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('copy'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('delete'); if(a.style.display=='inline'){a.style.display='none';}
-o=document.getElementById('upload'); if(o.style.display=='inline'){o.style.display='none';}else{o.style.display='inline';} return false;">Upload File</a>
-&nbsp;
-<a href="#" onclick="
-a=document.getElementById('upload'); if(a.style.display=='inline'){a.style.display='none';} 
-a=document.getElementById('rename'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('copy'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('delete'); if(a.style.display=='inline'){a.style.display='none';}
-o=document.getElementById('createfolder'); if(o.style.display=='inline'){o.style.display='none';}else{o.style.display='inline';} return false;">Create Folder</a>
-&nbsp;
-<a href="#" onclick="
-a=document.getElementById('upload'); if(a.style.display=='inline'){a.style.display='none';} 
-a=document.getElementById('createfolder'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('copy'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('delete'); if(a.style.display=='inline'){a.style.display='none';}
-o=document.getElementById('rename'); if(o.style.display=='inline'){o.style.display='none';}else{o.style.display='inline';} document.renameform.filefield.value = '$path/'+document.myform.filename.value;return false;">Rename</a>
-&nbsp;
-<a href="#" onclick="
-a=document.getElementById('upload'); if(a.style.display=='inline'){a.style.display='none';} 
-a=document.getElementById('rename'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('createfolder'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('delete'); if(a.style.display=='inline'){a.style.display='none';}
-o=document.getElementById('copy'); if(o.style.display=='inline'){o.style.display='none';}else{o.style.display='inline';} document.copyform.filefield.value = '$path/'+document.myform.filename.value;return false;">Copy</a>
-&nbsp;
-<a href="#" onclick="
-a=document.getElementById('upload'); if(a.style.display=='inline'){a.style.display='none';} 
-a=document.getElementById('rename'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('copy'); if(a.style.display=='inline'){a.style.display='none';}
-a=document.getElementById('createfolder'); if(a.style.display=='inline'){a.style.display='none';}
-o=document.getElementById('delete'); if(o.style.display=='inline'){o.style.display='none';}else{o.style.display='inline';} document.deleteform.filefield.value = '$path/'+document.myform.filename.value;return false;">Delete</a>
+<a href="#" onclick="\$('#createfolder').hide(); \$('#rename').hide(); \$('#copy').hide(); \$('#delete').hide(); \$('#upload').toggle(); return false;">Upload File</a>
+&nbsp;<a href="#" onclick="\$('#createfolder').toggle(); \$('#rename').hide(); \$('#copy').hide(); \$('#delete').hide(); \$('#upload').hide(); return false;">Create Folder</a>
+&nbsp;<a href="#" onclick="\$('#createfolder').hide(); \$('#rename').hide(); \$('#copy').hide(); \$('#delete').hide(); \$('#upload').toggle(); document.renameform.filefield.value = '$path/'+document.myform.filename.value; return false;">Rename</a>
+&nbsp;<a href="#" onclick="\$('#createfolder').hide(); \$('#rename').hide(); \$('#copy').toggle(); \$('#delete').hide(); \$('#upload').hide(); document.copyform.filefield.value = '$path/'+document.myform.filename.value; return false;">Copy</a>
+&nbsp;<a href="#" onclick="\$('#createfolder').hide(); \$('#rename').hide(); \$('#copy').hide(); \$('#delete').toggle(); \$('#upload').hide(); document.deleteform.filefield.value = '$path/'+document.myform.filename.value;return false;">Delete</a>
 </div>
 <div class="spacercel"></div>
 </div>
