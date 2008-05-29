@@ -55,16 +55,20 @@ sub handler
 
   $url =~ s/^$location\/?//mx;
   ($url,@params) = split("/",$url);
-
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
-  my $body = qq(<form method="post" action="<?SPINE_Location?>admin/cache/clear/"><input type="submit" class="button" value="Clear Cache"></form>);
+  my @cache = @{$attribute_dbi->get(attr=>"cache",section=>"content")};
+  my $body = "";
+  for my $cached (@cache)
+  { my %cache = $cached->tohash;
+    $body .= "$cache{name}<br>";
+  }
+  $body = qq(<form method="post" action="<?SPINE_Location?>admin/cache/clear/"><input type="submit" class="button" value="Clear Cache"></form>);
   
   # This part catches the image as button bug in IE.
   shift @params;
   my $action = shift @params;
   if ($request->method eq "POST" && $action eq "clear")
-  { my @cache = @{$attribute_dbi->get(attr=>"cache",section=>"content")};
-    for my $cache (@cache)
+  { for my $cache (@cache)
     { $attribute_dbi->remove($cache); }    
   }
   my $c = SPINE::Base::Content->new({body=>$body,style=>".admin"});
