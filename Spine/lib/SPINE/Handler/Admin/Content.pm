@@ -128,42 +128,42 @@ sub handler
   #@params is something like qw(content new);
   #And we already know it's in content so discard first element
   if (!$params[0] || !$page || $page eq $enter_name_string)
-  { $url = '.admin-general'; @params = (); }
+  { $url = '.administration/general'; @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
   { $error = $valid_perms_string.$create_content_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
   { $error = $valid_perms_string.$remove_content_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
   { $error = $valid_perms_string.$edit_content_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'save' && !$writeperms)
   { $error = $valid_perms_string.$save_content_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
   { $error = $valid_perms_string.$copy_content_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   my $edit_content = shift @{$content_dbi->get({name=>$page}, count=>1)};
   if ($edit_content && $params[0] eq 'new' && !$error)
   { $error = $content_exists_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if (!$edit_content && ($params[0] eq 'save' || $params[0] eq 'edit' || $params[0] eq 'copy' || $params[0] eq 'remove')&& !$error)
   { $error = $content_notexists_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'new' && !$error && $request->method eq "POST")
@@ -173,24 +173,24 @@ sub handler
     $mon++; $year += 1900;
     $c->modified("$year-$mon-$day $hour:$min:$sec") if ref $c;
     $content_dbi->add($c);
-    $url = '.admin-content'.$lang; 
+    $url = '.administration/content'.$lang; 
   }
 
   if ($params[0] eq 'edit' && !$error)
-  { $url = '.admin-content'.$lang; }
+  { $url = '.administration/content'.$lang; }
   
   if ($params[0] eq 'save' && !$error && $request->method eq "POST")
-  { $url = '.admin-content'.$lang; 
+  { $url = '.administration/content'.$lang; 
     save();
   }
 
   if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
-  { $url = '.admin-general'.$lang;
+  { $url = '.administration/general'.$lang;
     copy();
   }
 
   if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
-  { $url = '.admin-general'.$lang; 
+  { $url = '.administration/general'.$lang; 
     remove();
   }
 
@@ -210,7 +210,7 @@ sub handler
   }
   my $body = undef;
   if (ref $content) { $body = $content->body; }
-  if ($url eq ".admin-general")
+  if ($url eq ".administration/general")
   { $content->title("Content Administration"); }
 
   #This part is tricky. This part will merge permissions (r-- in group A and -wx in group B = rwx)
@@ -456,7 +456,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

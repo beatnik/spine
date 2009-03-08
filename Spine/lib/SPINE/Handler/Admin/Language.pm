@@ -69,7 +69,7 @@ sub handler
   
   $body .= <<"EOF";
 <div name="adminpanel" class="fullpanel">\n
-<form action="<?SPINE_Location?>admin/language/" method="post" style="padding: 0; margin: 0; display: inline;">\n
+<form action="<?SPINE_Location?>admin/language/" method="post">\n
 <b>Change language</b><br><input type="submit" value="Load" class="button">&nbsp;<select name="lang">$selected</select>\n
 </form></div><div name="adminpanel" class="fullpanel"><hr width="95%"></div>\n
 EOF
@@ -89,15 +89,15 @@ EOF
   { my %hash = $_->tohash; 
   $body .= <<"EOF";
 <div name="adminpanel" class="fullpanel">
-<form action="<?SPINE_Location?>admin/language/" method="post" style="padding: 0; margin: 0; display: inline;">
+<form action="<?SPINE_Location?>admin/language/" method="post">
 <input type="hidden" name="id" value="$hash{id}">
+<input type="hidden" name="lang" value="$lang">
 <input type="hidden" name="attr" value="$hash{attr}">
 <div class="panelcel" style="padding-right: 2px"><input type="text" class="input" name="name" value="$hash{name}"></div>
 <div class="panelcel" style="padding-right: 2px"><input type="text" class="input" name="value" value="$hash{value}" size="60"></div>
 <div class="panelcel" style="padding-right: 2px"><input type="image" name="save" src="/images/save.png"></div>
-<div class="panelcel" style="padding-right: 2px"><input type="image" name="delete" src="/images/delete.png"></div>
-</form>\n
- <div class="spacercel"></div>
+<div class="panelcel" style="padding-right: 2px"><input type="image" name="delete" src="/images/delete.png"></form></div>
+<div class="spacercel"></div>
 </div>
 EOF
 
@@ -148,7 +148,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

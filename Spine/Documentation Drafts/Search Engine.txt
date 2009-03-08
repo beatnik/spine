@@ -1,0 +1,18 @@
+
+Using the search engine ¦
+General ¦
+
+The Search engine is available as a plugin called "Search". Define the plugin on the pages that is used to display the search results:
+
+<?SPINE_Search?> 
+
+The Search engine plugin will read the keyword attribute defined in each content and perform an is-in check using the word passed as a parameter to the plugin. Only the results to which you have access will be listed on the result page.
+Setup ¦
+
+To add the search engine to your page (preferably in a style), create a HTML form that points to the result page
+
+<form action="results.html" method="get">
+Search for <input type="text" name="keyword">&nbsp;
+<input type="submit" value="Search"></form>
+
+See style main and content results.html for examples.

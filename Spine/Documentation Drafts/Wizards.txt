@@ -1,0 +1,8 @@
+== Wizards ==
+
+1. Installation Wizard
+  * Checklist of requirements (+ optional shell script to test)
+  * Step by step installation (javascript based, hidden divs)
+2. Quick-Click page: Administration panel revised 
+  * I want to... (add|edit|remove...)
+    

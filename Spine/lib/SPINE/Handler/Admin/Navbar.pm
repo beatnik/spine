@@ -128,52 +128,52 @@ sub handler
 
   shift @params;
   if (!$params[0] || !$page || $page eq $enter_name_string)
-  { $url = '.admin-general'; @params = (); }
+  { $url = '.administration/general'; @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
   { $error = $valid_perms_string.$create_navbar_string; 
-    $url = '.admin-general'; 
+    $url = '.admininistration/general'; 
   }
 
   if ($params[0] eq 'addbutton' && !$writeperms)
   { $error = $valid_perms_string.$add_button_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'editbutton' && !$writeperms)
   { $error = $valid_perms_string.$edit_button_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
   { $error = $valid_perms_string.$remove_navbar_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
   { $error = $valid_perms_string.$edit_navbar_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
   { $error = $valid_perms_string.$save_navbar_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
   { $error = $valid_perms_string.$copy_navbar_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   my $edit_navbar = shift @{$navbar_dbi->get({name=>$page}, count=>1)};
   if ($edit_navbar && $params[0] eq 'new' && !$error)
   { $error = $navbar_exists_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if (!$edit_navbar && ($params[0] eq 'edit' || $params[0] eq 'copy' || $params[0] eq 'remove')&& !$error)
   { $error = $navbar_notexists_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
  
   if ($params[0] eq 'new' && !$error && $request->method eq "POST")
@@ -225,12 +225,12 @@ sub handler
   }
 
   if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
-  { $url = '.admin-general'; 
+  { $url = '.administration/general'; 
     copy();
   }
 
   if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
-  { $url = '.admin-general'; 
+  { $url = '.administration/general'; 
     remove();
   }
 
@@ -567,7 +567,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

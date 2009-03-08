@@ -1,0 +1,2 @@
+ALTER USER pgsql SET client_encoding to 'LATIN1';
+ALTER USER $user SET client_encoding to 'LATIN1';

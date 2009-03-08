@@ -1,0 +1,13 @@
+
+FAQ ¦
+
+Q:How to change the default port in the hostname mapping?
+A:Define in your apache location configuration the following settings: perlSetVar servername 'hostname:port' as in
+
+perlSetVar servername '192.168.0.1:8080'
+
+
+Q: Where can I use the spine tags? Is there a page that lists all this information?
+A: TODO!
+Q: So why would I choose Spine over any other CMS?
+A: I can only give you some of the cooler features.. features you probably haven't seen in other CMSs. Spine allows you do create truly transparent content. A visitor will not see the difference between a generated file and a true file. In fact, Spine allows you to mix generated files and true files.

@@ -2,9 +2,15 @@
 
 use DBI;
 
-#$table = $ARGV[0];
+$table = $ARGV[0];
+print "Enter user:";
+$user = <STDIN>;
+chomp $user;
+print "Enter password:";
+$password = <STDIN>;
+chomp $password;
 
-my $dbh = DBI->connect("dbi:mysql:$ARGV[0]","root","foobar") || die "Can't connect to DB: ".$Mysql::db_errstr;
+my $dbh = DBI->connect("dbi:mysql:$table",$user,$password) || die "Can't connect to DB: ".$Mysql::db_errstr;
 
 for $table (qw(attribute adminaccess content macro message messagegroup navbarbuttons navbars style usergroup users) )
 { $sth = $dbh->prepare("select * from $table") || die "Oops"; 

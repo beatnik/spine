@@ -106,10 +106,11 @@ sub handler
   for(@adminaccess) { $adminaccess = $adminaccess | $_->permissions; }
 
   $content_notexists_string = $i18n{'content_not_exists'} || "This content does not exist!";
-  if ($request->method eq "POST" && $action eq "rename")
+  $enter_name_string = $i18n{'enter_name'} || "Enter name";
+  my $destination = scalar($request->param("destname"));
+  if ($request->method eq "POST" && $action eq "rename" && $destination ne $enter_name_string)
   { my $source = shift @{$content_dbi->get({name=>$request->param('content'), count=>1})};
     $ierror = $content_notexists_string if !$source;
-    my $destination = scalar($request->param("destname"));
     if ($user eq 'admin' || $source->owner eq $user || 
        $source->permissions =~ /^\d1/mx || $source->permissions =~ /\d1$/mx)
     { $source->name($destination);
@@ -123,6 +124,7 @@ sub handler
   my $list = undef;
   my $c = undef;
   my @list = ();
+  my @full_list = ();
   if ($user ne 'admin')
   { @li = grep { $_->name =~ /^[^\.]/mx } @li; }
     
@@ -137,7 +139,7 @@ sub handler
           $readwperms) || #Content is world readable
           (@groups && $readgperms) #Content is group readable and user is part of group
          )
-      { push(@list,$c->name); next; }
+      { push(@list,$c->name); push(@full_list,$c); next; }
   }
 
   for(@list) { $list .= qq(<option value="$_">$_\n); }
@@ -146,14 +148,16 @@ sub handler
   { for(@list) { $list .= qq(<option value="$_">$_\n); }
     $body .= <<EOF;
 <form method="post" action="<?SPINE_Location?>admin/tools/rename/">
-<input type="submit" value="Rename" class="button">&nbsp;<select name="content" class="general">$list</select> to <input type="text" class="input" name="destname" value="">
+<input type="submit" value="Rename" class="button">&nbsp;<select name="content" class="general">$list</select> to <input type="text" class="input" name="destname" value="$enter_name_string">
 </form>  
 EOF
 
   }
 
   if ($action eq "listlog")
-  { 
+  { for my $c (@full_list)
+    { $body .= $c->name if $c->logging;
+    }
   }
   
   my $c = SPINE::Base::Content->new({body=>$body,style=>".admin"});
@@ -185,7 +189,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

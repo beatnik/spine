@@ -159,22 +159,22 @@ sub handler
   my $body = undef;
   if (ref $content)
   { $body = $content->body; }
-  if ($url eq ".admin-general")
+  if ($url eq ".administration/general")
   { $content->title("File Types"); }
 
   my @filetypes = @{$attribute_dbi->get({section=>"mimetype", name=>"content"})};
   my $list = undef;
-  $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/filetypes/new/" method="post" style="padding: 0; margin: 0; display: inline;">\n);
+  $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/filetypes/new/" method="post">\n);
   $list .= qq(<div class="panelcel" style="width: 10%"><input type="text" name="attr" class="input" value="extension" size="15">\n</div>);
   $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="value" class="input" value="mime/type" size="30">\n</div>);
   $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Create" class="button" name="action"></div>\n</form><div class="spacercel"></div></div>\n); 
   for(@filetypes)
   { my %hash = $_->tohash;
-    $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/filetypes/save/" method="post" style="padding: 0; margin: 0; display: inline;">);
+    $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/filetypes/save/" method="post">);
     $list .= qq(<input type="hidden" name="id" value="$hash{id}">\n);
     $list .= qq(<div class="panelcel" style="width: 10%"><input type="text" name="attr" class="input" value="$hash{attr}" size="15">\n</div>);
     $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="value" class="input" value="$hash{value}" size="30">\n</div>);
-    $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Save" class="button" name="action">\n</form><form action="<?SPINE_Location?>admin/filetypes/remove/" method="post"  style="padding: 0; margin: 0; display: inline;">);
+    $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Save" class="button" name="action">\n</form><form action="<?SPINE_Location?>admin/filetypes/remove/" method="post">);
     $list .= qq(<input type="hidden" name="id" value="$hash{id}">\n<input type="submit" value="Delete" class="button" name="action"></div\n</form><div class="spacercel"></div></div>\n);     
   }
   $body =~ s/\$list/$list/gmx;
@@ -224,7 +224,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

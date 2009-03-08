@@ -1,0 +1,3 @@
+== Edit Page Plugin ==
+
+Create plugin that shows a link on a page when the user is logged in. Link redirects to admin section for that content.

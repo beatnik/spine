@@ -1,0 +1,12 @@
+
+Spine Philosophy ¦
+
+    * Low dependency rate : Dependencies should be minimal for core setup.
+    * No programming needed : You don't need to program to create a page
+    * Extensibility : Provide easy plugin support
+    * Invisible for visitor : Spine should be invisible (for instance, create .html files)
+    * Secure : Minimize system calls
+    * No need for any components : Don't force using any of the components
+    * Portability : Spine should run on any Apache version, on any RDBMS
+    * Access restriction : Limit access to all of the admin components
+ 

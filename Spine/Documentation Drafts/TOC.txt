@@ -1,0 +1,333 @@
+== Documentation : Table of Contents ==
+
+ * Installation
+   * Requirements
+   * Apache + mod_perl
+     * Debian installation
+   * Apache2 + mod_perl2
+     * Debian installation
+   * Databases
+     * Mysql
+     * Postgresql
+     * Sybase
+
+ * FAQ
+
+ * Getting started
+   * How Spine works
+   * Quickstart: Adding content
+   * Quickstart: Adding styles
+
+ * Plugins
+   * Search Engine
+
+ * Administration
+   * Logging in
+   * Content
+   * Style
+   * Navigation bar
+   * Users
+   * Usergroups
+   * Messages
+   * Macros
+   * Statistics
+   * File Manager
+   * Plugins
+   * I18n
+
+ * Development
+   * Quickstart: Hello World
+   * Quickstart: Database driven Hello World
+   * Quickstart: Adding an administration panel
+   * API Documentation
+     * SPINE::DBI::Base
+     * SPINE::Base::Content
+     * Apache::SPINE::Index
+     * Apache2::SPINE::Index
+
+ * Reference
+   * Tag index
+   * Screenshots
+   * Admin Access permissions
+   
+---------------------
+
+=== How Spine works ===
+
+Spine hooks onto a specific <Location> within Apache. Every request below that URL is handled by Spine. If your website is located at ''http://www.yoursite.com/site'' (''site'' being the path you defined in Apache to hook to Spine), a browser request to ''http://www.yoursite.com/site/index.html'' is processed by Spine. By default, Spine uses virtual files for all it's pages but you can easily mix true files and virtual files. See '''Virtual files versus true files'''. (eidolon: true files? what about "file on disk" or "real files?)[[BR]][[BR]]
+A virtual file is a combination of a '''content''', a '''style''' and (if any) other components dynamically inserted in the page. The virtual file filename is linked to the content. Spine looks up the content's content and the style's content in the database and will combine these in a (virtual) file. There are no technical limits to what type or size of data can be generated. To change how ''index.html'' looks, both the '''content''' ''index.html'' and the style mapped to that content might have to be edited.[[BR]] Specific tags (placeholders if you will) can be inserted in the '''content''' or '''style''' content. 
+
+=== Plugins: Search Engine ===
+
+The '''Search Engine plugin''' included with Spine searches the content keywords for matches. The results are access-sensitive.[[BR]]
+ 1. Create a results page
+This page lists the search results. Add the '''Search Engine''' tag to '''content''' content.
+In ''search.html'', add the following:
+{{{
+<?SPINE_Search?>
+}}}
+ 2. Add the ''Search Engine''
+Add the search form to the '''content''' or '''style''' content:
+{{{
+<form action="search.html" method="get">
+Search: <input type="text" name="'''keyword'''">&nbsp;<input type="submit" value="Search">
+</form>
+}}}
+
+Remember a form field with name '''keyword'''.[[BR]][[BR]]
+Any page can contain the search results or the form. Make sure to link to the proper page in the {{{form action}}}.
+
+=== Virtual files versus true files ===
+A virtual file is a Spine content. It exists in the Spine database and is served as a web page by the Spine content engine. The content engine composes the virtual file from various properties, style, tags, ..
+
+A true file on the other hand, is a file which exists on the file system.[[BR]]
+
+Spine can handle both virtual files and true files in one setup. True files take precedence over virtual files. [[BR]]An example:[[BR]]
+Suppose you have a file called {{{wishlist.html}}}, which lists all the presents you want for Christmas. When you load {{{http://www.yoursite.com/path/wishlist.html}}}, it will load the true file, even if you created a content within Spine that's also called {{{wishlist.html}}}.
+Spine comes with a content called {{{index.html}}}. This content is loaded when no document is specified (this behaviour is common). If a true {{{index.html}}} file exists, Spine will load the true file instead.
+
+==== Default file ====
+Spine will look for {{{index.html}}}, if no other file is specified. The same rule applies here as any other file: Spine will first look for the true index.html file, and then for a virtual file. Spine will display a "404. Not found" page, if the file cannot be found.
+
+
+== Administration ==
+
+=== Logging in ===
+
+To log in into the administration, go to
+{{{
+http://www.yoursite.com/path/login.html
+}}}
+where the URL and path are relative to your setup. Provide the user credentials the administrator provided. Once logged in, you can either click on the link in the form or go directly to
+{{{
+http://www.yoursite.com/admin/
+}}}
+Accessing the administration panel without proper access permissions will return a typical HTTP 403 error ('''Forbidden'''). See the FAQ on how to change this behaviour.
+
+
+=== 1. Content ===
+ 1.1 General
+  * Only the content files visible to you are included in the dropdown list.
+  * As administrator, you have access to all contents.
+  * Loading a restricted content as a normal page will generate a typical HTTP 403 error message ('''Forbidden'''). See the FAQ on how to change this behaviour.
+  * Use the administration access panel to define access rights to the content administration.
+  * Administration actions cannot be undone.
+
+ 1.1 Content Attributes
+  * Size[[BR]]
+    This value is automatically calculated on each save.
+  * Title[[BR]]
+    The title is combined with the title from the style into the <?SPINE_Title?> tag.
+  * Modification date[[BR]]
+    This value is updated automatically on each save. Query this value with the <?SPINE_Stats("modified")?> tag.
+  * Style[[BR]]
+    The style defines how the content is merged into the final generated page. Default value: '''main'''.
+  * Contents[[BR]]
+    This is the actual content body. This is where you define the page contents (usually in HTML, but it can be pretty much anything).
+  * Enter to break (perhaps rename this to '''newline''' to break??)[[BR]]
+    Check this checkbox to automagically convert all newlines (enters) to HTML breaks (<br>). Default value: unchecked.
+  * Access logging[[BR]]
+    Check this checkbox to log access to this content. The access statistics are available in the '''Statistics''' administration panel. Unchecking this checkbox does not reset the page statistics but merely stops future logging. Default value: checked.
+  * Macros[[BR]]
+    Macro sets are pairs of keys and values. The macro tag (<?SPINE_Macro("key")?>) in the content or style body is translated into the macro value for that specific set.
+  * Keywords[[BR]]
+    These are keywords that are used by the Search Engine plugin. Use the space as separator.
+  * Owner and Usergroup[[BR]]
+    The owner is a fixed value, defined on conten creation. The usergroup can be used to restrict or permit access to this content.
+  * Permissions[[BR]]
+    The permissions define the access control for the selected content for both the usergroup and the public access.
+  * Content-type[[BR]]
+    By default, contents are show with content-type '''text/html'''. Define an alternative type in this value (for instance, '''text/css''' or '''application/x-javascript''').
+  * Comments[[BR]]
+    Add comments for this content. The comments are merely used internally and are not shown.
+
+ 1.2 Creating New Content
+  * To create a new content, enter a name in textfield in the '''New content''' section of the Content Administration pane and click on the '''Create''' button. The '''Edit''' pane will open.
+  * If you create a content that already exists, the existing content is not overwritten but loaded in the '''Edit''' pane.
+  * To create a hidden content, use the {{{.}}} (dot) prefix. Hidden contents can only be seen by the administrator.
+  * Loading a restricted content in the '''Edit''' pane generates an error message if you have insufficient access permissions. Set the access permission flags in the '''Advanced''' content properties to provide this access.
+
+ 1.3 Editing Existing Content
+  * To save your changes to the content, click on the '''Save''' button.
+  * To edit a content from your setup, select the name from the dropdown box and click the '''Edit''' button.
+  * To include a content into a style, add the following tag in the __style__ body:
+{{{
+<?SPINE_Content?>
+}}}
+The result is a combination of the content body and any interpreted tags that are present within. A content always needs a style. To include all the HTML inside the content, set the {{{blank}}} style.
+  * Click on the '''Advanced''' button to show the advanced content properties.
+
+ 1.4 Copying Content
+  * To copy a content from your setup, select the name from the dropdown box, provide the content target name and press the '''Copy''' button.
+  * Copying to an existing content generates an error message indicating that the target name is already used.
+
+ 1.5 Deleting Content
+  * To delete a content from your setup, select the name from the dropdown box and press the '''Delete''' button. Confirm your action by pressing '''OK''' in the dialog.
+
+=== 2. Style ===
+==== 2.1 General ====
+  * Only the styles visible to you are included in the dropdown list.
+  * As administrator, you have access to all styles.
+  * Loading a content with a restricted style as a normal page will generate a typical HTTP 403 error message ('''Forbidden'''). See the FAQ on how to change this behaviour.
+  * Use the administration access panel to define access rights to the style administration.
+  * Administration actions cannot be undone.
+
+ 2.1 Style Attributes
+  * Size[[BR]]
+    This value is automatically calculated on each save.
+  * Title[[BR]]
+    The title is combined with the title from the content into the <?SPINE_Title?> tag.
+  * Modification date[[BR]]
+    This value is updated automatically on each save. Query this value with the <?SPINE_Stats("modified")?> tag.
+  * Contents[[BR]]
+    This is the actual style body. This is where you define the page style (usually in HTML, but it can be pretty much anything).
+  * Macros[[BR]]
+    Macro sets are pairs of keys and values. The macro tag (<?SPINE_Macro("key")?>) in the content or style body is translated into the macro value for that specific set.
+  * Owner and Usergroup[[BR]]
+    The owner is a fixed value, defined on conten creation. The usergroup can be used to restrict or permit access to this style.
+  * Permissions[[BR]]
+    The permissions define the access control for the selected content for both the usergroup and the public access.
+  * Comments[[BR]]
+    Add comments for this style. The comments are merely used internally and are not shown.
+
+==== 2.2 Creating New Styles ====
+  * To create a new style, enter a name in textfield in the '''New style''' section of the Style Administration pane and click on the '''Create''' button. The '''Edit''' pane will open.
+  * If you create a style that already exists, the existing style is not overwritten but loaded in the '''Edit''' pane.
+  * To create a hidden style, use the {{{.}}} (dot) prefix. Hidden styles can only be seen by the administrator.
+  * Loading a restricted style in the '''Edit''' pane generates an error message if you have insufficient access permissions. Set the access permission flags in the '''Advanced''' content properties to provide this access.
+
+==== 2.3 Editing Existing Styles ====
+  * To save your changes to the style, click on the '''Save''' button.
+  * Click on the '''Advanced''' button to show the advanced style properties.
+  * To edit a style from your setup, select the name from the dropdown box and click the '''Edit''' button.
+  * To include a content into a style, add the following tag in the __style__ body:
+{{{
+<?SPINE_Content?>
+}}}
+The result is a combination of the content body and any interpreted tags that are present within. A content always needs a style. To include all the HTML inside the content, set the {{{blank}}} style.
+
+==== 2.4 Copying Styles ====
+  * To copy a style from your setup, select the name from the dropdown box, provide the style target name and press the '''Copy''' button.
+  * Copying to an existing style generates an error message indicating that the target name is already used.
+
+==== 2.5 Deleting Styles ====
+  * To delete a style from your setup, select the name from the dropdown box and press the '''Delete''' button. Confirm your action by pressing '''OK''' in the dialog.
+
+=== 3 Navigation Bars ===
+==== 3.1 General ====
+  * Only the navigation bars visible to you are included in the dropdown list.
+  * As administrator, you have access to all navigation bars.
+  * Use the administration access panel to define access rights to the navigation bar administration.
+  * Administration actions cannot be undone.
+  * A navigation bar typically exists out of images or text (''label''). Both can be made into a link. When both an image and text is defined, the text is used as alternative text of the image.
+  * Adding a navigation bar entry without URL results in a plain text entry.
+  * Navigation bar entry text can contain HTML.
+  * Separator text is inserted between each navigation bar entry. The separator text can contain HTML.
+
+==== 3.2 Creating New Navbars ====
+  * To create a new 
+  * To create a new navigation bar, enter a name in textfield in the '''New Navigation Bar''' section of the Navigation Bar Administration pane and click on the '''Create''' button.
+  * To include a navigation bar into a style or content, add the following tag in the __style__ or __content__ body:
+{{{
+<?SPINE_Navbar("name")?>
+}}}
+The result is a combination of the navigation bar entries and the navigation bar properties (things like alignment, separator, font, ...). Using a navigation bar is not a requirement. You can insert as many or as little as you need. 
+
+
+==== 3.3 Editing Existing Navbars ====
+  * To save your changes to the navigation bar settings, click on the '''Save''' button. Changes to images and text needs to be saved individually. Using the navigation bar '''Save''' button does not save changes to the images and text. 
+  * Click on the '''Advanced''' button to show the advanced navigation bar properties.
+  * URLs can be either relative ({{{../page.html}}}) or static ({{{http://www.google.com}}}).
+  * Image links can be either relative ({{{../images/banner.jpg}}}) or static {{{http://www.google.com/images/logo_sm.gif}}}). Note that the images in your document root image directory are available through {{{/images/}}}.
+
+==== 3.4 Copying Navbars ====
+
+==== 3.5 Deleting Navbars ====
+
+=== 4 Messages ===
+==== 4.1 General ====
+  * Message lists only show top level messages, depending on the parent message.
+  * Adding messages to a page can be done by adding the Message tag in the content or style body:
+{{{
+<?SPINE_Message("test")?>
+}}}
+The result is a descending list of top level messages from that messagegroup, formatted using the message style defined. The order can be defined per messagegroup.
+  * Adding one specific message to a page can be done by adding the message id in the tag:
+{{{
+<?SPINE_Message("test",5)?>
+}}}
+  * Add the message ID to the URL when you wish to achieve the same thing:
+
+
+==== 4.2 Creating New Messages ====
+
+==== 4.3 Editing Existing Messages ====
+
+==== 4.4 Copying Messages ====
+
+==== 4.5 Deleting Messages ====
+
+=== 5 Macros ===
+==== 5.1 General ====
+ * What are Macros? A macro set is a group of key and value pairs. When defining a content or a style, a macro set can be assigned. 
+==== 5.2 Using Macros ====
+ To use a macro set, select it from the dropdown list in the style or content administration pane. Within the content or style body, use the specific macro tag:
+{{{
+<?SPINE_Macro("keyword")?>
+}}}
+where the keyword is a macro keyword. Example: You select a macroset that contains a pair with keyword '''Name''', that value mapped to that keyword will be inserted in the content body at the place. Changing the name value afterwards only needs to be done in the macroset. Changing a range of macro values can be achieved by setting a different macro set with the same keywords. For example, both macroset '''before''' and '''after''' contain the keywords '''color''' and '''length'''. By simply selecting a different macroset in the content properties, all occurrences of the keywords will be translated to their respective values. Tip: HTML can also be used as a macro value.
+
+==== 5.3 Creating New Macros ====
+
+==== 5.4 Editing Existing Macros ====
+
+==== 5.5 Copying Macros ====
+
+==== 5.6 Deleting Macros ====
+
+=== 6 Users ===
+==== 6.1 Creating New Users ====
+
+==== 6.2 Editing Existing Users ====
+
+==== 6.3 Copying Users ====
+
+==== 6.4 Deleting Users ====
+
+=== 7 Filemanager ===
+==== 7.1 Uploading Files ====
+
+==== 7.2 Creating Folders ====
+
+==== 7.3 Copying Files ====
+
+=== 8 Advanced ===
+==== 8.1 Database ====
+
+==== 8.2 Development ====
+=====   8.2.1 Content Handlers =====
+=====   8.2.2 Admin Handlers =====
+
+=== References ===
+==== 1. Tag Reference ====
+
+==== 2. Index ====
+
+=== Tests ===
+
+ * Create Content that already exists
+ * Create Content that already exists but is not writeable
+ * Edit a Content that doesn't exist
+ * Copy a Content that doesn't exist
+ * Copy a Content that does exist to a Content that does exist
+ * Copy a Content that does exist but is not readable
+ * Copy a Content that does exist to a Content that does exist but is not readable
+ * Remove a Content that doesn't exist
+ * Remove a Content that does exist but is not writeable
+ * Save a Content that doesn't exist
+ * Save a Content that does exist but is not writeable
+ * Set Content to restricted and try to access it as a different user.
+
+=== Links ===
+
+See http://wiki.cmsmadesimple.org/index.php/User_Handbook/Developers_Guide

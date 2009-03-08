@@ -1,0 +1,156 @@
+== i18n Strings ==
+i18n support consists out of 2 things:
+ * GUI
+ * Messages
+
+The GUI support is done by changing the .admin-* contents. Each of the admin pannels has (or should have) a content like that. The i18n code will (or should) load the different content depending on the language. For instance, the dutch content panel is stored in .admin-content.nl. I will try to provide full example layouts for dutch. English is included by design. Selecting the language is done (or should be) in the user admin panel. The drop down box for this still needs to be added. Perhaps this approach should be abandoned and the message approach will also work for the GUI translation?? Downside is that most of the admin panels are static. This approach will also add a large chunk of extra code. Upside: Translating will be easier and we can stick to one content per admin panel. Any feedback?
+[[BR]][[BR]]
+The messages support (not related to Spine messages) is basically the errors and warnings shown if something goes wrong. Below is a list of messages that can be generated and the keyword they use to lookup in the database. A GUI for editing these messages is in the works.
+[[BR]][[BR]]
+Short list of admin strings that need translating:
+
+
+0. Global
+
+ * enter_name : Enter name / Naam invoegen
+ * valid_perms : You do not have valid permissions for this operation : / U heeft niet voldoende rechten voor deze operatie :
+   * for instance : valid_perms + create_content : "You do not have valid permissions for this operation : Creating a new content<br>"
+
+--------------------
+
+1. ~~Content (update in db)~~
+
+ * ~~Message = valid_perms + string below~~
+   * ~~create_content : Create a new content<br> / Nieuwe content aanmaken<br>~~
+   * ~~remove_content : Remove a content<br> / Content verwijderen<br>~~
+   * ~~edit_content : Edit a content<br> / Content wijzigen<br>~~
+   * ~~save_content : Save a content<br> / Content opslaan<br>~~
+   * ~~copy_content : Copy a content<br> / Content kopieren<br>~~
+
+ * ~~content_exists : This Content already exists!<br> / Deze content bestaat reeds!<br>~~
+ * ~~content_not_exists : This Content does not exist!<br> / Deze content bestaat niet!<br>~~v
+
+-----------------
+
+2. ~~Style (add to db) + check code~~
+
+ * ~~Message = valid_perms + string below~~
+   * ~~create_style : Create a new style<br> / Nieuwe style aanmaken<br>~~
+   * ~~remove_style : Remove a style<br> / Style verwijderen<br>~~
+   * ~~edit_style : Edit a style<br> / Style wijzigen<br>~~
+   * ~~save_style : Save a style<br> / Style opslaan<br>~~
+   * ~~copy_style : Copy a style<br> / Style kopieren<br>~~
+
+ * ~~style_exists : This style already exists!<br> / Deze style bestaat reeds!<br>~~
+ * ~~style_not_exists : This style does not exist!<br> / Deze style bestaat niet!<br>~~
+
+------------------
+
+3. Navbar (add to db) + fix code (period)
+
+ * Message = valid_perms + string below
+   * create_navbar : Create a new navigation bar<br> / Nieuwe navigation bar aanmaken<br>
+   * remove_navbar : Remove a navigation bar<br> / Navigation bar verwijderen<br>
+   * edit_navbar : Edit a navigation bar<br> / Navigation bar wijzigen<br>
+   * save_navbar : Save a navigation bar<br> / Navigation bar opslaan<br>
+   * copy_navbar : Copy a navigation bar<br> / Navigation bar kopieren<br>
+   * add_button : Add a button to the navigation bar<br> / Voeg knop toe<br>
+   * edit_button : Edit a button in the navigation bar<br> / Wijzig knop<br>
+   * delete_button : Delete a button from the navigation bar<br> / Knop verwijderen<br>
+
+ * navbar_exists : This navigation bar already exists!<br> / Deze navigation bar bestaat reeds!<br>
+ * navbar_not_exists : This navigation bar does not exist!<br> / Deze navigation bar bestaat niet!<br>
+
+------------------
+
+4. ~~Messages (add to db) + fix code (period)~~
+
+ * ~~Message = valid_perms + string below~~
+   * ~~create_message : Create a new message<br> / Nieuw bericht toevoegen<br>~~
+   * ~~remove_message : Remove a message<br> / Bericht verwijderen<br>~~
+   * ~~edit_message : Edit a message<br> / Bericht verwijderen<br>~~
+   * ~~save_message : Save a message<br> / Bericht opslaan<br>~~
+   * ~~save_messagegroup : Save a messagegroup<br> / Groep opslaan<br>~~
+   * ~~copy_messagegroup : Copy a messagegroup<br> / Groep kopieren<br>~~
+
+ * ~~messagegroup_exists : This messagegroup already exists!<br> / Deze groep bestaat reeds!<br>~~
+ * ~~messagegroup_not_exists : This messagegroup does not exist!<br> / Deze groep bestaat niet!<br>~~
+
+------------------
+
+5. Users (add to db) + fix code (period)
+
+ * Message = valid_perms + string below
+   * create_user : Add a new user<br> / Nieuwe gebruiker toevoegen<br>
+   * create_usergroup : Add a new usergroup<br> / Nieuwe gebruikersgroep toevoegen<br>
+   * remove_user : Remove a user<br> / Gebruiker verwijderen<br>
+   * remove_usergroup : Remove a usergroup<br> / Gebruikersgroep verwijderen<br>
+   * edit_user : Edit a user<br> / Gebruiker wijzigen<br>
+   * save_user : Save a user<br> / Gebruiker opslaan<br>
+
+ * user_exists : This user already exists!<br> / Deze gebruiker bestaat reeds!<br>
+ * user_not_exists : This user does not exist!<br> / Deze gebruiker bestaat niet!<br>
+ * user_in_group : The user is already part of this usergroup!<br> / Deze gebruiker maakt al deel uit van de gebruikersgroep!<br>
+ * user_in_group : The user is not part of this usergroup!<br> / Dewe gebruiker maakt geen deel uit van de gebruikersgroep!<br>
+
+------------------
+
+6. Macros (add to db) + fix code (period)
+
+ * Message = valid_perms + string below
+   * create_macroset : Add a new macroset<br> / Nieuwe macroset toevoegen<br>
+   * create_macro : Add a new macro<br> / Nieuwe macro toevoegen<br>
+   * remove_macro : Remove a macro<br> / Macro verwijderen<br>
+   * remove_macroset : Remove a macroset<br> / Macroset verwijderen<br>
+   * edit_macroset : Edit a macroset<br> / Macroset wijzigen<br>
+   * save_macro : Save a macro<br> / Macro opslaan<br>
+   * copy_macroset : Copy a macroset<br> / Macroset kopieren<br>
+
+ * macroset_exists : This macroset already exists!<br> / Deze macroset bestaat reeds!<br>
+ * macroset_not_exists : This macroset does not exist!<br> / Deze macroset bestaat niet!<br>
+
+------------------
+
+7. ~~Admin Access (add to db) + fix code (period)~~
+
+ * ~~Message = valid_perms + string below~~
+   * ~~create_adminaccess : Add new admin access permissions<br> / Nieuwe toegangsrechten toevoegen<br>~~
+   * ~~save_adminaccess : Save admin access permissions<br> / Toegangsrechten opslaan<br>~~
+   * ~~remove_adminaccess : Remove admin access permissions<br> / Toegangsrechten verwijderen<br>~~
+
+ * ~~adminaccess_exists : These admin access permissions already exists!<br> / Deze toegangsrechten bestaan reeds!<br>~~
+ * ~~adminaccess_not_exists : These admin access permissions does not exist!<br> / Deze toegangsrechten bestaan niet!<br>~~
+
+------------------
+
+8. ~~File Manager (add to db) + fix code (period)~~
+
+ * ~~Message = valid_perms + string below~~
+   * ~~new_upload : Upload a file<br> / Upload een bestand<br>~~
+   * ~~new_folder : Create a folder<br> / Folder aanmaken<br>~~
+   * ~~copy_file : Copy a file<br> / Bestand kopieren<br>~~
+   * ~~rename_file : Rename a file<br> / Bestand van naam veranderen<br>~~
+   * ~~read_folder : Read folder contents<br> / Inhoud van de folder lezen<br>~~
+ 
+ * ~~Message = docroot_permissions + string below~~
+   * ~~mkdir_failed : Unable to create folder. / Folder kan niet aangemaakt worden.~~
+   * ~~copy_failed : Unable to copy file. / Bestand kan niet gekopieerd worden.~~
+   * ~~remove_failed : Unable to remove file. / Bestand kan niet verwijderd worden.~~
+   * ~~rename_failed : Unable to rename file. / Bestand kan niet van naam veranderd worden.~~
+   * ~~readdir_failed : Unable to read folder. / Inhoud van folder kan niet gelezen worden.~~
+
+ * ~~docroot_permissions : Does the document root directory have correct permissions? / Heeft document root correcte toegangsrechten?~~
+ * ~~upload_failed : File could not be uploaded. If this problem persists, submit a bug report. / Bestand kan niet geupload worden. Rapporteer een programmafout als dit een blijvend probleem is.~~
+ * ~~upload_unknown : Error creating file: / Fout bij het aanmaken van het bestand:~~
+ * ~~file_exists : This file already exists!<br> / Dit bestand bestaat reeds!<br>~~
+ * ~~file_not_exists : This file does not exists!<br> / Dit bestand bestaat niet!<br>~~
+ * ~~folder_exists : This folder already exists!<br> / Deze folder bestaat reeds!<br>~~
+ * ~~folder_not_exists : This folder does not exist!<br> / Deze folder bestaat niet!<br>~~
+
+------------------
+
+9. ~~Statistics (add to db) + fix code (period)~~
+
+ * ~~Message = valid_perms + string below~~
+   * ~~view_stats : Viewing statistics<br> / Statistieken opvragen<br>~~
+   * ~~remove_stats : Removing statistics<br> / Statistieken verwijderen<br>~~

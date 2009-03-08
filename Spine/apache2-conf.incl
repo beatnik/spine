@@ -7,13 +7,13 @@
            PerlResponseHandler Apache2::SPINE::Index
            PerlSetVar dbd mysql
            PerlSetVar dbname spine
-           PerlSetVar dbuser spine
-           PerlSetVar dbpwd spine
+           PerlSetVar dbuser user
+           PerlSetVar dbpwd password
            PerlSetVar main index.html
            PerlSetVar webmaster 'John Doe'
 	   #perlSetVar servername 'servername:8080'
            PerlSetVar sitename 'SPINE Example site' 
-           PerlSetVar chroot /var/www/
+           PerlSetVar chroot /home/www/html
            PerlLogHandler Apache2::SPINE::Log
   </Location>
 

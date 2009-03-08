@@ -1,0 +1,17 @@
+== Focus for version 1.3 : Plugins ==
+ * RSS Feed for messages
+ * Fix !ImageGallery plugin
+ * Fix Wiki plugin + admin
+ * Fix Dump plugin
+ * Polls
+ * Calendar
+ * Weather
+ * Guestbook
+ * Quiz
+ * EditPage
+ * DocumentFlow
+ * [wiki:ImagesConfig Images config]
+ * Who is logged in?
+ * Dump tool (dump data in specific format / CLI)
+ * Slideshow (pass navbar as param and generate next/previous links + TOC table)
+ * [wiki:cssdesign CSS design in admin]

@@ -73,7 +73,7 @@ sub handler
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
 
-  $url = '.admin-general'; 
+  $url = '.administration/general'; 
 
   my $session = undef;
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
@@ -133,37 +133,37 @@ sub handler
 
   if ($params[0] eq 'new' && !$execperms)
   { $error = $valid_perms_string.$create_messagegroup_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'create' && !$execperms)
   { $error = $valid_perms_string.$create_message_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
   
   if ($params[0] eq 'remove' && !$execperms)
   { $error = $valid_perms_string.$remove_message_string; # or should this be $remove_messagegroup_string???
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
   
   if ($params[0] eq 'edit' && !$readperms)
   { $error = $valid_perms_string.$edit_message_string; # or should this be $remove_messagegroup_string???
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
   { $error = $valid_perms_string.$save_message_string; # or should this be $save_messagegroup_string???
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'savegroup' && !$writeperms)
   { $error = $valid_perms_string.$save_messagegroup_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
   { $error = $valid_perms_string.$copy_messagegroup_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'new' && !$error && $request->method eq "POST")
@@ -174,7 +174,7 @@ sub handler
   my $edit_messagegroup = shift @{$messagegroup_dbi->get({name=>$request->param('name')}, count=>1)};
   if ($edit_messagegroup && $params[0] eq 'create' && !$error)
   { $error = $messagegroup_exists_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
   
   if ($params[0] eq 'create' && !$error && $request->method eq "POST")
@@ -216,7 +216,7 @@ sub handler
   { return $SPINE::Transparent::Constant::NOT_FOUND; }
   my $body = undef;
   $body = $content->body if ref $content;
-  if ($url eq ".admin-general")
+  if ($url eq ".administration/general")
   { $content->title("Message Administration"); }
 
   if (!$error && ($params[0] eq 'edit' || $params[0] eq 'new' || $params[0] eq 'savegroup' || $params[0] eq 'save' || $params[0] eq 'create' || ($params[0] eq 'remove' &&  $request->param('id') ) ) )
@@ -420,7 +420,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

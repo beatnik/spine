@@ -1,0 +1,3 @@
+Adding an Image Gallery to your content / style ¦
+
+<?SPINE_ImageGallery("hike")?> or use <?SPINE_ImageGallery("")?> and pass the location to your URL: gallery.html?dir=hike The name of this parameter is the same as the directory you use to store the images. 

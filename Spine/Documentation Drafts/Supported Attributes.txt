@@ -1,0 +1,9 @@
+== Supported Attributes ==
+=== Content ===
+* binary : 1
+
+Treat content body as binary data thus preventing users from saving binary data (and corrupting it in the process)
+
+* cache : 1
+
+Cache complete page in memory. Do not preprocess content and handle all tags.

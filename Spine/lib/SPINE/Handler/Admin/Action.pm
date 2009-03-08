@@ -161,7 +161,7 @@ sub handler
   my $body = undef;
   if (ref $content)
   { $body = $content->body; }
-  if ($url eq ".admin-general")
+  if ($url eq ".administration/general")
   { $content->title("Timed Actions"); }
 
   my $list = undef;
@@ -225,7 +225,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

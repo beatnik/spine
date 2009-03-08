@@ -1,0 +1,34 @@
+== TinyMCE notes ==
+Plan: Add TinyMCE support by default for all text areas.[[br]]
+{{{
+<script language="javascript" type="text/javascript" src="../jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript" src="../jscripts/tiny_mce/init.js"></script>
+
+<script type="text/javascript">
+var tinyMCEmode = false;
+function toogleEditorMode(sEditorID) {
+    try {
+        if(tinyMCEmode) {
+            tinyMCE.removeMCEControl(tinyMCE.getEditorId(sEditorID));
+            tinyMCEmode = false;
+        } else {
+            tinyMCE.addMCEControl(document.getElementById(sEditorID), sEditorID);
+            tinyMCEmode = true;
+        }
+    } catch(e) {
+        //error handling
+    }
+}
+</script>
+<a href="#" id="switchtinymce" title="hide TinyMCE" onclick="toogleEditorMode('body'); return false;">Hide TinyMCE</a>
+<form>
+<textarea name="body" id="body" cols="200" rows="40">
+</form>
+</div>
+}}}
+
+Note: Take out 
+{{{
+elements : "body",
+}}}
+from init.js and make sure to put an onLoad javascript to init the textarea . Also add a cleaner link (or button) to switch.

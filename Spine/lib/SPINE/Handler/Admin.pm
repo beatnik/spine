@@ -76,7 +76,7 @@ sub handler
     return ($content,$SPINE::Transparent::Constant::FORBIDDEN);
   }
 
-  $params[0] ||= 'content';
+  #$params[0] ||= 'content';
   my $servername = $request->dir_config("servername") || $ENV{SERVER_NAME};    
   my $badref = $ref !~ /https?\:\/\/$servername$location/ && $ref;
   if ($badref)
@@ -84,6 +84,11 @@ sub handler
     my $c = SPINE::Base::Content->new({body=>"Something went wrong while loading Administration: Bad refering page!<br>Please contact your server administrator if the problem persists."});
     carp $@;
     return ($c,$status);
+  }
+  if ($url eq 'admin' && !$params[0])
+  { my $content = shift @{$content_dbi->get({name=>".administration/main", count=>1})};
+    my $status = $SPINE::Transparent::Constant::OK;
+    return ($content,$status);
   }
   if ($url eq 'admin' && $params[0])
   { my $module = ucfirst $params[0];
@@ -134,7 +139,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

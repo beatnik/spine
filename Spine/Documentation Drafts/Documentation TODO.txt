@@ -1,0 +1,44 @@
+
+TODO : Documentation ¦
+
+Getting started:
+
+    * Styles -> add a new style and document step by step how to do this (combine with navbar??) -> See http://www.oswd.org/design/preview/id/2493
+    * Navigation Bars -> adding links, using separator, add linkless text, ...
+    * Messages -> adding messages, threading, ;..
+    * Usergroups -> very quick rundown 
+
+General Documentation
+
+    * Why login?
+    * Screenshots of admin + highlight areas
+    * Where to use which tags
+    * How to develop plugins : Merge examples
+    * How permissions work : merging of permissions (users rights + group rights | admin access restrictions or component permissions) 
+
+Admin
+
+    * Content -> Describe all fields and how the affect the layout of a page
+    * Style -> Describe all fields and how the affect the layout of a page
+    * Navbar -> Describe all fields and how the affect the layout of a page
+    * Messages -> Describe all fields and how the affect the layout of a page -> Describe message layout (in content)
+    * Macros -> Very quick rundown
+    * Users
+    * Usergroups
+    * Statistics ->
+    * File Manager -> Basic functions -> Permissions
+    * Admin Access 
+
+Plugins
+
+    * Using the search engine
+    * Using the wiki
+    * Using the image gallery
+    * Using messages 
+
+Complete FAQ
+
+Development
+
+    * Complete POD 
+

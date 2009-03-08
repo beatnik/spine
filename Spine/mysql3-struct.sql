@@ -250,9 +250,9 @@ CREATE TABLE `wiki` (
   UNIQUE KEY `name` (`name`)
 );
 
----
---- Table structure for table 'action'
----
+--
+-- Table structure for table 'action'
+--
 
 DROP TABLE IF EXISTS `action`;
 CREATE TABLE `action` (
@@ -268,5 +268,3 @@ CREATE TABLE `action` (
   PRIMARY KEY  (`id`)
 );
 
---- insert into action (id, datatype, dataname, action, actiontime, owner,actionkey, actionvalue, description) values (0,'content','actiontest.html','create','2008-04-06 14:00:00','admin','body','This is a test','test action');
---- insert into action (id, datatype, dataname, action, actiontime, owner,actionkey, actionvalue, description) values (0,'content','actiontest.html','update','2008-04-06 14:00:00','admin','title','TEST','test action');

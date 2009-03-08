@@ -48,6 +48,7 @@ sub handler
 { my $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my $chroot = $request->dir_config("chroot") || $request->document_root;
+  $chroot = $chroot eq "DOCROOT" : $req->request->document_root : $chroot;
   my $action = $request->param("action"); # The file operation, eg copy, delete, etc
   my $filename = $request->param("filename"); # Name of the selected radiobutton
   my $foldername = $request->param("foldername"); # Folder name used with create folder
@@ -386,7 +387,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

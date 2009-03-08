@@ -1,0 +1,65 @@
+
+Using Administration Access ¦
+
+The following sections can be defined in the AdminAccess administration panel.
+
+    * adminaccess (Admin Access)
+    * content (Content)
+    * fileman (File Manager)
+    * macros (Macros)
+    * message (Messages)
+    * navbar (Navigation Bars)
+    * stats (Statistics)
+    * style (Styles)
+    * users (Users)
+    * usergroup (Usergroups)
+    * wiki (Wiki) 
+
+Each usergroup can be mapped to read, write or execute permissions for each of these sections.
+AdminAccess Permissions ¦
+
+The following permissions are set for AdminAccess:
+
+    * Exec rights: Creating new AdminAccess permissions, Removing existing AdminAccess permissions,
+    * Write rights: TODO! Add 'Save AdminAccess permissions' here. 
+
+Content Permissions ¦
+
+The following permissions are set for contents:
+
+    * Exec rights: Creating new Content, Removing Content, Copying Content
+    * Write rights: Saving Content, Copying Content
+    * Read rights: Reading Content, Copying Content 
+
+Style Permissions ¦
+
+The following permissions are set for styles:
+
+    * Exec rights: Creating new Style, Removing Style, Copying Style
+    * Write rights: Saving Style, Copying Style
+    * Read rights: Reading Style, Copying Style 
+
+File Manager Permissions ¦
+
+The following permissions are set for the File Manager:
+
+    * Exec rights: Creating new folders
+    * Write rights: Uploading files, copying files, deleting files, renaming files,
+    * Read rights: Reading folders 
+
+Message Permissions ¦
+
+The following permissions are set for messages:
+
+    * Exec rights: Creating new messagegroups, adding new messages, removing messages, copying message groups
+    * Write rights: Saving messages, saving message groups, copying message groups
+    * Read rights: Reading messages, copying message groups 
+
+Navigation Bar Permissions ¦
+
+The following permissions are set for navigation bars:
+
+    * Exec rights: Creating new navigation bars, removing messages, copying navigation bars
+    * Write rights: Adding buttons to navigation bars, editing buttons in navigation bars, Saving navigation bars, copying navigation bars
+    * Read rights: Reading navigation bars, copying nevigation bars 
+

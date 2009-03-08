@@ -94,42 +94,42 @@ sub handler
   #@params is something like qw(wiki new);
   #And we already know it's in wiki so discard first element
   if (!$params[0] || !$page || $page eq 'Enter name')
-  { $url = '.admin-general'; @params = (); }
+  { $url = '.administration/general'; @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
   { $error = 'You do not have valid permissions for this operation : Creating new wiki<br>'; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
   { $error = 'You do not have valid permissions for this operation : Remove wiki<br>'; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
   { $error = 'You do not have valid permissions for this operation : Edit wiki<br>'; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
   { $error = 'You do not have valid permissions for this operation : Save wiki<br>'; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
   { $error = 'You do not have valid permissions for this operation : Copying wiki<br>'; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   my $edit_wiki = shift @{$wiki_dbi->get({name=>$page}, count=>1)};
   if ($edit_wiki && $params[0] eq 'new' && !$error)
   { $error = 'This wiki already exists!<br>'; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if (!$edit_wiki && ($params[0] eq 'save' || $params[0] eq 'edit' || $params[0] eq 'copy' || $params[0] eq 'remove')&& !$error)
   { $error = 'This wiki does not exist!<br>'; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
  
   if ($params[0] eq 'new' && !$error)
@@ -151,12 +151,12 @@ sub handler
   }
 
   if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
-  { $url = '.admin-general'; 
+  { $url = '.administration/general'; 
     copy();
   }
 
   if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
-  { $url = '.admin-general'; 
+  { $url = '.administration/general'; 
     remove();
   }
 
@@ -332,7 +332,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 

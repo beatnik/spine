@@ -1,0 +1,36 @@
+=== Spine Slides ===
+
+== Short Biography ==
+A 28 year old belgian who likes Mountain Dew, Girl Scout Cookies, Tim Hortons French Vanilla Flavoured Cappucinno, Belgian beer, Belgian chocolate, Belgian women, Magners Cider, chocolate chipped cookies and Perl. Likes snowboarding, snorkling, sailing and silence. Bach can really cheer him up! He still misses his dog. In his superhero time (8.30 AM to 5.30 PM), he works on world peace.
+
+== Introduction to Spine ==
+
+== Length: 20 minutes ==
+
+SPINE is a webbased Content Management System, implemented in Perl and released under the GPL (GNU Public License). It requires a Unix flavoured webserver, a database (postgresql or mysql), a default Apache installation and mod_perl. It features mixed static/dynamic content, separated template and content administration, granular privileges, userfriendly URLs, plugins, ...
+
+This talk provides an introduction to the Spine Content Management System. Topics discussed include:
+ 
+ * Requirements: database, webserver, extra libraries
+ * Features
+ * Creating Content: a 4 step plan (Wizard)
+ * Advanced Contents: access, meta data, tags
+ * Creating Styles: building a style
+
+-----
+
+== Building Websites with Spine ==
+
+== Length: 20 minutes ==
+
+SPINE is a webbased Content Management System, implemented in Perl and released under the GPL (GNU Public License). It requires a Unix flavoured webserver, a database (postgresql or mysql), a default Apache installation and mod_perl. It features mixed static/dynamic content, separated template and content administration, granular privileges, userfriendly URLs, plugins, ...
+
+This talk provides a more in depth look into the Spine Content Management System. Topics discussed include:
+
+  * Plugins: simple plugin
+  * Admin Plugins: add admin features
+  * Navigation Bars: building navigation bars
+  * User Groups: users and user groups
+  * File Manager: upload, browse, delete, rename, copy real files
+  * Statistics: page counters, useragent statistics
+  * Admin Access: restrict access to admin panels

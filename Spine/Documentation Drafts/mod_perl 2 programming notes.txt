@@ -1,0 +1,31 @@
+= Mod_Perl2 Notes =
+ * To use OK, NOT FOUND and FORBIDDEN,
+{{{
+use Apache2::Const qw(FORBIDDEN NOT_FOUND OK);
+}}}
+exports explicitly into namespace.
+ * Use
+{{{ 
+Apache2::RequestIO qw(print); 
+}}}
+to allow 'print' in your code
+ * There is no
+{{{ 
+send_http_header
+}}}
+ * To get the remote hostname, use
+{{{ 
+$req->connection->get_remote_host
+}}}
+instead of
+{{{ 
+$req->get_remote_host
+}}}
+ * When setting cookies in a redirect, instead of 
+{{{ 
+$r->header_out->('Set-Cookie' => $cookie);
+}}}
+Use
+{{{
+    $r->err_headers_out->add('Set-Cookie' => $cookie);
+}}}

@@ -1,0 +1,4 @@
+
+Document Flow Control ¦
+
+Use existing content structure. Define steps in review process. Assign user groups to each step and restrict access to other groups.

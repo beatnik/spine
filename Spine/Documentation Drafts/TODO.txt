@@ -1,0 +1,60 @@
+= Todo =
+ * Fix [wiki:WikiPlugin Wiki plugin] and add documentation (fixing means: add support for auth)
+ * Add i18n support for other admin pages. See [wiki:i18nStrings i18n strings]
+ * Add GUI for message sorting
+ * Add and complete tests
+ * Add more stylesheets. See http://www.oswd.org/ for examples
+ * Decent stock pictures: http://www.sxc.hu/index.phtml
+ * Update icons : http://www.maxpower.ca/free-icons/2006/03/05/ http://www.iconsreview.com/
+ * ~~Add Authors page in Spine site~~
+ * ~~Add SF page in Spine site~~
+ * ~~Add Contact page in Spine site~~
+ * Add to Wikipedia: http://en.wikipedia.org/wiki/Category:Open_source_content_management_systems
+ * Add to listing : http://slashdot.org/articles/06/07/24/0340231.shtml
+ * Check for leaks : http://search.cpan.org/~gozer/mod_perl-1.29/Leak/Leak.pm
+
+ * Update Install docs to include Apache 2 packages:
+{{{
+ii  apache2-common                         2.0.54-5ubuntu4                    next generation, scalable, extendable web se
+ii  apache2-mpm-prefork                    2.0.54-5ubuntu4                    traditional model for Apache2
+ii  apache2-prefork-dev                    2.0.54-5ubuntu4                    development headers for apache2
+ii  apache2-utils                          2.0.54-5ubuntu4                    utility programs for webservers
+rc  libapache2-mod-apreq2                  2.07-1                             generic Apache request library - Apache modu
+ii  libapache2-mod-perl2                   2.0.1-3                            Integration of perl with the Apache2 web ser
+ii  libapache2-mod-perl2-dev               2.0.1-3                            Integration of perl with the Apache2 web ser
+}}}
+
+ * Check the listing on DMOZ : http://dmoz.org/Computers/Software/Internet/Site_Management/Content_Management/
+ * Follow-up: Add to http://www.cmsreview.com/
+
+== Nice to have ==
+ * Audit trails (user logged in, user created content, user move button, ...)
+
+== ~~Features~~ (added) ==
+ * Easy to use Webbased administration: 
+ * Unix style access control restrictions: Permit access to pages based on usernames and usergroups.
+ * Usergroup based adminstrative permissions: Restrict access to administrative panels based on usergroups.
+ * Integrate components into your pages: Navigation bars, macros, message boards, page statistics.
+ * Mix Static and Dynamic content: Transparent 
+ * Full template support: Separate style from content
+ * Minimal requirements: Very few extra packages required. All dependencies are available in the standard packages.
+ * File manager: Create folders and Copy, upload and rename files in a chrooted environment.
+ * Extensive API: Developers can add both normal plugins and administration plugins. Integrate with Apache configuration and additional mod_perl handlers.
+ * Template based editing 
+ * Database based (multiple platforms: mysql & postgresql) 
+ * Use either Apache 1.3x (mod_perl 1) or Apache 2.x (mod_perl 2) 
+ * Short and search engine friendly URLs
+ * No data files: Load database, copy images files, copy Apache configuration and starting using.
+ * Simultaneous unique setups (define database settings per subdirectory) 
+ * Very fast (mod_perl based)
+ * Native access logging with advanced details: access time, browser, 
+ * Threaded message serving 
+ * Manage any media type: Generate HTML, XML, CSS,..
+ * Extended easily through perl modules (tag and administration) 
+ * Straightforward installation (Once per webserver) 
+ * Short learning process & No programming required 
+ * Search engine plugin 
+ * Very few external library dependencies 
+ * Transparently mix static and dynamic content 
+ * File manager 
+ * Detailed access statistics 

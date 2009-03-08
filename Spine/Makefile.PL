@@ -4,15 +4,20 @@ use ExtUtils::MakeMaker;
 
 use Getopt::Long;
 
-my $just_modules = 1; # Only install modules
-my $no_modules = 1; # Don't install modules
-my $dbtype = "mysql"; # Default database type
-my $dbname = "spine"; # Default database name
-my $dbuser = "root"; # Default database user
-my $dbpasswd = "secret"; # Default database password
+my $just_modules = 0; # Only install modules
+my $no_modules = 0; # Don't install modules
+my $dbtype = ""; # Default database type
+my $dbname = ""; # Default database name
+my $dbuser = ""; # Default database user
+my $dbpasswd = ""; # Default database password
 my $apache = 0; # Default Apache version
 my $mysql = 0; # Force using mysql
 my $postgresql = 0; #Force using postgresql
+my $location = "/spine"; # Default location for Apache configuration
+my $sitename = "";
+my $chroot = "";  # Blank value means $DOCUMENT_ROOT
+my $help = 0;
+my $configfile = "";
 
 my $argv = GetOptions ("no_modules"  => \$no_modules,
                         "just_modules" => \$just_modules,
@@ -22,8 +27,31 @@ my $argv = GetOptions ("no_modules"  => \$no_modules,
                         "dbpasswd=s" => \$dbpasswd,
                         "mysql" => \$mysql,
                         "postgresql" => \$postgresql,
-                        "apache=i" => \$apache
+                        "apache=i" => \$apache,
+                        "sitename=s" => \$sitename,
+                        "chroot=s" => \$chroot,
+                        'help|?' => \$help,
                           ); 
+
+if ($help)
+{ print <<EOF;
+The following options can be used to force a setting:
+--no_modules\t\tskip perl library installation
+--just_modules\t\tjust install perl libraries
+--dbtype=string\t\tuse database type. Valid options: postgresql or mysql
+--dbname=string\t\tdatabase name
+--dbuser=string\t\tusername for the databse
+--dbpasswd=string\tpassword for the database
+--mysql\t\t\tuse mysql as database
+--postgresql\t\tuse postgresql as database
+--apache=version\tuse a specific apache version. Valid versions: 1 or 2
+--sitename=name\t\tpredefine the sitename
+--location=web path\tpath in the URL. Example: /spine  in http://www.yoursite.com/spine
+--chroot=document_root\tlocation of Document Root
+--help\t\t\tdisplay this message
+EOF
+  exit;
+}
 
 if ($just_modules)
 { genmake(); exit; }
@@ -33,17 +61,21 @@ eval "use Digest::MD5"; $md5 = $@ ? 0 : 1;
 print "Digest::MD5 found\n" if $md5;
 die "Please install Digest::MD5!" if !$md5;
 
-if (($apache == 1) or ($apache ==2))
-{ print "Using Apache v$apache\n"; }
-else
-{ my $apache1 = 0;
-  my $apache2 = 0;
-  eval "use Apache::Constants"; $apache1 = $@ ? 0 : 1;
-  eval "use Apache2::Const"; $apache2 = $@ ? 0 : 1;
-  print "mod_perl 1 found\n" if $apache1;
-  print "mod_perl 2 found\n" if $apache2;
-  die "Please install mod_perl 1 or 2!" if !($apache1 || $apache2);
+my $apache1 = 0;
+my $apache2 = 0;
+my $apache = 0;
 
+if (($apache == 1) or ($apache == 2))
+{ print "Using Apache v$apache\n";
+  $apache1 = $apache == 1 ? 1 : ($apache2 = 1);
+}
+else
+{ eval "use Apache::Constants"; $apache1 = $@ ? 0 : 1;
+  eval "use Apache2::Const"; $apache2 = $@ ? 0 : 1;
+  print "Apache 1 + mod_perl 1 found\n" if $apache1;
+  print "Apache 2 + mod_perl 2 found\n" if $apache2;
+  die "Please install mod_perl v1 or v2" if !$apache1 && !$apache2;
+  $apache = $apache1 ? 1 : 2;
   my $apreq1 = 0;
   my $apreq2 = 0;
   eval "use Apache::Request"; $apreq1 = $@ ? 0 : 1;
@@ -53,6 +85,9 @@ else
   die "Please install Apache::Request or Apache2::Request!" if !($apreq1 || $apreq2);
 }
 
+my $configdb = prompt("Configure database?","yes");
+if ($configdb !~ /yes/i)
+{ goto NODB; }
 
 my $dbi = 0;
 $dbtype = lc($dbtype);
@@ -77,7 +112,8 @@ while ($dbpass == 0)
   { $dbtype = prompt("You have MySQL and Postgresql installed. Enter mysql (default) or pg to select:","mysql");
     if (($dbtype ne "mysql") && ($dbtype ne "pg")) { next; }
   }
-  $dbname = prompt("Enter the database name (defaultL spine):","spine") if !$dbname;
+
+  $dbname = prompt("Enter the database name (default spine):","spine") if !$dbname;
   $dbuser = prompt("Enter the database user:") if !$dbuser;
   $dbpasswd = prompt("Enter the database user password:") if !$dbpasswd;
   $dberror = undef;
@@ -85,13 +121,84 @@ while ($dbpass == 0)
 
   eval { $dbh = DBI->connect("dbi:$dbtype:dbname=$dbname","$dbuser","$dbpasswd", { PrintError => 0 } ); $dberror = $DBI::errstr; };
   if ($@ || !$dbh)
-  { print "$dberror\n"; } else { $dbpass = 1; print "DBI connect succesfull\n"; }
+  { print "$dberror\n"; } else
+  { $dbpass = 1;
+    print "DBI connect succesfull\n";
+    my $sth = $dbh->prepare("select title from content where name = 'index.html'");
+    if ($dbh->errstr)
+    { print "Database exists but does not contain SQL schema."; }
+    else
+    { $sth->execute();
+      if ($sth->fetchrow_array)
+      { print "Database already contains content. Use SQL import data from upgrade folder\n"; }
+      else { print "Database exists but does not contain content. Use SQL import from install folder\n"; }
+    }
+  }
+  if (!$dbpass)
+  { my $force = prompt("Cannot connect to $dbtype database $dbname. Continue anyway?","yes");
+    $dbpass = 1 if $force =~ /y/i;
+  }
 }
+
+NODB:
+
+$apache = $apache1 ? "" : $apache;
+$configfile = $apache1+$apache2 == 2 ? "apache-conf.incl & apache2-conf.incl" : "apache$apache-conf.incl";
+
+print "Default configuration for Apache is found is $configfile\n";
+my $configapache = prompt("Generate configuration file for Apache?","yes");
+if ($configapache !~ /yes/i)
+{ goto NOHTTP; }
+
+$sitename = prompt("Enter sitename:", $sitename);
+$sitename ||= "_";
+$docroot ||= "Default Apache Document Root";
+$docroot = prompt("Enter document root:", $docroot);
+$docroot = $docroot eq "Default Apache Document Root" ? "DOCROOT" : $docroot;
+
+my $stdout = \*STDOUT;
+my $handler = \*STDOUT;
+
+if ($apache1 + $apache2 == 2)
+{ genconfig($handler, 1, "PerlHandler Apache::SPINE::Index", "PerlLogHandler Apache::SPINE::Log");
+  genconfig($handler, 2, "PerlResponseHandler Apache2::SPINE::Index", "PerlLogHandler Apache2::SPINE::Log");
+  my $write = prompt("Write configuration to file?","yes");
+  if ($write =~ /yes/i)
+  { open(CONFIG,">apache-conf.incl") || die $!;
+    genconfig(\*CONFIG, 1, "PerlHandler Apache::SPINE::Index", "PerlLogHandler Apache::SPINE::Log");
+    close(CONFIG);
+    print "Configuration written in apache-conf.incl\n";
+    open(CONFIG,">apache2-conf.incl") || die $!;
+    genconfig(\*CONFIG, 2, "PerlResponseHandler Apache2::SPINE::Index", "PerlLogHandler Apache2::SPINE::Log");
+    close(CONFIG);
+    print "Configuration written in apache2-conf.incl\n";    
+  }
+}
+else
+{ my $perlhandler = "PerlHandler Apache::SPINE::Index";
+  my $loghandler = "PerlLogHandler Apache::SPINE::Log";
+  my $version = 1;
+  $perlhandler = $apache1 ? "PerlHandler Apache::SPINE::Index" : "PerlResponseHandler Apache2::SPINE::Index";
+  $loghandler = $apache1 ? "PerlLogHandler Apache::SPINE::Log" : "PerlLogHandler Apache2::SPINE::Log";
+  $version = $apache2 ? 2 : $version;
+  genconfig($handler, $version, $perlhandler, $loghandler);
+  my $write = prompt("Write configuration to file?","yes");
+  if ($write =~ /yes/i)
+  { open(CONFIG,">apache$apache-conf.incl") || die $!;
+    genconfig(\*CONFIG, 2, "PerlResponseHandler Apache2::SPINE::Index", "PerlLogHandler Apache2::SPINE::Log");
+    close(CONFIG);
+    print "Configuration written in apache$apache-conf.incl\n";
+  }
+}
+
+NOHTTP:
 
 if ($no_modules)
 { print "Skipping perl module installation\n";
   exit;
 }
+
+genmake();
 
 sub genmake
 { print "Generating makefile\n";
@@ -106,3 +213,37 @@ sub genmake
   print "Run 'make install' as root to install\n";
 }
 
+sub genconfig
+{ my $outhandler = shift;
+  my $version = shift;
+  my $perlhandler = shift;
+  my $loghandler = shift;
+print $outhandler <<EOF;
+-- Copy this to the Apache $version configuration file
+
+<IfModule mod_perl.c>
+ # PerlModule Apache::DBI
+ # Remove the # above if you have Apache::DBI installed and you wish to use it
+
+  <Location $location>
+           SetHandler perl-script
+           $perlhandler
+           PerlSetVar dbd $dbtype
+           PerlSetVar dbname $dbname
+           PerlSetVar dbuser $dbuser
+           PerlSetVar dbpwd $dbpasswd
+           PerlSetVar main index.html
+           PerlSetVar webmaster 'John Doe'
+	   #perlSetVar servername 'servername:8080' 
+           PerlSetVar sitename $sitename 
+           PerlSetVar chroot $docroot
+           $loghandler
+  </Location>
+
+</IfModule>
+
+-- Configuration ends here
+EOF
+   
+select(\*$stdout); 
+}

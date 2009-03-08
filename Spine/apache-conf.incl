@@ -11,6 +11,7 @@
            PerlSetVar dbpwd password
            PerlSetVar main index.html
            PerlSetVar webmaster 'John Doe'
+	   #perlSetVar servername 'servername:8080' 
            PerlSetVar sitename 'SPINE Example site' 
            PerlSetVar chroot /home/www/html
            PerlLogHandler Apache::SPINE::Log

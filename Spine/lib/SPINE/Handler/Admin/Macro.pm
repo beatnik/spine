@@ -66,7 +66,7 @@ sub handler
   $macro_dbi = SPINE::DBI::Macro->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   
-  $url = '.admin-general'; 
+  $url = '.administration/general'; 
   $error = "";
   my $session = undef;
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
@@ -122,31 +122,31 @@ sub handler
   #@params is something like qw(content new);
   #And we already know it's in content so discard first element
   if (!$params[0] || !$request->param('name') || $request->param('name') eq $enter_name_string)
-  { $url = '.admin-general'; @params = (); }
+  { $url = '.administration/general'; @params = (); }
 
   if ($params[0] eq 'new' && !$execperms)
   { $error = $valid_perms_string.$create_macroset_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
   { $error = $valid_perms_string.$remove_macroset_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
   { $error = $valid_perms_string.$edit_macroset_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
   { $error = $valid_perms_string.$save_macro_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
 
   if ($params[0] eq 'copy' && ( !$writeperms || !$readperms || !$execperms ) )
   { $error = $valid_perms_string.$copy_macroset_string;
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
   if ($params[0] eq 'new' && !$error && $request->param("action") eq "save" && $request->param("key") && $request->param("name") && $request->method eq "POST")
   { save();
@@ -159,18 +159,18 @@ sub handler
 
   if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { remove();
-    $url = '.admin-general' if (!$request->param('id'));
+    $url = '.administration/general' if (!$request->param('id'));
   }
 
   if ($params[0] eq 'copy' && !$error && $request->method eq "POST")
-  { $url = '.admin-general'; 
+  { $url = '.administration/general'; 
     copy();
   }
   
   my $edit_macro = shift @{$macro_dbi->get({name=>$request->param('name')}, count=>1)};
   if ($edit_macro && $params[0] eq 'new' && !$error && !$request->param('action'))
   { $error = $macroset_exists_string; 
-    $url = '.admin-general'; 
+    $url = '.administration/general'; 
   }
  
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
@@ -182,7 +182,7 @@ sub handler
 
   my $body = undef;
   $body = $content->body if ref $content;
-  if ($url eq ".admin-general")
+  if ($url eq ".administration/general")
   { $content->title("Macro Administration"); }
 
   if ($request->param('name') && ($params[0] eq 'edit' || $params[0] eq 'new' || ($params[0] eq 'remove' && $request->param('id') ) ) && !$error )
@@ -280,7 +280,7 @@ This is spine 1.3 beta.
 
 =head1 AUTHOR
 
-Hendrik Van Belleghem - b e a t n i k   a t   u s e r s  d o t  s f  d o t  n e t
+Hendrik Van Belleghem - hendrik.vanbelleghem@gmail.com
 
 =head1 LICENSE
 
