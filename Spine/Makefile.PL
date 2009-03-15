@@ -14,6 +14,8 @@ my $apache = 0; # Default Apache version
 my $mysql = 0; # Force using mysql
 my $postgresql = 0; #Force using postgresql
 my $location = "/spine"; # Default location for Apache configuration
+my $copy = 0;
+my $adminpassword = "";
 my $sitename = "";
 my $chroot = "";  # Blank value means $DOCUMENT_ROOT
 my $help = 0;
@@ -30,6 +32,7 @@ my $argv = GetOptions ("no_modules"  => \$no_modules,
                         "apache=i" => \$apache,
                         "sitename=s" => \$sitename,
                         "chroot=s" => \$chroot,
+                        "adminpassword=s" => \$adminpasword,
                         'help|?' => \$help,
                           ); 
 
@@ -48,6 +51,7 @@ The following options can be used to force a setting:
 --sitename=name\t\tpredefine the sitename
 --location=web path\tpath in the URL. Example: /spine  in http://www.yoursite.com/spine
 --chroot=document_root\tlocation of Document Root
+--adminpassword=password\t\tGenerate Administrator user account SQL statement with following password
 --help\t\t\tdisplay this message
 EOF
   exit;
@@ -60,6 +64,10 @@ my $md5 = 0;
 eval "use Digest::MD5"; $md5 = $@ ? 0 : 1;
 print "Digest::MD5 found\n" if $md5;
 die "Please install Digest::MD5!" if !$md5;
+
+eval "use File::Copy"; $copy = $@ ? 0 : 1;
+print "File::Copy found\n" if $copy;
+print "File::Copy not found." if !$copy;
 
 my $apache1 = 0;
 my $apache2 = 0;
@@ -140,6 +148,17 @@ while ($dbpass == 0)
   }
 }
 
+my $createadmin = prompt("Generate SQL statement for site administrator account?","yes");
+if ($createadmin =~ /y/i)
+{ while (!$adminpassword)
+  { $adminpassword = prompt("Enter password you want to assign to user 'admin' in Spine:");  }
+  my $dig = Digest::MD5->new;
+  $dig->add($adminpassword);
+  my $md5password = $dig->hexdigest;
+  print "The generated SQL below needs to be pasted into the database shell.\n";
+  print qq{insert into users (email,fullname,login,password,usergroup) values ('admin\@localhost','Administrator','admin','$md5password','admin');\n};
+}
+
 NODB:
 
 $apache = $apache1 ? "" : $apache;
@@ -196,6 +215,20 @@ NOHTTP:
 if ($no_modules)
 { print "Skipping perl module installation\n";
   exit;
+}
+
+if ($copy)
+{ my $copyimages = prompt("Copy images automatically to images folder?","yes");
+  if ($copyimages =~ /yes/i)
+  { my $imagesfolder = prompt("Define the images folder");
+    opendir(IMAGES,"images") || die $!;
+    for my $img (readdir(IMAGES))
+    { next if $img =~ /^\.{1,2}$/;
+      next if -d "images/$img";
+      copy( "images/$img", "$imagesfolder/$img" ) or die "Copy failed: $!";
+      print "Copied $img to $imagesfolder/$img\n";
+    }
+  }
 }
 
 genmake();
