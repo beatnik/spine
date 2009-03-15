@@ -168,7 +168,7 @@ sub handler
 
   if ($params[0] eq 'new' && !$error && $request->method eq "POST")
   { $messagegroup_dbi->add(SPINE::Base::Messagegroup->new({id=>0,name=>scalar($request->param("name")), content=>'.message', owner=>$user, usergroup=>"admin", permissions=>'111111'}));
-    $url = '.admin-message'; 
+    $url = '.administration/message'; 
   }
 
   my $edit_messagegroup = shift @{$messagegroup_dbi->get({name=>$request->param('name')}, count=>1)};
@@ -182,14 +182,14 @@ sub handler
     $mon++; $year += 1900;
     my $mdate = "$year-$mon-$day $hour:$min:$sec";
     $new_id = $message_dbi->add(SPINE::Base::Message->new({mdate=>$mdate, mgroup=>scalar($request->param('mgroup')), owner=>scalar($request->param('owner')), subject=>scalar($request->param('subject')), parent=>scalar($request->param('parent')) }));
-    $url = '.admin-message'; 
+    $url = '.administration/message'; 
   }
 
   if ($params[0] eq 'edit' && !$error)
-  { $url = '.admin-message'; }
+  { $url = '.administration/message'; }
 
   if ($params[0] eq 'save' && !$error && $request->method eq "POST")
-  { $url = '.admin-message'; 
+  { $url = '.administration/message'; 
     my $save = $request->param('save.x') ? "save" : "";
     my $delete = $request->param('delete.x') ? "delete" : "";    
     my $action = $save || $delete; 
@@ -198,7 +198,7 @@ sub handler
   }
 
   if ($params[0] eq 'savegroup' && !$error && $request->method eq "POST")
-  { $url = '.admin-message'; 
+  { $url = '.administration/message'; 
     savemessagegroup();
   }
 
@@ -209,7 +209,7 @@ sub handler
   { remove();  }
 
   if ($params[0] eq 'remove' && $request->param("id"))
-  { $url = '.admin-message';  }
+  { $url = '.administration/message';  }
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};
   if (!ref $content)

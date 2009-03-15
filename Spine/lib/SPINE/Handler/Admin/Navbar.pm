@@ -183,14 +183,14 @@ sub handler
     $mon++; $year += 1900;
     $n->modified("$year-$mon-$day $hour:$min:$sec") if ref $n;
     $navbar_dbi->add($n);
-    $url = '.admin-navbar'; 
+    $url = '.administration/navbar'; 
   }
 
   if ($params[0] eq 'edit' && !$error)
-  { $url = '.admin-navbar'; }
+  { $url = '.administration/navbar'; }
 
   if ($params[0] eq 'editbutton' && !$error && $request->method eq "POST")
-  { $url = '.admin-navbar'; 
+  { $url = '.administration/navbar'; 
     # This part catches the image as button bug in IE.
     my $save = $request->param('save.x') ? "save" : "";
     my $delete = $request->param('delete.x') ? "delete" : "";    
@@ -206,7 +206,7 @@ sub handler
   if ($params[0] eq 'addbutton' && !$error && $request->method eq "POST")
   { my $edit_navbar = shift @{$navbar_dbi->get({name=>$page, count=>1})};
     my $n = SPINE::Base::Button->default(); 
-    $url = '.admin-navbar'; 
+    $url = '.administration/navbar'; 
     $n->navbar($request->param("id"));
     $n->link($request->param("link"));
     $n->image($request->param("image"));
@@ -220,7 +220,7 @@ sub handler
   }
   
   if ($params[0] eq 'save' && !$error && $request->method eq "POST")
-  { $url = '.admin-navbar'; 
+  { $url = '.administration/navbar'; 
     save();
   }
 
@@ -250,7 +250,7 @@ sub handler
   }
   my $body = undef;
   $body = $content->body if ref $content;
-  if ($url eq ".admin-general")
+  if ($url eq ".administration/general")
   { $content->title("Navigation Bar Administration"); }
 
   if ( ($params[0] eq 'edit' || $params[0] eq 'save' || $params[0] eq 'new' || $params[0] eq 'editbutton' || $params[0] eq 'addbutton') && !$error)
@@ -316,11 +316,11 @@ sub handler
     if ($ierror) { $ierror = qq(<p class="error">$ierror</p>); }    
     $body =~ s/\$error/$ierror/gmx;
     my $buttons = "";
-    my $button_content = shift @{$content_dbi->get({name=>".admin-navbar-button", count=>1})};
+    my $button_content = shift @{$content_dbi->get({name=>".administration/navbar-button", count=>1})};
     if (!ref $button_content)
     { $button_content = shift @{$content_dbi->get({name=>".404", count=>1})} || SPINE::Base::Content::default(); 
       my $body = $button_content->body;
-      $body =~ s/\$page/.admin-navbar-button/gmx;
+      $body =~ s/\$page/.administration\/navbar-button/gmx;
       my ($serversig) = $ENV{SERVER_SOFTWARE} =~ /^(.*?)\s.*/mx;
       $serversig .= " Server at $ENV{SERVER_NAME} Port $ENV{SERVER_PORT}";
       $body =~ s/\$serversig/$serversig/gmx;

@@ -68,7 +68,7 @@ sub handler
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
-  $url = '.admin-access'; 
+  $url = '.administration/access'; 
 
   my $session = undef;
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
@@ -120,22 +120,22 @@ sub handler
 
   if ($params[0] eq 'new' && !$execperms)
   { $error = $valid_perms_string.$create_adminaccess_string;    
-    $url = '.admin-access'; 
+    $url = '.administration/access'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
   { $error = $valid_perms_string.$remove_adminaccess_string;
-    $url = '.admin-access'; 
+    $url = '.administration/access'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
   { $error = $valid_perms_string.$save_adminaccess_string;
-    $url = '.admin-access'; 
+    $url = '.administration/access'; 
   }
 
   if (($params[0] eq 'save')  && !$error && $request->method eq "POST")
   { save();
-    $url = '.admin-access';
+    $url = '.administration/access';
   }
 
   if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
@@ -145,7 +145,7 @@ sub handler
   my $edit_adminaccess = shift @{$adminaccess_dbi->get({section=>$request->param('section'), usergroup=>$request->param('usergroup')}, count=>1)};
   if ($edit_adminaccess && $params[0] eq 'new' && !$error)
   { $error = $adminaccess_exists_string;
-    $url = '.admin-access'; 
+    $url = '.administration/access'; 
   }
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};

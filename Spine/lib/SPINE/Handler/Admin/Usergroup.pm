@@ -67,7 +67,7 @@ sub handler
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);   
-  $url = '.admin-usergroup'; 
+  $url = '.administration/usergroup'; 
 
   my $session = undef;
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
@@ -119,12 +119,12 @@ sub handler
 
   if ($params[0] eq 'new' && !$execperms)
   { $error = $valid_perms_string.$create_usergroup_string; 
-    $url = '.admin-usergroup'; 
+    $url = '.administration/usergroup'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
   { $error = $valid_perms_string.$remove_usergroup_string; 
-    $url = '.admin-usergroup'; 
+    $url = '.administration/usergroup'; 
   }
   
   if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
@@ -134,7 +134,7 @@ sub handler
   my $edit_usergroup = shift @{$usergroup_dbi->get({usergroup=>$request->param('usergroup'),username=>$request->param('username')}, count=>1)};
   if ($edit_usergroup && $params[0] eq 'new' && !$error)
   { $error = $usergroup_exists_string; 
-    $url = '.admin-usergroup';  
+    $url = '.administration/usergroup';  
   }
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};

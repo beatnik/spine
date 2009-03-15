@@ -66,7 +66,7 @@ sub handler
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);  
-  $url = '.admin-stats-general'; 
+  $url = '.administration/stats-general'; 
 
   my $session = undef;
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
@@ -113,23 +113,23 @@ sub handler
   shift @params;
 
   if (!$params[0])
-  { $url = '.admin-stats-general'; @params = (); }
+  { $url = '.administration/stats-general'; @params = (); }
 
   if ($params[0] eq 'view' && !$readperms)
   { $error = $valid_perms_string.$view_stats_string;
-    $url = '.admin-stats-general'; 
+    $url = '.administration/stats-general'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
   { $error = $valid_perms_string.$remove_stats_string;
-    $url = '.admin-stats-general'; 
+    $url = '.administration/stats-general'; 
   }
 
   if ($params[0] eq 'view' && !$error)
-  { $url = '.admin-stats'; }
+  { $url = '.administration/stats'; }
   
   if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
-  { $url = '.admin-stats-general'; 
+  { $url = '.administration/stats-general'; 
     remove($request);
   }
 

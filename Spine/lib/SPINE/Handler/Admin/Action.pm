@@ -70,7 +70,7 @@ sub handler
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
   $action_dbi = SPINE::DBI::Action->new($dbh);  
-  $url = '.admin-filetypes'; 
+  $url = '.administration/filetypes'; 
 
   my $session = undef;
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
@@ -122,22 +122,22 @@ sub handler
 
   if ($params[0] eq 'new' && !$execperms)
   { $error = $valid_perms_string.$create_filetype_string;    
-    $url = '.admin-filetypes'; 
+    $url = '.administration/filetypes'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
   { $error = $valid_perms_string.$remove_filetype_string;
-    $url = '.admin-filetypes'; 
+    $url = '.administration/filetypes'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
   { $error = $valid_perms_string.$save_filetype_string;
-    $url = '.admin-filetypes'; 
+    $url = '.administration/filetypes'; 
   }
 
   if (($params[0] eq 'save')  && !$error && $request->method eq "POST")
   { save();
-    $url = '.admin-filetypes';
+    $url = '.administration/filetypes';
   }
 
   if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
@@ -147,7 +147,7 @@ sub handler
   my $edit_action = shift @{ $action_dbi->get( { id => $request->param('id'), count=>1 } ) };
   if ($edit_action && $params[0] eq 'new' && !$error)
   { $error = $filetype_exists_string;
-    $url = '.admin-action'; 
+    $url = '.administration/action'; 
   }
 
   my $content = shift @{$content_dbi->get({name=>$url, count=>1})};

@@ -66,7 +66,7 @@ sub handler
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
   $attribute_dbi = SPINE::DBI::Attribute->new($dbh);  
-  $url = '.admin-user'; 
+  $url = '.administration/user'; 
   
   my $session = undef;
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
@@ -119,36 +119,36 @@ sub handler
 
   if ($params[0] eq 'new' && !$execperms)
   { $error = $valid_perms_string.$create_user_string; 
-    $url = '.admin-user'; 
+    $url = '.administration/user'; 
   }
 
   if ($params[0] eq 'remove' && !$execperms)
   { $error = $valid_perms_string.$remove_user_string; 
-    $url = '.admin-user'; 
+    $url = '.administration/user'; 
   }
 
   if ($params[0] eq 'edit' && !$readperms)
   { $error = $valid_perms_string.$edit_user_string; 
-    $url = '.admin-user'; 
+    $url = '.administration/user'; 
   }
   
   if ($params[0] eq 'save' && !$writeperms)
   { $error = $valid_perms_string.$save_user_string; 
-    $url = '.admin-user'; 
+    $url = '.administration/user'; 
   }
 
   if (($params[0] eq 'edit' || $params[0] eq 'new' )  && !$error)
-  { $url = '.admin-user-edit'; }
+  { $url = '.administration/user-edit'; }
 
   my $edit_user = shift @{ $user_dbi->get({login=>$request->param("login"), count=>1}) };
   if ($edit_user && $params[0] eq 'new' && !$error)
   { $error = $user_exists_string; 
-    $url = '.admin-user'; 
+    $url = '.administration/user'; 
   }
 
   if (!$edit_user && ($params[0] eq 'save' || $params[0] eq 'edit' || $params[0] eq 'copy' || $params[0] eq 'remove')&& !$error)
   { $error = $user_notexists_string; 
-    $url = '.admin-user'; 
+    $url = '.administration/user'; 
   }
 
   if ($params[0] eq 'new'  && !$error && $request->method eq "POST")
@@ -168,7 +168,7 @@ sub handler
 
   my $body = undef;
   $body = $content->body if ref $content;
-  if ($url eq ".admin-user")
+  if ($url eq ".administration/user")
   { $content->title("User Administration"); }
   
   if ((!$params[0] || $params[0] eq 'remove' || $params[0] eq 'save')  || $error)

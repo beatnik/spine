@@ -150,12 +150,12 @@ sub handler
   }
   if ($params[0] eq 'new' && !$error && $request->param("action") eq "save" && $request->param("key") && $request->param("name") && $request->method eq "POST")
   { save();
-    $url = '.admin-macro';
+    $url = '.administration/macro';
     $params[0] = "edit";
   }
 
   if ($request->param('name') && ($params[0] eq 'edit' || $params[0] eq 'new' || ($params[0] eq 'remove' && $request->param('id') ) ) )
-  { $url = '.admin-macro'; }
+  { $url = '.administration/macro'; }
 
   if ($params[0] eq 'remove' && !$error && $request->method eq "POST")
   { remove();

@@ -48,7 +48,7 @@ sub handler
 { my $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my $chroot = $request->dir_config("chroot") || $request->document_root;
-  $chroot = $chroot eq "DOCROOT" : $req->request->document_root : $chroot;
+  $chroot = $chroot eq "DOCROOT" ? $request->document_root : $chroot;
   my $action = $request->param("action"); # The file operation, eg copy, delete, etc
   my $filename = $request->param("filename"); # Name of the selected radiobutton
   my $foldername = $request->param("foldername"); # Folder name used with create folder

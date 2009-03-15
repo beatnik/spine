@@ -166,14 +166,14 @@ sub handler
   { my $s = SPINE::Base::Style::default();
     $s->name($page); $s->owner($user);
     $style_dbi->add($s); 
-    $url = '.admin-style'; 
+    $url = '.administration/style'; 
   }
 
   if ($params[0] eq 'edit' && !$error)
-  { $url = '.admin-style'; }
+  { $url = '.administration/style'; }
   
   if ($params[0] eq 'save' && !$error && $request->method eq "POST")
-  { $url = '.admin-style'; 
+  { $url = '.administration/style'; 
     save();
   }
 

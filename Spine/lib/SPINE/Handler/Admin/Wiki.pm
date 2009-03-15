@@ -139,14 +139,14 @@ sub handler
     $mon++; $year += 1900;
     $w->modified("$year-$mon-$day $hour:$min:$sec") if ref $w;
     $wiki_dbi->add($w);
-    $url = '.admin-wiki'; 
+    $url = '.administration/wiki'; 
   }
 
   if ($params[0] eq 'edit' && !$error)
-  { $url = '.admin-wiki'; }
+  { $url = '.administration/wiki'; }
   
   if ($params[0] eq 'save' && !$error && $request->method eq "POST")
-  { $url = '.admin-wiki'; 
+  { $url = '.administration/wiki'; 
     save();
   }
 
