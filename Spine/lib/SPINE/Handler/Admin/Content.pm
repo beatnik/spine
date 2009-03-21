@@ -376,10 +376,10 @@ sub save
     $content->breaks($breaks) if ref $content;
     $content->type($request->param('type')) if ref $content;
     if (!$binary) { $content->body($request->param('body')) if ref $content; }
-    my $permissions = scalar $request->param('groupr') ? "1" : 0;
-    $permissions .= scalar $request->param('groupw') ? "1" : 0;
-    $permissions .= scalar $request->param('worldr') ? "1" : 0;
-    $permissions .= scalar $request->param('worldw') ? "1" : 0;      
+    my $permissions = scalar $request->param('groupr') ne "undefined" ? "1" : "0";
+    $permissions .= scalar $request->param('groupw') ne "undefined"  ? "1" : "0";
+    $permissions .= scalar $request->param('worldr') ne "undefined"  ? "1" : "0";
+    $permissions .= scalar $request->param('worldw') ne "undefined"  ? "1" : "0";
     $content->permissions($permissions) if ref $content;
     $content->usergroup($request->param('usergroup')) if ref $content;
     $content->icomment($request->param('icomment')) if ref $content;  

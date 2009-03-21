@@ -77,7 +77,8 @@ sub handler
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
-
+  my $transport = scalar $request->param('transport');
+  
   my @default_hash = ();
   @default_hash = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
@@ -201,6 +202,13 @@ sub handler
     $body =~ s/\$serversig/$serversig/gmx;
     $content->body($body);
   }
+  
+  if ($transport eq "ajax")
+  { my $ajax_content = SPINE::Base::Content->new({style=>'blank',body=>$ierror}) if $ierror;
+    $ajax_content = SPINE::Base::Content->new({style=>'blank',body=>'ok'}) if !$ierror;
+    return $ajax_content;
+  }  
+  
   my $body = undef;
   $body = $content->body if ref $content;
   if ($url eq ".administration/general")
@@ -235,10 +243,10 @@ sub handler
 	if ($user ne 'admin' && $edit_style->owner ne $user && $edit_style->permissions !~ /^\d1/mx && $edit_style->permissions !~ /\d1$/mx)
     { $readonly = 1; }
     my $lock = qq(<img src="<?SPINE_Images?>lock.png">) if $readonly;
-    my $gpermissions = qq(Read: <input type="checkbox" name="groupr" value="1"$checked[$perms[0]]>);
-    $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
-    my $wpermissions = qq(Read: <input type="checkbox" name="worldr" value="1"$checked[$perms[2]]>);
-    $wpermissions .= qq(Write: <input type="checkbox" name="worldw" value="1"$checked[$perms[3]]>);
+    my $gpermissions = qq(Read: <input type="checkbox" id="grouprfield" name="groupr" value="1"$checked[$perms[0]]>);
+    $gpermissions .= qq(Write: <input type="checkbox" id="groupwfield" name="groupw" value="1"$checked[$perms[1]]>);
+    my $wpermissions = qq(Read: <input type="checkbox" id="worldrfield" name="worldr" value="1"$checked[$perms[2]]>);
+    $wpermissions .= qq(Write: <input type="checkbox" id="worldwfield" value="1"$checked[$perms[3]]>);
     $body =~ s/\$group/$group/gmx;
     $body =~ s/\$lastmod/$edit_style->modified/gmxe if ref $edit_style;
     $body =~ s/\$size/length($sbody)/gmxe;
@@ -293,10 +301,10 @@ sub save
     $style->body($request->param('body')) if ref $style;
     $style->macros($request->param('macros')) if ref $style;
     $style->usergroup($request->param('usergroup')) if ref $style;
-    my $permissions = scalar $request->param('groupr') ? "1" : 0;
-    $permissions .= scalar $request->param('groupw') ? "1" : 0;
-    $permissions .= scalar $request->param('worldr') ? "1" : 0;
-    $permissions .= scalar $request->param('worldw') ? "1" : 0;
+    my $permissions = scalar $request->param('groupr') ne "undefined" ? "1" : "0";
+    $permissions .= scalar $request->param('groupw') ne "undefined" ? "1" : "0";
+    $permissions .= scalar $request->param('worldr') ne "undefined" ? "1" : "0";
+    $permissions .= scalar $request->param('worldw') ne "undefined" ? "1" : "0";
     $style->permissions($permissions) if ref $style;
     $style->icomment($request->param('icomment')) if ref $style;
     my ($sec,$min,$hour,$day,$mon,$year) = localtime;
