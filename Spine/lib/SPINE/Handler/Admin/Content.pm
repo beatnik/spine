@@ -33,6 +33,7 @@ use SPINE::DBI::Attribute;
 use SPINE::Constant;
 
 use strict;
+use Data::Dumper;
 
 use SPINE::Transparent::Constant;
 
@@ -75,7 +76,7 @@ sub handler
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
-
+  my $transport = scalar $request->param('transport');
   my (@default_hash) = @{$attribute_dbi->get(section=>"default",attr=>$user)};
   for(@default_hash)
   { my %hash = ();
@@ -208,6 +209,13 @@ sub handler
     $body =~ s/\$serversig/$serversig/gmx;
     $content->body($body);
   }
+  
+  if ($transport eq "ajax")
+  { my $ajax_content = SPINE::Base::Content->new({style=>'blank',body=>$ierror}) if $ierror;
+    $ajax_content = SPINE::Base::Content->new({style=>'blank',body=>'ok'}) if !$ierror;
+    return $ajax_content;
+  }
+  
   my $body = undef;
   if (ref $content) { $body = $content->body; }
   if ($url eq ".administration/general")
@@ -248,7 +256,7 @@ sub handler
     $icomment = $edit_content->icomment if ref $edit_content;
     my @selected = ('',' checked');
     if ($edit_content->breaks) { @selected = reverse @selected; }
-    my $breaks = qq(<input type="checkbox" value="1"$selected[0] name="breaks">);
+    my $breaks = qq(<input type="checkbox" id="breakfield" value="1"$selected[0] name="breaks">);
     @selected = ('',' checked');
     if ($edit_content->logging) { @selected = reverse @selected; }
     my @groups = @{$usergroup_dbi->getlist(field=>'usergroup')};
@@ -259,11 +267,11 @@ sub handler
     if ($user ne 'admin' && $edit_content->owner ne $user && $edit_content->permissions !~ /^\d1/mx && $edit_content->permissions !~ /\d1$/mx)
     { $readonly = 1; }
     my $lock = qq(<img src="<?SPINE_Images?>lock.png">) if $readonly;
-    my $logging = qq(<input type="checkbox" value="1"$selected[0] name="logging">);
-    my $gpermissions = qq(Read: <input type="checkbox" name="groupr" value="1"$checked[$perms[0]]>);
-    $gpermissions .= qq(Write: <input type="checkbox" name="groupw" value="1"$checked[$perms[1]]>);
-    my $wpermissions = qq(Read: <input type="checkbox" name="worldr" value="1"$checked[$perms[2]]>);
-    $wpermissions .= qq(Write: <input type="checkbox" name="worldw" value="1"$checked[$perms[3]]>);
+    my $logging = qq(<input type="checkbox" id="loggingfield" value="1"$selected[0] name="logging">);
+    my $gpermissions = qq(Read: <input type="checkbox" id="grouprfield" name="groupr" value="1"$checked[$perms[0]]>);
+    $gpermissions .= qq(Write: <input type="checkbox" id="groupwfield" name="groupw" value="1"$checked[$perms[1]]>);
+    my $wpermissions = qq(Read: <input type="checkbox" id="worldrfield" name="worldr" value="1"$checked[$perms[2]]>);
+    $wpermissions .= qq(Write: <input type="checkbox" id="worldwfield" name="worldw" value="1"$checked[$perms[3]]>);
     my @attr = @{$attribute_dbi->get(section=>"content",name=>$edit_content->name)};
     my $attrlist = "";
     my $filename = $edit_content->name;
