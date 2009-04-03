@@ -216,6 +216,13 @@ sub handler
     return $ajax_content;
   }
   
+  if ($transport eq "xml")
+  { my $xml = $edit_content->toxml("MODIFIED");
+    $xml = SPINE::Base::Content->new({style=>'blank',body=>$ierror}) if $ierror;
+    $xml = SPINE::Base::Content->new({style=>'blank',type=>'text/xml',body=>$xml}) if !$ierror;
+    return $xml;
+  }
+  
   my $body = undef;
   if (ref $content) { $body = $content->body; }
   if ($url eq ".administration/general")

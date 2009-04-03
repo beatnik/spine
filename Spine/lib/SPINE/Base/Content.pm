@@ -74,6 +74,27 @@ sub tohash
   return (%hash);
 }
 
+sub toxml
+{ my $self = shift;
+  my $id = $self->{ID};
+  my @keys = %{$self};  
+  if (@_) 
+  { @keys = @_; }
+  my $xml = qq(<?xml version="1.0" encoding="utf-8"?>\n<data>\n<content id="$id">\n);
+  for(@keys)
+  { my $lc = lc $_;
+    my $body = $self->{$_};
+    $body =~ s/\&/\&amp\;/gmx; 
+    $body =~ s/\</\&lt\;/gmx;
+    $body =~ s/\>/\&gt\;/gmx;
+    $body =~ s/\'/\&apos\;/gmx;
+    $body =~ s/\"/\&quot;\;/gmx;
+    $xml .= qq(<$lc>$body<\/$lc>\n);
+  }
+  $xml .= qq(</content>\n</data>);
+  return $xml;
+}
+
 sub default 
 { my ($sec,$min,$hour,$day,$mon,$year) = localtime;
   $mon++; $year += 1900;
