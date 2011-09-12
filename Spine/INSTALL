@@ -1,4 +1,4 @@
-Installation Notes for Spine v1.3 beta
+Installation Notes for Spine v1.3b beta
 
 Requirements
 ------------
@@ -7,7 +7,7 @@ Spine has very few dependencies:
 
     * Apache 1.X (development is based on version 1.3.28 and tested on 1.3.33)
       or
-      Apache 2.x (development is baed on 2.054)
+      Apache 2.x (development is based on 2.054)
     * mod_perl 1.X (development is based on version 1.27 and tested on 1.29)
       or 
       mod_perl 2.X (development is based on version 2.0.1)
@@ -22,7 +22,7 @@ Spine has very few dependencies:
     * Apache::DBI (development is based on version 0.91 and tested on 0.94)
     * Mysql 3.X
       of
-      Postgresql (development is based on 7.4)
+      PostgreSQL (development is based on 7.4 and above)
 
 Generating SQL statements for users
 -----------------------------------
@@ -34,7 +34,10 @@ Visit
 
    http://spine.sourceforge.net/createuser.html
 
-to generate a custom SQL statement to create the admin account. 
+to generate a custom SQL statement to create the admin account. If you would
+rather use a local file there is a createuser.html file in the Spine directory
+of this installation. You use the SQL statement generated here after you have
+created the database and created the database structure.
 
 Installation on Debian (mod_perl 1)
 ----------------------
@@ -44,16 +47,46 @@ On Debian, install the following packages :
     * apache-perl
     * libapache-dbi-perl
     * libdbd-mysql-perl
-    * mysql-client
-    * mysql-server
+    * mysql-client (optional)
+    * mysql-server (optional)
+    * postgres client/server (optional)
     * libapache-request-perl
 
-TODO: Complete debian installation notes for Apache2
+Note: Mysql or PostgreSQL are listed as optional but you must choose an
+RDBMS. This install, at present, includes files necessary for either a of
+these databases. Development is based on mysql and PostgreSQL. Support for other RDBMSs is a bonus.
+
+Installation on OpenSUSE (mod_perl 2)
+------------------------
+
+Older versions of OpenSUSE offer a bit of a difficult install because the
+versions of Apache2 and mod_perl 2 in the repository do not work.  These
+instructions (thank you http://www.masonhq.com/?InstallationRecipes) were
+tested on OpenSUSE 11.0:
+
+    * Uninstall all Apache/Mod_Perl packages with the distribution
+    * Fetch current stable Apache2/mod_perl2/libapreq2 sources from www.apache.org
+    * Get Apache2::Request from CPAN
+    * Compile Apache2 with ./configure --prefix=/opt/apache2
+    * Run make and make install for Apache
+    * Start Apache (you might want to configure a script to make it run automatically)
+    * Compile mod_perl2: perl Makefile.PL MP_APXS=/opt/apache2/bin/apxs
+    * Run make and make install for mod_perl2
+    * Compile libapreq2: perl Makefile.PL --with-apache2-apxs=/opt/apache2/bin/apxs
+    * Run make and make install for libapreq2
+    * Add /opt/apache2/lib and /opt/apache2/modules to /etc/ld.so.conf
+    * Run ldconfig -v
+    * Modify your Apache httpd.conf to load the correct DSOs like this:
+
+    LoadModule apreq_module modules/mod_apreq2.so
+    LoadModule perl_modle modules/mod_perl.so
+
+    * Install mysql or PostgreSQL from the repository
+
+Now go to the PostgreSQL configuration section.
 
 Mysql Configuration (Installation only)
 -------------------
-
-Development is based on mysql. Support for other RDBMSs is a bonus.
 
 Create a Database in mysql, e.g. spine (consult the mysql manpages for extra options):
 
@@ -65,11 +98,11 @@ in the mysql shell :
 
 Then exit the shell and import the structure: 
 
-  bash# mysql spine -p < mysql3-struct.sql 
+  bash# mysql spine -p < ./sql/mysql/mysql3-struct.sql 
 
 Once the database structure is set-up, insert the data:
 
-  bash# mysql spine -p < mysql3-data.sql 
+  bash# mysql spine -p < ./sql/mysql/mysql3-data.sql 
 
 Database permissions might have to be defined. Consult the mysql documentation.
 
@@ -78,6 +111,27 @@ Open the mysql shell again
   bash# mysql spine -p 
 
 In the mysql shell, insert the generated SQL statement for the user account.
+
+PostgreSQL Configuration (Installation only)
+------------------------
+
+Create a database in PostgreSQL, e.g. spine
+
+bash# createdb YOURDBNAME
+
+Import the structure:
+
+bash# psql -d YOURDBNAME -f ./sql/postgres/psql-struct.sql
+
+Next, insert the data:
+
+bash# psql -d YOURDBNAME -f ./sql/postgres/pg-dump-*.sql
+
+If you are logged in as the same user as you plan to specify in your SPINE
+configuration settings then PostgreSQL may have automatically provided the
+account with full read/write permissions on the database. If not, you may have
+to alter permissions on the tables. Refer to PostgreSQL standard documentation
+for further details on grants (http://www.postgresql.org/docs/current/interactive/sql-grant.html).
 
 Perl Modules Installation (Including Upgrade)
 -------------------------
@@ -91,13 +145,20 @@ and as root (superuser)
 
   bash# make install
 
-Make sure you have Apache::Request installed. If you have questions about installing this, consult the administrator.
+Make sure you have Apache::Request installed. If you have questions about
+installing this, consult the administrator.
+
+NOTE: If installing this version of SPINE on a system with a previous version
+of SPINE be certain to check for and remove legacy copies of
+Apache2/SPINE/Index.pm that may be in /usr/lib/perl5/5.x.x/Apache2/SPINE. If
+this file exists and differs from the new version Apache might run it first
+and generate errors.
 
 Upgrade from 1.2 installations
 ------------------------------
 
 Resetting the password is the only update needed in the database. 
-See pg_setup.txt for instructions on how to this in Postgresql.
+See pg_setup.txt for instructions on how to this in PostgreSQL.
 
 Generate the User SQL statement, as described above.
 
@@ -116,7 +177,7 @@ Insert the generated SQL statement for the user account.
 Apache Configuration
 --------------------
 
-Spine is developed for Apache & mod_perl 1.3.x
+Spine is developed for Apache & mod_perl versions 1.3 and 2.
 
 Edit your apache config file (by default httpd.conf) as follows :
 
@@ -127,7 +188,7 @@ Edit your apache config file (by default httpd.conf) as follows :
   <Location /spine>
            SetHandler perl-script
            PerlHandler Apache::SPINE::Index
-           PerlSetVar dbd mysql
+           PerlSetVar dbd mysql #use Pg for PostgreSQL
            PerlSetVar dbname spine
            PerlSetVar dbuser user
            PerlSetVar dbpwd password
@@ -149,8 +210,8 @@ as a template. On Debian installations, copy the configuration files in
 /etc/apache-perl/conf.d
 
     * The dbname is the database name (you defined earlier).
-    * The dbuser is the user as which you connect to mysql (consult your mysql documentation for this setting)
-    * The dbpwd is the user password you use to connect to mysql (consult your mysql documentation for this setting)
+    * The dbuser is the user as which you connect to mysql or PostgreSQL
+    * The dbpwd is the user password you use to connect to the account
     * The main variable is 'content' name that is loaded by default (like a index.html).
 
 Restart the webserver, by default by running
