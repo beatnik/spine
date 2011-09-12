@@ -1,3 +1,14 @@
 Main SPINE repository README File
-------------------------------
+---------------------------------
+
+This is a version-agnostic README regarding the SPINE project. A
+version-specific README can be found in the ./Spine folder.
+
+What is SPINE?
+--------------
+
+SPINE is a Content Management System (CMS) written mainly in the Perl
+language. Visit http://spine.sourceforge.net for project details. 
+
+
 
