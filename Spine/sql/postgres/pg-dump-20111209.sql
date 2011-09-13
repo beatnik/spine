@@ -20117,7 +20117,7 @@ INSERT INTO navbarbuttons VALUES (206, 33, 5, 'docs.html', '', 'Documentation', 
 INSERT INTO navbarbuttons VALUES (207, 33, 6, 'developers.html', '', 'Developers', '', 0, '', '', '', '', '', '', '');
 INSERT INTO navbarbuttons VALUES (208, 33, 7, 'screenshots.html', '', 'Screenshots', '', 0, '', '', '', '', '', '', '');
 INSERT INTO navbarbuttons VALUES (209, 33, 8, 'login.html', '', 'Login', '', 0, '', '', '', '', '', '', '');
-INSERT INTO navbarbuttons VALUES (210, 1, 1, 'admin/', '', '?', '', 0, '', '', '', '', '', '', '');
+INSERT INTO navbarbuttons VALUES (210, 1, 1, 'admin/', '', 'Start', '', 0, '', '', '', '', '', '', '');
 
 
 --
