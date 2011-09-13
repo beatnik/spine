@@ -5,8 +5,16 @@ use Test::Simple tests=>10;
 use DBI;
 use SPINE::DBI::Content;
 use Data::Dumper;
+use Getopt::Long;
 
-my $dbh = DBI->connect("dbi:mysql:dbname=test","spine","spine") or die "Could not connect to Database:$!";
+my ($dbistr, $username, $psname);
+
+my $result = GetOptions ("dbistr=s"=>\$dbistr,
+                         "username=s"=>\$username,
+                         "password=s"=>\$psname);
+
+
+my $dbh = DBI->connect($dbistr||"dbi:mysql:dbname=test",$username||"spine",$psname||"spine") or die "Could not connect to Database:$!";
 my $content_dbi = SPINE::DBI::Content->new($dbh);
 ok(ref($content_dbi) eq "SPINE::DBI::Content","Return type: Content DBI object");
 ok(ref($content_dbi->get({name=>"index.html",count=>1})) eq "ARRAY","Return type: get returns array ref");
@@ -38,7 +46,7 @@ $content->keywords("test");
 $content_dbi->update($content);
 
 $content = $content_dbi->get("name"=>"bar");
-ok($content->keywords eq "test","Return type: update keyword test");
+ok(ref($content) eq 'ARRAY' && $content->[0]->keywords eq "test","Return type: update keyword test");
 
 $content_dbi->remove($content);
 

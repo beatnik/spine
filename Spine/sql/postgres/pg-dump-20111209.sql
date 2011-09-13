@@ -5490,7 +5490,7 @@ $error
 <div name="adminpanel" class="fullpanel">
  <div class="panelcel" style="width: 15%">Enter to &lt;br&gt;:</div>
  <div class="panelcel" style="width: 25%">$breaks</div>
- <div class="panelcel" style="width: 15%">Log Acces: </div>
+ <div class="panelcel" style="width: 15%">Log Access: </div>
  <div class="panelcel" style="width: 25%">$logging</div>
 <div class="spacercel"></div>
 </div>
