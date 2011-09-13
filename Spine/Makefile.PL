@@ -117,7 +117,7 @@ my $dbh = undef;
 my $dbpass = 0;
 while ($dbpass == 0)
 { if ($mysql && $pg)
-  { $dbtype = prompt("You have MySQL and Postgresql installed. Enter mysql (default) or pg to select:","mysql");
+  { $dbtype = prompt("You have MySQL or PostgreSQL installed. Enter mysql (default) or pg to select:","mysql");
     if (($dbtype ne "mysql") && ($dbtype ne "pg")) { next; }
   }
 
