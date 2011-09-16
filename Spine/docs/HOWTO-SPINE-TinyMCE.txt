@@ -15,9 +15,9 @@ extract the entire tiny_mce folder from the archive into your /htdocs/jscripts f
 Making tinymce_init.js
 -----------------------
 
-The tiny_mce/tiny_mce_init.js file is a bit different. This file does not come
+The tiny_mce_init.js file is a bit different. This file does not come
 with the standard distribution. It is normally a file you create to set up
-TinyMCE for your specific needs. At some point a the SPINE team will produce a
+TinyMCE for your specific needs. At some point the SPINE team will produce a
 standard version of this. For now the following one will at least get the
 script running:
 
