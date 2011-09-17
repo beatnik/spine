@@ -48,7 +48,7 @@ $content_dbi->update($content);
 $content = $content_dbi->get("name"=>"bar");
 ok(ref($content) eq 'ARRAY' && $content->[0]->keywords eq "test","Return type: update keyword test");
 
-$content_dbi->remove($content);
+$content_dbi->remove($content->[0]);
 
 $content = $content_dbi->get("name"=>"bar");
-ok(ref($content) eq "","Return type: get of unknown content returns undef");
+ok(ref($content->[0]) eq "","Return type: get of unknown content returns undef");
