@@ -393,6 +393,12 @@ sub save
     my ($sec,$min,$hour,$day,$mon,$year) = localtime;
     $mon++; $year += 1900;
     $content->modified("$year-$mon-$day $hour:$min:$sec") if ref $content;
+    # change to accomodate TinyMCE's munge of SPINE tags -- JL 20-SEP-2011
+    my $tbody = $content->body();
+    $tbody=~s/\<!--\?/\<\?/g;
+    $tbody=~s/\?\s*--\>/\?\>/g;
+    $content->body($tbody);
+
     $content_dbi->update($content);
   }
   else
