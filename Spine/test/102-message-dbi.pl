@@ -1,9 +1,8 @@
 #!/usr/bin/perl
 
 use strict;
-use Test::Simple tests=>10;
+use Test::Simple tests=>9;
 use DBI;
-use SPINE::DBI::Message;
 use SPINE::DBI::Messagegroup;
 use Data::Dumper;
 use Getopt::Long;
@@ -55,22 +54,44 @@ $message_dbi->add(SPINE::Base::Messagegroup->new({
 
 
 
-# Create message entries
-
-
 
 # Copy message group
 
+$mess_content = shift @{$message_dbi->get({'name'=>"attic50",count=>1})};
+
+$mess_content->name('attic60');
+
+$message_dbi->add($mess_content);
+
+my $mess_cont1 = shift @{$message_dbi->get({'name'=>"attic60",count=>1})};
+
+ok ($mess_cont1->name() eq 'attic60', "New element created.");
 
 # Update message group
 
-# Update individual message
+my $mess_cont2 = shift @{$message_dbi->get({'name'=>"attic60",count=>1})};
 
+$mess_cont2->usergroup('nobody');
 
-# Delete message entries
+$message_dbi->update($mess_cont2);
+
+my $mess_cont3 = shift @{$message_dbi->get({'name'=>"attic60",count=>1})};
+
+ok ($mess_cont3->usergroup() eq 'nobody', "User setting successfully changed.");
 
 # Delete message group
 
+$message_dbi->remove($mess_content);
+
+my $mess_missing = shift @{$message_dbi->get({'name'=>"attic50",count=>1})};
+
+ok ((!$mess_missing),"Remove worked ok.");
+
+$message_dbi->remove($mess_cont1);
+
+my $mess_missing = shift @{$message_dbi->get({'name'=>"attic60",count=>1})};
+
+ok ((!$mess_missing),"Remove worked ok.");
 
 
 1;
