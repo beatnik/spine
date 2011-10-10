@@ -196,15 +196,41 @@ sub handler
       $hash{macrovalue} =~ s/</&lt;/gmx;
       $hash{macrovalue} =~ s/>/&gt;/gmx;
       $hash{macrovalue} =~ s/\"/&quot;/gmx;
-      
-      $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/macro/new/" method="post"><input type="hidden" name="action" value="save">);
-      $list .= qq(<input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">);
-      $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="key" class="input" value="$hash{macrokey}" size="30"></div>);
-      $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="value" value="$hash{macrovalue}" class="input" size="30"></div>);
-      $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="save" class="button" name="action"></form>&nbsp;&nbsp;);
-      $list .= qq(<form action="<?SPINE_Location?>admin/macro/remove/" method="post">);
-      $list .= qq(<input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}"><input type="submit" value="Delete" class="button" name="action"></div>);
-      $list .= qq(<div class="spacercel"></div></form></div>);
+ 
+      $list .=<<EOF;
+         <div name="adminpanel" class="_spine_fullpanel">
+            <div style="float:left;width:412px;">
+            <form action="<?SPINE_Location?>admin/macro/new" method="post">
+            <input type="hidden" name="action" value="save" />
+            <input type="hidden" name="name" value="$hash{'name'}" />
+            <input type="hidden" name="id"   value="$hash{'id'}"  />
+            <div class="_spine_panelcel" style="width:195px">
+                 <input type="text" class="_spine_input" name="key" 
+                      value="$hash{'macrokey'}" 
+                      size="30" /></div>
+            <div class="_spine_panelcel" style="width:195px">
+                 <input type="text" class="_spine_input" name="value" 
+                    value="$hash{'macrovalue'}" 
+                    size="30"/></div>
+            <div class="_spine_panelcel" style="width:10px;background-color:orange;">
+                 <input type="image" src="/images/save.png" alt="Save" name="action" style="padding:0px" />
+                 </form></div>
+            </div>
+            <div style="float:left;width:50px">
+            <form action="<?SPINE_Location?>admin/macro/remove/" 
+                  method="post">
+                 <input type="hidden" name="name" value="$hash{'name'}" />
+                 <input type="hidden" name="id"   value="$hash{'id'}"   />
+                 <div class="_spine_panelcel" style="width:10px;background-color:pink;">
+                 <input type="image" src="/images/delete.png" alt="Delete"
+                          name="action" style="padding:0px" /></div>
+            </form>
+            </div>
+            <div class="_spine_spacercel"></div>
+         </div><!-- adminpanel -->
+
+EOF
+
     }
     $body =~ s/\$name/$request->param('name')/gmxe;
     $body =~ s/\$list/$list/gmx;
