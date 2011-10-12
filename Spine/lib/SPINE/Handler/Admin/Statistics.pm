@@ -154,8 +154,8 @@ sub handler
       for (@statlist)
       { my %hash = %{$_};
         my $percentage = sprintf("%.2f",( ( $hash{number} / $ctotal ) * 100 ) );
-        $list .= qq(<div name="adminpanel" class="fullpanel"><div class="panelcel" style="width: 45%; height: auto">$hash{$stat}</div>\n);
-        $list .= qq(<div class="panelcel" style="width: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$percentage" height="10">&nbsp;$hash{number} ($percentage%)</div><div class="spacercel"></div></div>\n);
+        $list .= qq(<div name="adminpanel" class="spine-fullpanel"><div class="spine-panelcel" style="width: 45%; height: auto">$hash{$stat}</div>\n);
+        $list .= qq(<div class="spine-panelcel" style="width: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$percentage" height="10">&nbsp;$hash{number} ($percentage%)</div><div class="spine-spacercel"></div></div>\n);
       }
       $body =~ s/\$${stat}list/$list/gxm;
       $body =~ s/\$name/$name/gmx;
@@ -169,7 +169,7 @@ sub handler
       for my $lstat (@statlist)
       { my %hash = %{$lstat};
         my $percentage = sprintf("%.2f",( ( $hash{number} / $ctotal ) * 100 ) );
-        $datelist .= qq(<div name="adminpanel" class="fullpanel"><div class="panelcel" style="width: 45%; height: auto">$hash{"$stat"}</div><div class="panelcel" style="width: 45%; height: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$percentage" height="10">&nbsp;$hash{number} ($percentage%)</div><div class="spacercel"></div></div>\n);
+        $datelist .= qq(<div name="adminpanel" class="spine-fullpanel"><div class="spine-panelcel" style="width: 45%; height: auto">$hash{"$stat"}</div><div class="spine-panelcel" style="width: 45%; height: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$percentage" height="10">&nbsp;$hash{number} ($percentage%)</div><div class="spine-spacercel"></div></div>\n);
       }
       my $label = "";
       $label = $stat eq "monthname(sdate)" ? "month" : "";
@@ -224,11 +224,11 @@ sub handler
     }
 
     for my $name (@sorted)
-    { $namelist .= qq(<div name="adminpanel" class="fullpanel"><div class="panelcel" style="width: 20%">$name</div>\n);
+    { $namelist .= qq(<div name="adminpanel" class="spine-fullpanel"><div class="spine-panelcel" style="width: 20%">$name</div>\n);
       my $percentage = sprintf("%.2f",( ( $counters{$name} / $total ) * 100 ) );
-      $namelist .= qq(<div class="panelcel" style="width: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$percentage" height="10">&nbsp;$counters{$name} ($percentage%)</div><div class="spacercel"></div></div>\n);
+      $namelist .= qq(<div class="spine-panelcel" style="width: auto"><img src="/images/dot.jpg" style="border: 1px solid #888888" width="$percentage" height="10">&nbsp;$counters{$name} ($percentage%)</div><div class="spine-spacercel"></div></div>\n);
     }
-    if ($error) { $error = qq(<p class="error">$error</p>); }
+    if ($error) { $error = qq(<p class="spine-error">$error</p>); }
     $body =~ s/\$error/$error/gmx;
     $body =~ s/\$list/$list/gmx;
     $body =~ s/\$orderf/$orderf/gmx;

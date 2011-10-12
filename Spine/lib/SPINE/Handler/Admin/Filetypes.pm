@@ -164,21 +164,56 @@ sub handler
 
   my @filetypes = @{$attribute_dbi->get({section=>"mimetype", name=>"content"})};
   my $list = undef;
-  $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/filetypes/new/" method="post">\n);
-  $list .= qq(<div class="panelcel" style="width: 10%"><input type="text" name="attr" class="input" value="extension" size="15">\n</div>);
-  $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="value" class="input" value="mime/type" size="30">\n</div>);
-  $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Create" class="button" name="action"></div>\n</form><div class="spacercel"></div></div>\n); 
+  $list .=<<EOF;
+<div name="adminpanel" class="spine-fullpanel">
+     <form action="<?SPINE_Location?>admin/filetypes/new/" method="post">
+     <div class="spine-panelcel" style="width:120px">
+         <input type="text" name="attr" class="spine-input" value="extension" size="15"></div>
+     <div class="spine-panelcel" style="width:195px">
+     <input type="text" name="value" class="spine-input" value="mime/type" size="30"></div>
+     <div class="spine-panelcel" style="width:50px">
+     <input type="submit" value="Create" class="spine-button" name="action"></div>
+     </form>
+<div class="spine-spacercel"></div>
+</div>
+EOF
+
   for(@filetypes)
   { my %hash = $_->tohash;
-    $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/filetypes/save/" method="post">);
+
+    $list .=<<EOF;
+<div name="adminpanel" class="spine-fullpanel">
+    <div style="float:left;">
+    <form action="<?SPINE_Location?>admin/filetypes/save/" method="post">
+         <input type="hidden" name="id" value="$hash{id}">
+         <div class="spine-panelcel" style="width: 120px">
+         <input type="text" name="attr" class="spine-input" value="$hash{attr}" size="15"></div>
+         <div class="spine-panelcel" style="width:195px">
+         <input type="text" name="value" class="spine-input" value="$hash{value}" size="30"></div>
+         <div class="spine-panelcel" style="width: 25px">
+         <input type="image" alt="Save" src="/images/save.png" name="action"></div>
+    </form>
+    </div>
+    <div style="float:left;width:25px">
+          <form action="<?SPINE_Location?>admin/filetypes/remove/" method="post">
+         <input type="hidden" name="id" value="$hash{id}">
+         <input type="image" alt="Delete" src="/images/delete.png" name="action">
+    </div>
+    </div</form><div class="spine-spacercel"></div>
+</div>
+EOF
+
+=head1
+    $list .= qq(<div name="adminpanel" class="spine-fullpanel"><form action="<?SPINE_Location?>admin/filetypes/save/" method="post">);
     $list .= qq(<input type="hidden" name="id" value="$hash{id}">\n);
-    $list .= qq(<div class="panelcel" style="width: 10%"><input type="text" name="attr" class="input" value="$hash{attr}" size="15">\n</div>);
-    $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="value" class="input" value="$hash{value}" size="30">\n</div>);
-    $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Save" class="button" name="action">\n</form><form action="<?SPINE_Location?>admin/filetypes/remove/" method="post">);
-    $list .= qq(<input type="hidden" name="id" value="$hash{id}">\n<input type="submit" value="Delete" class="button" name="action"></div\n</form><div class="spacercel"></div></div>\n);     
+    $list .= qq(<div class="spine-panelcel" style="width: 10%"><input type="text" name="attr" class="spine-input" value="$hash{attr}" size="15">\n</div>);
+    $list .= qq(<div class="spine-panelcel" style="width: 20%"><input type="text" name="value" class="spine-input" value="$hash{value}" size="30">\n</div>);
+    $list .= qq(<div class="spine-panelcel" style="width: 20%"><input type="submit" value="Save" class="spine-button" name="action">\n</form><form action="<?SPINE_Location?>admin/filetypes/remove/" method="post">);
+    $list .= qq(<input type="hidden" name="id" value="$hash{id}">\n<input type="submit" value="Delete" class="spine-button" name="action"></div\n</form><div class="spine-spacercel"></div></div>\n);     
+=cut
   }
   $body =~ s/\$list/$list/gmx;
-  if ($error) { $error = qq(<p class="error">$error</p>); }
+  if ($error) { $error = qq(<p class="spine-error">$error</p>); }
   $body =~ s/\$error/$error/gmx;
   $content->body($body);
   return $content;

@@ -9,16 +9,16 @@ package SPINE::Handler::Admin::User;
 
 ## SPINE is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 
 ## You should have received a copy of the GNU General Public License
 ## along with Foobar; if not, write to the Free Software
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-## See COPYING and LICENSE for more information on the GPL   
-## http://spine.sourceforge.net                  
-## beatnik@users.sf.org        
+## See COPYING and LICENSE for more information on the GPL
+## http://spine.sourceforge.net
+## beatnik@users.sf.org
 
 ## $Author: beatnik $ - $Date: 2006/03/08 20:48:44 $ - $Revision: 1.46 $
 
@@ -43,7 +43,7 @@ $VERSION = $SPINE::Constant::VERSION;
 #Apache::Request Handler
 #DB Handler
 
-sub handler 
+sub handler
 { $request = shift; #SPINE::Transparent::Request ; Apache::Request
   my $dbh = shift; #DB Handler
   my @params = ();
@@ -65,15 +65,15 @@ sub handler
   $usergroup_dbi = SPINE::DBI::Usergroup->new($dbh);
   $adminaccess_dbi = SPINE::DBI::Adminaccess->new($dbh);
   $session_dbi = SPINE::DBI::Session->new($dbh);
-  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);  
-  $url = '.administration/user'; 
+  $attribute_dbi = SPINE::DBI::Attribute->new($dbh);
+  $url = '.administration/user';
   
   my $session = undef;
   $session = $session_dbi->get($cookies{'key'}->value) if $cookies{'key'};
   $user = "admin";
   $user = $session->username if $session;
 
-  my @usergroups =  @{ $usergroup_dbi->get({username=>$user}) };
+  my @usergroups = @{ $usergroup_dbi->get({username=>$user}) };
   @usergroups = map { $_ = $_->usergroup } @usergroups;
   my @adminaccess = ();
   for(@usergroups)
@@ -118,42 +118,42 @@ sub handler
   shift @params;
 
   if ($params[0] eq 'new' && !$execperms)
-  { $error = $valid_perms_string.$create_user_string; 
-    $url = '.administration/user'; 
+  { $error = $valid_perms_string.$create_user_string;
+    $url = '.administration/user';
   }
 
   if ($params[0] eq 'remove' && !$execperms)
-  { $error = $valid_perms_string.$remove_user_string; 
-    $url = '.administration/user'; 
+  { $error = $valid_perms_string.$remove_user_string;
+    $url = '.administration/user';
   }
 
   if ($params[0] eq 'edit' && !$readperms)
-  { $error = $valid_perms_string.$edit_user_string; 
-    $url = '.administration/user'; 
+  { $error = $valid_perms_string.$edit_user_string;
+    $url = '.administration/user';
   }
   
   if ($params[0] eq 'save' && !$writeperms)
-  { $error = $valid_perms_string.$save_user_string; 
-    $url = '.administration/user'; 
+  { $error = $valid_perms_string.$save_user_string;
+    $url = '.administration/user';
   }
 
-  if (($params[0] eq 'edit' || $params[0] eq 'new' )  && !$error)
+  if (($params[0] eq 'edit' || $params[0] eq 'new' ) && !$error)
   { $url = '.administration/user-edit'; }
 
   my $edit_user = shift @{ $user_dbi->get({login=>$request->param("login"), count=>1}) };
   if ($edit_user && $params[0] eq 'new' && !$error)
-  { $error = $user_exists_string; 
-    $url = '.administration/user'; 
+  { $error = $user_exists_string;
+    $url = '.administration/user';
   }
 
   if (!$edit_user && ($params[0] eq 'save' || $params[0] eq 'edit' || $params[0] eq 'copy' || $params[0] eq 'remove')&& !$error)
-  { $error = $user_notexists_string; 
-    $url = '.administration/user'; 
+  { $error = $user_notexists_string;
+    $url = '.administration/user';
   }
 
-  if ($params[0] eq 'new'  && !$error && $request->method eq "POST")
-  { $user_dbi->add(SPINE::Base::User->new({usergroup=>"users",login=>$request->param('login'), fullname=>$request->param('fullname')})); 
-    $usergroup_dbi->add(SPINE::Base::Usergroup->new({usergroup=>"users",username=>$request->param('login')})); 
+  if ($params[0] eq 'new' && !$error && $request->method eq "POST")
+  { $user_dbi->add(SPINE::Base::User->new({usergroup=>"users",login=>$request->param('login'), fullname=>$request->param('fullname')}));
+    $usergroup_dbi->add(SPINE::Base::Usergroup->new({usergroup=>"users",username=>$request->param('login')}));
   }
 
   if ($params[0] eq 'save' && !$error && $request->method eq "POST")
@@ -171,48 +171,66 @@ sub handler
   if ($url eq ".administration/user")
   { $content->title("User Administration"); }
   
-  if ((!$params[0] || $params[0] eq 'remove' || $params[0] eq 'save')  || $error)
+  if ((!$params[0] || $params[0] eq 'remove' || $params[0] eq 'save') || $error)
   { my @users = @{$user_dbi->get()};
     my $list = undef;
     for(@users)
     { my %hash = $_->tohash;
-      $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/user/edit/" method="post">\n);
-      $list .= qq(<input type="hidden" name="login" value="$hash{login}"><div class="panelcel" style="width: 20%">$hash{fullname}</div>\n);
-      $list .= qq(<div class="panelcel" style="width: 20%">$hash{login}</div><div class="panelcel" style="width: 20%"><input type="submit" value="edit" class="button" name="action">\n);
-      $list .= qq(</form>&nbsp;<form action="<?SPINE_Location?>admin/user/remove/" method="post"><input type="hidden" name="login" value="$hash{login}">\n);
-      $list .= qq(<input type="submit" value="delete" class="button" name="action"></div></form></div><div class="spacercel"></div>\n);
+      $list .=<<EOF;
+<div name="adminpanel" class="spine-fullpanel">
+   <div style="float:left;width:412px;">
+       <form action="<?SPINE_Location?>admin/user/edit/" method="post">
+            <input type="hidden" name="login" value="$hash{login}">
+            <div class="spine-panelcel" style="width:195px">$hash{fullname}</div>
+            <div class="spine-panelcel" style="width:195px">$hash{login}</div>
+            <div class="spine-panelcel" style="width:10px">
+              <input type="image" alt="edit" src="/images/preferences.png" name="action" style="padding:0px"></div>
+       </form>
+   </div>
+   <div style="float:left;">
+       <form action="<?SPINE_Location?>admin/user/remove/" method="post">
+       <input type="hidden" name="login" value="$hash{login}">
+       <input type="image" alt="delete" src="/images/delete.png" name="action" style="padding:0px">
+       </form>
+   </div>
+
+</div>
+<div class="spine-spacercel"></div>
+
+EOF
+
     }
-    if ($error) { $error = qq(<p class="error">$error</p>); }
+    if ($error) { $error = qq(<p class="spine-error">$error</p>); }
     $body =~ s/\$userdata/$list/gmx;
-    $body =~ s/\$error/$error/gmx;        
-  } 
-  if (($params[0] eq "edit" || $params[0] eq "save" || $params[0] eq "new")  && !$error)
+    $body =~ s/\$error/$error/gmx;
+  }
+  if (($params[0] eq "edit" || $params[0] eq "save" || $params[0] eq "new") && !$error)
   { my $user = shift @{ $user_dbi->get({login=>$request->param("login"), count=>1}) };
-    my @usergroups =  @{ $usergroup_dbi->get({username=>$request->param("login")}) };
+    my @usergroups = @{ $usergroup_dbi->get({username=>$request->param("login")}) };
     my %hash = ();
     %hash = $user->tohash if ref $user;
-    $body =~ s/\$error/$error/gmx;        
-    $body =~ s/\$login/$hash{login}/gmx;  
-    $body =~ s/\$name/$hash{fullname}/gmx;  
-    $body =~ s/\$password//gmx;  
-    $body =~ s/\$id/$hash{id}/gmx;  
-    $body =~ s/\$email/$hash{email}/gmx;  
+    $body =~ s/\$error/$error/gmx;
+    $body =~ s/\$login/$hash{login}/gmx;
+    $body =~ s/\$name/$hash{fullname}/gmx;
+    $body =~ s/\$password//gmx;
+    $body =~ s/\$id/$hash{id}/gmx;
+    $body =~ s/\$email/$hash{email}/gmx;
     @usergroups = map { $_ = $_->usergroup } @usergroups;
     my @adminaccess = ();
     for(@usergroups)
     { push(@adminaccess, @{ $adminaccess_dbi->get({usergroup=>$_}) }); }
     my $usergroups = join(", ",@usergroups);
-    $body =~ s/\$usergroups/$usergroups/gmx;      
+    $body =~ s/\$usergroups/$usergroups/gmx;
     my $adminaccess = undef;
     my %permissions = ();
     for(@adminaccess) { $permissions{$_->section} = $permissions{$_->section} | $_->permissions; }
     #Add clean HTML here
     #ORing permissions works
     #TODO: Add Group & permissions
-    for(keys %permissions) 
+    for(keys %permissions)
     { #$adminaccess .= qq(<input type="checkbox"
       $adminaccess .= $_."&nbsp;&nbsp;". $permissions{$_}."<br>"; }
-    $body =~ s/\$permissions/$adminaccess/gmx;      
+    $body =~ s/\$permissions/$adminaccess/gmx;
   }
   $content->body($body);
   return $content;

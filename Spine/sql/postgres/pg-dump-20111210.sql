@@ -14,28 +14,28 @@ SET search_path = public, pg_catalog;
 -- Name: adminaccess_id_seq; Type: SEQUENCE SET; Schema: public; Owner: spineuser
 --
 
-SELECT pg_catalog.setval('adminaccess_id_seq', 19, true);
+SELECT pg_catalog.setval('adminaccess_id_seq', 20, true);
 
 
 --
 -- Name: attribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: spineuser
 --
 
-SELECT pg_catalog.setval('attribute_id_seq', 242, true);
+SELECT pg_catalog.setval('attribute_id_seq', 252, true);
 
 
 --
 -- Name: content_id_seq; Type: SEQUENCE SET; Schema: public; Owner: spineuser
 --
 
-SELECT pg_catalog.setval('content_id_seq', 193, true);
+SELECT pg_catalog.setval('content_id_seq', 195, true);
 
 
 --
 -- Name: macro_id_seq; Type: SEQUENCE SET; Schema: public; Owner: spineuser
 --
 
-SELECT pg_catalog.setval('macro_id_seq', 3, true);
+SELECT pg_catalog.setval('macro_id_seq', 6, true);
 
 
 --
@@ -56,7 +56,7 @@ SELECT pg_catalog.setval('messagegroup_id_seq', 4, true);
 -- Name: navbarbuttons_id_seq; Type: SEQUENCE SET; Schema: public; Owner: spineuser
 --
 
-SELECT pg_catalog.setval('navbarbuttons_id_seq', 210, true);
+SELECT pg_catalog.setval('navbarbuttons_id_seq', 211, true);
 
 
 --
@@ -84,14 +84,14 @@ SELECT pg_catalog.setval('style_id_seq', 33, true);
 -- Name: usergroup_id_seq; Type: SEQUENCE SET; Schema: public; Owner: spineuser
 --
 
-SELECT pg_catalog.setval('usergroup_id_seq', 2, true);
+SELECT pg_catalog.setval('usergroup_id_seq', 3, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: spineuser
 --
 
-SELECT pg_catalog.setval('users_id_seq', 2, true);
+SELECT pg_catalog.setval('users_id_seq', 3, true);
 
 
 --
@@ -239,9 +239,15 @@ INSERT INTO attribute VALUES (106, 'mimetype', 'content', 'rss', 'application/rs
 INSERT INTO attribute VALUES (107, 'mimetype', 'content', 'xml', 'text/xml');
 INSERT INTO attribute VALUES (108, 'mimetype', 'content', 'htm', 'text/html');
 INSERT INTO attribute VALUES (109, 'mimetype', 'content', 'html', 'text/html');
-INSERT INTO attribute VALUES (238, 'stats', 'counter', 'login.html', '1');
-INSERT INTO attribute VALUES (242, 'stats', 'counter', '_admin.css', '31');
-INSERT INTO attribute VALUES (240, 'stats', 'counter', 'spine.js', '32');
+INSERT INTO attribute VALUES (249, 'stats', 'counter', 'index.html', '6');
+INSERT INTO attribute VALUES (245, 'stats', 'counter', 'plain.css', '1');
+INSERT INTO attribute VALUES (248, 'stats', 'counter', 'gscape.css', '1');
+INSERT INTO attribute VALUES (238, 'stats', 'counter', 'login.html', '8');
+INSERT INTO attribute VALUES (251, 'stats', 'counter', 'test.html', '18');
+INSERT INTO attribute VALUES (243, 'stats', 'counter', '_admin-v1.2.css', '751');
+INSERT INTO attribute VALUES (240, 'stats', 'counter', 'spine.js', '855');
+INSERT INTO attribute VALUES (246, 'stats', 'counter', 'littlehome.html', '2');
+INSERT INTO attribute VALUES (242, 'stats', 'counter', '_admin.css', '83');
 INSERT INTO attribute VALUES (194, 'i18n', 'macroset_not_exists', 'en', 'This macroset does not exist!');
 INSERT INTO attribute VALUES (195, 'i18n', 'messagegroup_exists', 'en', 'This messagegroup already exists!');
 INSERT INTO attribute VALUES (196, 'i18n', 'messagegroup_not_exists', 'en', 'This messagegroup does not exist!');
@@ -286,14 +292,41 @@ INSERT INTO attribute VALUES (234, 'i18n', 'usergroup_exists', 'en', 'This user 
 INSERT INTO attribute VALUES (235, 'i18n', 'valid_perms', 'en', 'You do not have valid permissions for this operation : ');
 INSERT INTO attribute VALUES (236, 'i18n', 'valid_perms', 'en', 'You do not have valid permissions for this operation : ');
 INSERT INTO attribute VALUES (237, 'i18n', 'view_stats', 'en', 'View statistics');
-INSERT INTO attribute VALUES (241, 'stats', 'counter', 'jquery.js', '32');
-INSERT INTO attribute VALUES (239, 'stats', 'counter', 'spine.css', '32');
+INSERT INTO attribute VALUES (247, 'stats', 'counter', 'gscape.html', '4');
+INSERT INTO attribute VALUES (252, 'stats', 'counter', 'search.html', '2');
+INSERT INTO attribute VALUES (244, 'stats', 'counter', 'spine-v1.2.css', '752');
+INSERT INTO attribute VALUES (241, 'stats', 'counter', 'jquery.js', '1090');
+INSERT INTO attribute VALUES (239, 'stats', 'counter', 'spine.css', '99');
+INSERT INTO attribute VALUES (250, 'stats', 'counter', 'toc.html', '2');
 
 
 --
 -- Data for Name: content; Type: TABLE DATA; Schema: public; Owner: spineuser
 --
 
+INSERT INTO content VALUES (87, 'test.html', '', 0, 'blank', 'main', 1, '', '2011-10-11 13:43:23', 'admin', 'users', '1111', '<p>
+</p>
+<div id="preview" class="preview">&nbsp;</div>
+<p><strong><input class="button" onclick="$(''#preview'').load(''index.html'').slideToggle(''slow'');" type="button" value="Preview" /></strong></p>
+<table style="width: 240px; height: 42px;" border="0">
+<tbody>
+<tr>
+<td><strong>This</strong></td>
+<td><strong>That</strong></td>
+</tr>
+<tr>
+<td>happy</td>
+<td>sad</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>a</li>
+<li>b</li>
+<li>c</li>
+<li>d</li>
+<li>e</li>
+</ul>', 'This is where you put comments about this content', '');
 INSERT INTO content VALUES (2, 'documentation/developing.html', 'Developing', 0, 'main', 'main', 1, 'developing plugin code', '2006-12-31 23:00:00', 'admin', 'users', '1010', '<h2>Developing for SPINE</h2>
 
 <p>There are currently two ways to interact with SPINE. Both use perl packages so we pressume you have sufficient skills.</p>
@@ -415,6 +448,73 @@ Both these handler types can be dropped in the specific Perl directories and the
 <p>If you need certain configuration settings, it might be handy to make it accessible like this. 
 This way there is no unnecessary file I/O.</p>
 ', 'This is where you put comments about this content', '');
+INSERT INTO content VALUES (8, '.administration/access', 'Administration Access', 0, '.admin', 'main', 1, '', '2011-10-12 11:51:48', 'admin', 'admin', '1111', '<div name="adminpanel" class="spine-fullpanel">
+$error
+<div class="spine-panelcel" style="width: 20%"><b>Admin Section</b></div>
+<div class="spine-panelcel" style="width: 10%"><b>Usergroup</b></div>
+<div class="spine-panelcel" style="width: 20%"><b>Permissions&nbsp;(rwx)</b></div>
+<div class="spine-spacercel"></div></div>
+$list', 'This bit is the general statistics administration template', '');
+INSERT INTO content VALUES (93, '.administration/navbar', 'Navigation Bar Administration', 0, '.admin', 'main', 1, '', '2011-10-12 12:09:45', 'admin', 'admin', '1111', '<form method="post" action="<?SPINE_Location?>admin/navbar/save/">
+<div name="adminpanel" class="spine-fullpanel">
+
+$error<b>Navigation Bar Edit : $filename</b><br>
+<input type="submit" value="Save" class="spine-button">
+<input type="button" value="Advanced" onClick="o=document.getElementById(''spine-advanced''); if(o.style.display==''inline''){o.style.display=''none'';}else{o.style.display=''inline'';}" class="spine-button">
+<br><b>Settings :</b>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel" id="spine-advanced" style="height: auto; width: 100%;">
+ <div class="spine-panelcel" style="width: 10%; height: auto">Owner:<br/>$owner</div>
+ <div class="spine-panelcel" style="width: 18%; height: auto">Usergroup:<br/><select name="usergroup" class="spine-general">$usergroup</select></div>
+ <div class="spine-panelcel" style="width: 18%; height: auto">Group Permissions:<br/>$gpermissions</div>
+ <div class="spine-panelcel" style="width: 18%; height: auto">Public Permissions:<br/>$wpermissions</div>
+ <div class="spine-panelcel" style="width: 18%; height: auto">Modified:<br/>$modified</div>
+ <div class="spine-spacercel"></div>
+</div>
+
+<input type="hidden" name="name" value="$filename">
+<input type="hidden" name="action" value="settings">
+<div name="adminpanel" class="spine-fullpanel" style="border: 1px; height: auto">
+ <div class="spine-panelcel" style="width: auto; padding-right: 2px; height: auto">Alignment:&nbsp;&nbsp;<br><select name="alignment">$alignment</select>&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; padding-right: 2px; height: auto">Positioning:&nbsp;&nbsp;<br><select name="positioning">$positioning</select>&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; padding-right: 2px; height: auto">Font:&nbsp;&nbsp;<br><input type="text" size="9" name="font" class="spine-input" value="$font">&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; padding-right: 2px; height: auto">Size:&nbsp;&nbsp;<br><input type="text" size="3" name="size" class="spine-input" value="$size">&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; padding-right: 2px; height: auto">Color:&nbsp;&nbsp;<br><input type="text" size="7" name="color" class="spine-input" value="$color">&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; padding-right: 2px; height: auto">Style:&nbsp;&nbsp;<br><select name="style">$style</select>&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; padding-right: 2px; height: auto">Separator:&nbsp;&nbsp;<br><input type="text" size="7" name="separator" class="spine-input" value="$separator">&nbsp;&nbsp;</div>
+ <div class="spine-spacercel"></div>
+</div> 
+
+</form>
+<div name="adminpanel" class="spine-fullpanel"><hr width="95%"></div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 18%">URL:</div>
+ <div class="spine-panelcel" style="width: 18%">Image:</div>
+ <div class="spine-panelcel" style="width: 18%">Label:</div>
+ <div class="spine-panelcel" style="width: 18%">&nbsp;</div> 
+ <div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel" style="height: auto">
+<form method="post" action="<?SPINE_Location?>admin/navbar/addbutton/" style="padding: 0; margin: 0; display: inline;">
+<input type="hidden" name="name" value="$filename">
+<input type="hidden" name="id" value="$navbar">
+<input type="hidden" name="position" value="$position">
+ <div class="spine-panelcel" style="width: 18%"><input type="text" size="25" name="link" class="spine-input" value=""></div>
+ <div class="spine-panelcel" style="width: 18%"><input type="text" size="25" name="image" class="spine-input" value=""></div>
+ <div class="spine-panelcel" style="width: 18%"><input type="text" size="25" name="label" class="spine-input" value=""></div>
+ <div class="spine-panelcel" style="width: 18%"><input type="image" src="<?SPINE_Images?>save.png" alt="Save" style="padding: 0px"></div> 
+ <div class="spine-spacercel"></div>
+</form>
+</div>
+
+<!-- Button list -->
+
+$buttonlist
+
+<div name="adminpanel" class="spine-fullpanel"><hr width="95%">Preview:<br /><?SPINE_Navbar("$filename")?></div>', '', '');
 INSERT INTO content VALUES (6, 'documentation/features.html', 'Features', 0, 'main', 'main', 1, 'features', '2007-05-04 23:00:41', 'admin', 'admin', '0010', '<h2>Features</h2>
 <dir>
 <li>Easy to use Webbased administration: Administrate your site through web forms</li>
@@ -586,13 +686,6 @@ Your webserver usually guesses what data is sent. SPINE does not guess. You have
 <p>Q: What if I want to define a specific CSS class to the button?</p>
 <p>A: See above. The Preferences pane has a field to define a CSS class for the button.</p>
 ', 'This is where you put comments about this content', '');
-INSERT INTO content VALUES (8, '.administration/access', 'Administration Access', 0, '.admin', 'main', 1, '', '2008-03-25 18:56:22', 'admin', 'admin', '0000', '<div name="adminpanel" class="fullpanel">
-$error
-<div class="panelcel" style="width: 20%"><b>Admin Section</b></div>
-<div class="panelcel" style="width: 10%"><b>Usergroup</b></div>
-<div class="panelcel" style="width: 20%"><b>Permissions&nbsp;(rwx)</b></div>
-<div class="spacercel"></div></div>
-$list', 'This bit is the general statistics administration template', '');
 INSERT INTO content VALUES (13, 'documentation/tags.html', 'Tags', 0, 'main', 'main', 1, '', '2006-12-31 23:00:00', 'admin', 'users', '1010', '<h2>Using Tags in your content</h2>
 <h3>&lt;?SPINE_Content?&gt;</h3>
 Use this tag in the Style to indicate where the content is inserted.
@@ -987,6 +1080,242 @@ Default login info:   <ol>
 <li>User:admin</li>
 <li>Password:  foo</li>
 </ol>', 'Installation instruction', 'text/html');
+INSERT INTO content VALUES (92, '.administration/content', 'Content Administration', 0, '.admin', 'main', 1, '', '2011-10-12 11:53:49', 'admin', 'admin', '1111', '<script language="javascript" src="jquery.js"></script>
+<script language="javascript" type="text/javascript" src="../jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript" src="../jscripts/tiny_mce/tinymce_init.js"></script>
+
+<script type="text/javascript">
+var tinyMCEmode = false;
+var changed = false;
+var randomstring = "";
+$(document).ready(function(){
+  $(''#help'').hide();
+  $(''#preview'').hide();
+ });
+
+function randomString() 
+{var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+  var string_length = 8;
+  randomstring = '''';
+  for (var i=0; i<string_length; i++) 
+  { var rnum = Math.floor(Math.random() * chars.length);
+     randomstring += chars.substring(rnum,rnum+1);
+   }
+}
+
+function toogleEditorMode(sEditorID) {
+    try {
+        if(tinyMCEmode) {
+            tinyMCEmode = false;
+            tinyMCE.execCommand("mceRemoveControl",tinyMCEmode,"body");
+            $(''#switch'').text(''Text'');
+        } else {
+           tinyMCEmode = true; 
+           tinyMCE.execCommand("mceAddControl", tinyMCEmode, "body");
+            $(''#switch'').text(''Visual'');
+        }
+    } catch(e) {
+        //error handling
+    }
+}
+</script>
+
+<div id="spine-attributes" class="spine-dialog" style="border: 1px solid; overflow: auto; height: 200px">
+<img border="0" align="right" valign="top" src="/images/delete.png" onclick="$(''#spine-attributes'').hide();"><b>&nbsp;Custom Attributes</b><br>
+<div style="width: 590px; height: 1.75em" id="attrlist">&nbsp;</div>
+</div>
+
+<div id="spine-realtags" class="spine-dialog" style="border: 1px solid: overflow:auto;height: 350px;">
+<img border="0" align="right" valign="top" src="/images/delete.png" onClick="document.getElementById(''spine-realtags'').style.display=''none''; return false;">
+<script type="text/javascript">
+$(document).ready(function(){
+  $(''#help'').hide();
+ });
+</script>
+<u>Usable tags:</u><br>
+&lt;?SPINE_Content?&gt;, 
+&lt;?SPINE_Env?&gt;, 
+&lt;?SPINE_Images?&gt;, 
+&lt;?SPINE_Location?&gt;, 
+&lt;?SPINE_Login?&gt;, 
+&lt;?SPINE_Macro("<i>key</i>")?&gt;, 
+&lt;?SPINE_Message("<i>messagegroup</i>"[,"<i>id</i>"])?&gt;, 
+&lt;?SPINE_Message_Body?&gt;, 
+&lt;?SPINE_Message_Comments?&gt;, 
+&lt;?SPINE_Message_Date?&gt;, 
+&lt;?SPINE_Message_DateTime?&gt;, 
+&lt;?SPINE_Message_Group?&gt;, 
+&lt;?SPINE_Message_Id?&gt;, 
+&lt;?SPINE_Message_Owner?&gt;, 
+&lt;?SPINE_Message_Parent_Id?&gt;
+<br />
+<u>Usable tags:</u>
+<br>
+&lt;?SPINE_Env?&gt;, 
+&lt;?SPINE_Message_Parent_Subject?&gt;, 
+&lt;?SPINE_Message_Subject?&gt;, 
+&lt;?SPINE_Message_Time?&gt;, 
+&lt;?SPINE_Navbar("<i>navbarname</i>")?&gt;,
+&lt;?SPINE_Page?&gt; 
+&lt;?SPINE_Referer?&gt;, 
+&lt;?SPINE_Search?&gt;, 
+&lt;?SPINE_Servername?&gt;, 
+&lt;?SPINE_Stats("hits")?&gt;, 
+&lt;?SPINE_Stats("modified")?&gt;,
+&lt;?SPINE_Title?&gt;, 
+&lt;?SPINE_User?&gt;, 
+&lt;?SPINE_Webmaster?&gt;, 
+&lt;?SPINE_XMLChanges?&gt;
+</div><!-- spine_realtags -->
+
+<div class="spine-dialog" id="tags" style="width:900px; height:140px">
+<img border="0" align="right" valign="top" src="/images/delete.png" onclick="$(''#tags'').hide(); return false;">
+
+
+<div class="spine-dialog" id="spine-tags" style="width:900px; height:140px">
+</div>
+<form method="post" action="<?SPINE_Location?>admin/style/save/">
+
+<div name="adminpanel" class="spine-fullpanel" style="position: relative">
+<div class="spine-help" id="spine-help">
+</div>
+$error<b>Style Edit : $filename $lock</b><br>
+<input type="submit" value="Save" class="spine-button">
+<input type="button" value="Advanced" onClick="o=document.getElementById(''spine-advanced''); if(o.style.display==''inline''){o.style.display=''none'';}else{o.style.display=''inline'';}" class="spine-button">
+<input type="hidden" name="name" value="$filename">
+<a href="#" style="position:absolute; top:5px; right:5px;" onClick="$(''#help'').load(''.help-style'').slideToggle(''slow''); return false;">Help</a>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Size :</div>
+ <div class="spine-panelcel" style="width: 25%">$size bytes</div>
+ <div class="spine-panelcel" style="width: 15%">Last Modified : </div>
+ <div class="spine-panelcel" style="width: 25%">$lastmod</div>
+ <div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Title :</div>
+ <div class="spine-panelcel" style="width: 25%"><input class="spine-input" name="title" value="$title" size="25" type="text"></div>
+ <div class="spine-panelcel" style="width: 15%">Macros : </div>
+ <div class="spine-panelcel" style="width: 25%"><select name="macros" class="spine-general">
+<option value="">none
+$macros
+</select></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel" id="spine-advanced2" style="height: auto ; width: 100%;">
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Owner :</div>
+ <div class="spine-panelcel" style="width: 25%">$owner</div>
+ <div class="spine-panelcel" style="width: 15%">Group : </div>
+ <div class="spine-panelcel" style="width: 25%"><select name="usergroup" class="spine-general">$group</select>
+ </div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Permissions :</div>
+ <div class="spine-panelcel" style="width: 55%">Group : $gpermissions &nbsp;&nbsp;&nbsp;&nbsp; Public : $wpermissions</div>
+ <div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+Comment :<br>
+<textarea cols="150" rows="8" name="icomment" class="spine-input">$icomment</textarea>
+</div>
+
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+Contents :<br>
+<textarea cols="150" rows="25" name="body" class="spine-input">$body</textarea>
+</div>
+</form>
+
+&lt;?SPINE_Message_Parent_Subject?&gt;, &lt;?SPINE_Message_Subject?&gt;, &lt;?SPINE_Message_Time?&gt;, &lt;?SPINE_Navbar("<i>navbarname</i>")?&gt;,
+&lt;?SPINE_Page?&gt; &lt;?SPINE_Referer?&gt;, &lt;?SPINE_Search?&gt;, &lt;?SPINE_Servername?&gt;, &lt;?SPINE_Stats("hits")?&gt;, &lt;?SPINE_Stats("modified")?&gt;,
+&lt;?SPINE_Title?&gt;, &lt;?SPINE_User?&gt;, &lt;?SPINE_Webmaster?&gt;, &lt;?SPINE_XMLChanges?&gt;</div>
+
+<form method="post" action="<?SPINE_Location?>admin/content/save/" name="editcontent">
+$error
+<div name="adminpanel" class="spine-fullpanel" style="position: relative">
+<div class="spine-preview" id="preview">
+</div>
+<div class="spine-help" id="help">
+</div>
+<b>Content Edit: $filename $lock </b><br>
+<input value="Save" class="spine-button" type="submit">
+<input type="button" value="Preview" onClick="$(''#preview'').load(''<?SPINE_Location?>$filename'').slideToggle(''slow''); return false;" class="spine-button">
+<input value="Advanced" onclick="$(''#spine-advanced'').toggle(); return false;" class="spine-button" type="button">
+<input name="name" value="$filename" type="hidden">
+<a href="#" style="position:absolute; top:5px; right:5px;" onClick="$(''#help'').load(''.help-content'').slideToggle(''slow''); return false;">Help</a>
+</div>
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Size:</div>
+ <div class="spine-panelcel" style="width: 25%">$size bytes</div>
+ <div class="spine-panelcel" style="width: 15%">Last Modified: </div>
+ <div class="spine-panelcel" style="width: 25%">$lastmod</div>
+ <div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Title:</div>
+ <div class="spine-panelcel" style="width: 25%"><input class="spine-input" name="title" value="$title" size="25" type="text"></div>
+ <div class="spine-panelcel" style="width: 15%">Style: </div>
+ <div class="spine-panelcel" style="width: 25%"><select name="style" class="spine-general">
+<option>Select Style $stylelist</select></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel" id="spine-advanced" style="height: auto ; width: 100%;">
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Enter to &lt;br&gt;:</div>
+ <div class="spine-panelcel" style="width: 25%">$breaks</div>
+ <div class="spine-panelcel" style="width: 15%">Log Acces: </div>
+ <div class="spine-panelcel" style="width: 25%">$logging</div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Macros:</div>
+ <div class="spine-panelcel" style="width: 25%"><select name="macros" class="spine-general">
+<option value="">none
+$macrolist
+</select></div>
+ <div class="spine-panelcel" style="width: 15%">Keywords:</div>
+ <div class="spine-panelcel" style="width: 25%"><input name="keywords" value="$keywords" size="30" class="spine-input" type="text"></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Owner:</div>
+ <div class="spine-panelcel" style="width: 25%">$owner</div>
+ <div class="spine-panelcel" style="width: 15%">Group:</div>
+ <div class="spine-panelcel" style="width: 25%"><select name="usergroup" class="spine-general">$group</select>
+ </div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Permissions:</div>
+ <div class="spine-panelcel" style="width: 25%; height: auto">Group: $gpermissions<br>Public&nbsp;: $wpermissions</div>
+ <div class="spine-panelcel" style="width: 15%">Content-type:</div>
+ <div class="spine-panelcel" style="width: 25%"><input class="spine-input" name="type" value="$type" size="25" type="text">&nbsp;<a href="#" onClick="document.editcontent.type.value=''$mimetype''; return false;">Find</a></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+Comment:<br>
+<textarea cols="150" rows="6" name="icomment" class="spine-input">$icomment</textarea>
+</div>
+</div>
+<div name="adminpanel" class="spine-fullpanel">
+Contents:&nbsp;&nbsp;&nbsp;<a href="#" onClick="$.post(''/spine/admin/attr/'', { name: encodeURI(''$filename'') },  function(data) { $(''#attrlist'').html(data); } ); $(''#spine-attributes'').show(); return false;">Attributes</a>&nbsp;&nbsp;<a href="#" onClick="$(''#spine-realtags'').show(); return false;">Tags</a>&nbsp;&nbsp;Switch editor mode: <a href="#" id="switch" title="hide TinyMCE" onclick="toogleEditorMode(''body''); return false;">Visual</a><br>
+<textarea cols="150" id="body" rows="30" name="body" class="spine-input"$disabled>$body</textarea><br>
+</div>
+</form>', 'I''m not sure what this is...', '');
 INSERT INTO content VALUES (24, 'documentation/quickstart.html', 'Getting Started', 0, 'main', 'main', 1, 'quick start tutorial documentation', '2007-02-22 23:14:51', 'admin', 'users', '1010', '<h2>Getting Started with Spine</h2>
 <u>Step 1: Login</u><br>
 Select the Login link.<br>
@@ -1271,6 +1600,36 @@ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 END OF TERMS AND CONDITIONS
 </pre>', 'This is the GNU GPL License.', 'text/html');
+INSERT INTO content VALUES (30, '.administration/stats-general', 'Statistics Administration', 0, '.admin', 'main', 1, '', '2011-10-12 13:15:11', 'admin', 'admin', '1111', '<div name="adminpanel" class="spine-fullpanel">
+<form method="post" action="<?SPINE_Location?>admin/$type/view/" style="padding: 0; margin: 0; display: inline;"><b>View $label</b><br>
+<input type="submit" value="View" class="spine-button">&nbsp;<select name="name" class="spine-general"><option value="">Select one
+$list
+</select>
+</form>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<hr width="95%">
+</div>
+
+<form method="POST" name="theform" action="<?SPINE_Location?>admin/$type/remove/" style="padding: 0; margin: 0; display: inline;" onSubmit="return confirm(''You are about to delete ''+(document.theform.$type.options[document.theform.$type.selectedIndex].value)+''! Are you sure?'');">
+<b>Remove $label</b><br>
+<input type="submit" value="Remove" class="spine-button">&nbsp;<select name="name" class="spine-general"><option value="">Select one
+$list
+</select>
+</form></div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<hr width="95%">
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 20%"><a href="<?SPINE_Location?>admin/statistics/?sort=filename$orderf">Page</a></div>
+<div class="spine-panelcel" style="width: auto"><a href="<?SPINE_Location?>admin/statistics/?sort=counter$orderc">Requests</a></div>
+<div class="spine-spacercel"></div>
+</div>
+$namelist
+', 'This bit is the general statistics administration template', '');
 INSERT INTO content VALUES (28, 'documentation/changelog.html', 'changelog', 0, 'main', 'main', 1, 'changes changelog update code status', '2007-08-28 17:46:44', 'admin', 'users', '1010', '<pre>
 ChangeLog
 =========
@@ -1451,93 +1810,140 @@ Release - 1.0_02
 Release - 1.0_01
 - First DB based release
 </pre>', '', 'text/html');
-INSERT INTO content VALUES (30, '.administration/stats-general', 'Statistics Administration', 0, '.admin', 'main', 1, '', '2008-05-06 14:08:24', 'admin', 'admin', '0000', '<div name="adminpanel" class="fullpanel">
-<form method="post" action="<?SPINE_Location?>admin/$type/view/" style="padding: 0; margin: 0; display: inline;"><b>View $label</b><br>
-<input type="submit" value="View" class="button">&nbsp;<select name="name" class="general"><option value="">Select one
-$list
-</select>
-</form>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<hr width="95%">
-</div>
-
-<form method="POST" name="theform" action="<?SPINE_Location?>admin/$type/remove/" style="padding: 0; margin: 0; display: inline;" onSubmit="return confirm(''You are about to delete ''+(document.theform.$type.options[document.theform.$type.selectedIndex].value)+''! Are you sure?'');">
-<b>Remove $label</b><br>
-<input type="submit" value="Remove" class="button">&nbsp;<select name="name" class="general"><option value="">Select one
-$list
-</select>
-</form></div>
-
-<div name="adminpanel" class="fullpanel">
-<hr width="95%">
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 20%"><a href="<?SPINE_Location?>admin/statistics/?sort=filename$orderf">Page</a></div>
-<div class="panelcel" style="width: auto"><a href="<?SPINE_Location?>admin/statistics/?sort=counter$orderc">Requests</a></div>
-<div class="spacercel"></div>
-</div>
-$namelist
-
-', 'This bit is the general statistics administration template', '');
-INSERT INTO content VALUES (31, '.administration/stats', 'Statistics Administration', 0, '.admin', 'main', 1, '', '2008-03-31 22:00:37', 'admin', 'admin', '0000', '<div name="adminpanel" class="fullpanel">
+INSERT INTO content VALUES (31, '.administration/stats', 'Statistics Administration', 0, '.admin', 'main', 1, '', '2011-10-12 12:06:33', 'admin', 'admin', '1111', '<div name="adminpanel" class="spine-fullpanel">
 Statistics for <b>$name</b>
 </div>
 
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 45%"><b>Referer</b></div>
-<div class="panelcel" style="width: auto"><b>Requests</b></div>
-<div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 45%"><b>Referer</b></div>
+<div class="spine-panelcel" style="width: auto"><b>Requests</b></div>
+<div class="spine-spacercel"></div>
 </div>
 $refererlist
 <br>
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 45%"><b>User Agent</b></div>
-<div class="panelcel" style="width: auto"><b>Requests</b></div>
-<div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 45%"><b>User Agent</b></div>
+<div class="spine-panelcel" style="width: auto"><b>Requests</b></div>
+<div class="spine-spacercel"></div>
 </div>
 $useragentlist
 <br>
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 45%"><b>Host / IP</b></div>
-<div class="panelcel" style="width: auto"><b>Requests</b></div>
-<div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 45%"><b>Host / IP</b></div>
+<div class="spine-panelcel" style="width: auto"><b>Requests</b></div>
+<div class="spine-spacercel"></div>
 </div>
 $remoteaddrlist
 <br>
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 45%"><b>URL parameters</b></div>
-<div class="panelcel" style="width: auto"><b>Requests</b></div>
-<div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 45%"><b>URL parameters</b></div>
+<div class="spine-panelcel" style="width: auto"><b>Requests</b></div>
+<div class="spine-spacercel"></div>
 </div>
 $querylist
 <br>
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 45%"><b>Month</b></div>
-<div class="panelcel" style="width: auto"><b>Requests</b></div>
-<div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 45%"><b>Month</b></div>
+<div class="spine-panelcel" style="width: auto"><b>Requests</b></div>
+<div class="spine-spacercel"></div>
 </div>
 $monthlist
 
 <br>
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 45%"><b>Weekday</b></div>
-<div class="panelcel" style="width: auto"><b>Requests</b></div>
-<div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 45%"><b>Weekday</b></div>
+<div class="spine-panelcel" style="width: auto"><b>Requests</b></div>
+<div class="spine-spacercel"></div>
 </div>
 $weekdaylist
 
 <br>
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 45%"><b>Hour</b></div>
-<div class="panelcel" style="width: auto"><b>Requests</b></div>
-<div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 45%"><b>Hour</b></div>
+<div class="spine-panelcel" style="width: auto"><b>Requests</b></div>
+<div class="spine-spacercel"></div>
 </div>
-$hourlist
-', 'This is the template for statistics administration', '');
+$hourlist', 'This is the template for statistics administration', '');
 INSERT INTO content VALUES (32, 'jquery.html', '', 0, 'main-minimal', 'main', 1, '', '2008-03-26 22:04:54', 'admin', 'users', '1010', '<a href="#" onClick="$(''#container'').addClass(''Opaque''); $(''#container'').fade(''slow''); return false;">Click</a>', 'This is where you put comments about this content', '');
+INSERT INTO content VALUES (91, '.administration/style', 'Style Administration', 0, '.admin', 'main', 1, '', '2011-10-12 12:16:21', 'admin', 'admin', '1111', '<script language="javascript" src="jquery.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $(''#help'').hide();
+ });
+</script>
+
+<div class="spine-dialog" id="spine-tags" style="width:900px; height:140px">
+<img border="0" align="right" valign="top" src="/images/delete.png" onClick="document.getElementById(''tags'').style.display=''none''; return false;"><u>Usable tags:</u><br>&lt;?SPINE_Env?&gt;, &lt;?SPINE_Images?&gt;, &lt;?SPINE_Location?&gt;, &lt;?SPINE_Login?&gt;, &lt;?SPINE_Macro("<i>key</i>")?&gt;, 
+
+&lt;?SPINE_Message("<i>messagegroup</i>"[,"<i>id</i>"])?&gt;, &lt;?SPINE_Message_Body?&gt;, &lt;?SPINE_Message_Comments?&gt;, &lt;?SPINE_Message_Date?&gt;, 
+&lt;?SPINE_Message_DateTime?&gt;, &lt;?SPINE_Message_Group?&gt;, &lt;?SPINE_Message_Id?&gt;, &lt;?SPINE_Message_Owner?&gt;, &lt;?SPINE_Message_Parent_Id?&gt;,
+
+&lt;?SPINE_Message_Parent_Subject?&gt;, &lt;?SPINE_Message_Subject?&gt;, &lt;?SPINE_Message_Time?&gt;, &lt;?SPINE_Navbar("<i>navbarname</i>")?&gt;,
+&lt;?SPINE_Page?&gt; &lt;?SPINE_Referer?&gt;, &lt;?SPINE_Search?&gt;, &lt;?SPINE_Servername?&gt;, &lt;?SPINE_Stats("hits")?&gt;, &lt;?SPINE_Stats("modified")?&gt;,
+
+&lt;?SPINE_Title?&gt;, &lt;?SPINE_User?&gt;, &lt;?SPINE_Webmaster?&gt;, &lt;?SPINE_XMLChanges?&gt;</div>
+<form method="post" action="<?SPINE_Location?>admin/style/save/">
+
+<div name="adminpanel" class="spine-fullpanel" style="position: relative">
+<div class="spine-help" id="spine-help">
+</div>
+$error<b>Style Edit : $filename $lock</b><br>
+<input type="submit" value="Save" class="spine-button">
+<input type="button" value="Advanced" onClick="o=document.getElementById(''spine-advanced''); if(o.style.display==''inline''){o.style.display=''none'';}else{o.style.display=''inline'';}" class="spine-button">
+<input type="hidden" name="name" value="$filename">
+<a href="#" style="position:absolute; top:5px; right:5px;" onClick="$(''#help'').load(''.help-style'').slideToggle(''slow''); return false;">Help</a>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Size :</div>
+ <div class="spine-panelcel" style="width: 25%">$size bytes</div>
+ <div class="spine-panelcel" style="width: 15%">Last Modified : </div>
+ <div class="spine-panelcel" style="width: 25%">$lastmod</div>
+ <div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Title :</div>
+ <div class="spine-panelcel" style="width: 25%"><input class="spine-input" name="title" value="$title" size="25" type="text"></div>
+ <div class="spine-panelcel" style="width: 15%">Macros : </div>
+ <div class="spine-panelcel" style="width: 25%"><select name="macros" class="spine-general">
+<option value="">none
+$macros
+</select></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel" id="spine-advanced" style="height: auto ; width: 100%;">
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Owner :</div>
+ <div class="spine-panelcel" style="width: 25%">$owner</div>
+ <div class="spine-panelcel" style="width: 15%">Group : </div>
+ <div class="spine-panelcel" style="width: 25%"><select name="usergroup" class="spine-general">$group</select>
+ </div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+ <div class="spine-panelcel" style="width: 15%">Permissions :</div>
+ <div class="spine-panelcel" style="width: 55%">Group : $gpermissions &nbsp;&nbsp;&nbsp;&nbsp; Public : $wpermissions</div>
+ <div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+Comment :<br>
+<textarea cols="150" rows="8" name="icomment" class="spine-input">$icomment</textarea>
+</div>
+
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+Contents :<br>
+<textarea cols="150" rows="25" name="body" class="spine-input">$body</textarea>
+</div>
+</form>
+', 'This is the style template', '');
 INSERT INTO content VALUES (42, 'documentation/styles.html', 'Included Styles', 0, 'main', 'main', 1, '', '2007-02-22 23:23:26', 'admin', 'users', '1010', 'SPINE includes 17 default styles:<br><center>
 <a href="<?SPINE_Images?>spine_style.jpg"><img src="<?SPINE_Images?>spine_style.jpg" width="455" height="526"></a><br>Default SPINE style. Style: main<br><br>
 <a href="<?SPINE_Images?>spine2_style.jpg"><img src="<?SPINE_Images?>spine2_style.jpg" width="455" height="526"></a><br>Second SPINE style. Style: main2<br><br>
@@ -4086,15 +4492,6 @@ INSERT INTO content VALUES (85, 'feed.rss2', '', 0, 'blank', 'main', 1, '', '200
 </rss>
 ', 'This is where you put comments about this content', 'application/rss-xml');
 INSERT INTO content VALUES (86, 'foo.html', '', 0, 'main', 'main', 1, '', '2008-05-08 11:04:26', 'admin', 'users', '1010', 'Stub content...<br><br> It looks like the author was negligent enough to leave this stub.', 'This is where you put comments about this content', '');
-INSERT INTO content VALUES (87, 'test.html', '', 0, 'blank', 'main', 1, '', '2008-06-15 18:12:43', 'admin', 'users', '1010', '<script type="text/javascript">
-$(document).ready(function(){
-  $(''#preview'').hide();
- });
-</script>
-
-<link rel="stylesheet" type="text/css" href="_admin.css" media="screen">
-<div class="preview" id="preview"></div>
-<input type="button" value="Preview" onClick="$(''#preview'').load(''index.html'').slideToggle(''slow'');" class="button">', 'This is where you put comments about this content', '');
 INSERT INTO content VALUES (88, '.help-content', '', 0, 'blank', 'main', 1, '', '2008-05-28 21:21:27', 'admin', 'users', '1010', 'HELP!<br>
 I need somebody!<br>
 I need somebody!<br>
@@ -4224,342 +4621,12 @@ Output:<br><textarea rows="18" cols="100" id="config" class="input">
 <div class="spacercel"></div>
 </div>
 </form>', 'This is where you put comments about this content', '');
-INSERT INTO content VALUES (91, '.administration/style', 'Style Administration', 0, '.admin', 'main', 1, '', '2008-05-29 22:40:00', 'admin', 'admin', '0000', '<script language="javascript" src="jquery.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-  $(''#help'').hide();
- });
-</script>
-
-<div class="dialog" id="tags" style="width:900px; height:140px">
-<img border="0" align="right" valign="top" src="/images/delete.png" onClick="document.getElementById(''tags'').style.display=''none''; return false;"><u>Usable tags:</u><br>&lt;?SPINE_Env?&gt;, &lt;?SPINE_Images?&gt;, &lt;?SPINE_Location?&gt;, &lt;?SPINE_Login?&gt;, &lt;?SPINE_Macro("<i>key</i>")?&gt;, 
-
-&lt;?SPINE_Message("<i>messagegroup</i>"[,"<i>id</i>"])?&gt;, &lt;?SPINE_Message_Body?&gt;, &lt;?SPINE_Message_Comments?&gt;, &lt;?SPINE_Message_Date?&gt;, 
-&lt;?SPINE_Message_DateTime?&gt;, &lt;?SPINE_Message_Group?&gt;, &lt;?SPINE_Message_Id?&gt;, &lt;?SPINE_Message_Owner?&gt;, &lt;?SPINE_Message_Parent_Id?&gt;,
-
-&lt;?SPINE_Message_Parent_Subject?&gt;, &lt;?SPINE_Message_Subject?&gt;, &lt;?SPINE_Message_Time?&gt;, &lt;?SPINE_Navbar("<i>navbarname</i>")?&gt;,
-&lt;?SPINE_Page?&gt; &lt;?SPINE_Referer?&gt;, &lt;?SPINE_Search?&gt;, &lt;?SPINE_Servername?&gt;, &lt;?SPINE_Stats("hits")?&gt;, &lt;?SPINE_Stats("modified")?&gt;,
-
-&lt;?SPINE_Title?&gt;, &lt;?SPINE_User?&gt;, &lt;?SPINE_Webmaster?&gt;, &lt;?SPINE_XMLChanges?&gt;</div>
-<form method="post" action="<?SPINE_Location?>admin/style/save/">
-
-<div name="adminpanel" class="fullpanel" style="position: relative">
-<div class="help" id="help">
-</div>
-$error<b>Style Edit : $filename $lock</b><br>
-<input type="submit" value="Save" class="button">
-<input type="button" value="Advanced" onClick="o=document.getElementById(''advanced''); if(o.style.display==''inline''){o.style.display=''none'';}else{o.style.display=''inline'';}" class="button">
-<input type="hidden" name="name" value="$filename">
-<a href="#" style="position:absolute; top:5px; right:5px;" onClick="$(''#help'').load(''.help-style'').slideToggle(''slow''); return false;">Help</a>
-</div>
-
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Size :</div>
- <div class="panelcel" style="width: 25%">$size bytes</div>
- <div class="panelcel" style="width: 15%">Last Modified : </div>
- <div class="panelcel" style="width: 25%">$lastmod</div>
- <div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Title :</div>
- <div class="panelcel" style="width: 25%"><input class="input" name="title" value="$title" size="25" type="text"></div>
- <div class="panelcel" style="width: 15%">Macros : </div>
- <div class="panelcel" style="width: 25%"><select name="macros" class="general">
-<option value="">none
-$macros
-</select></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel" id="advanced" style="height: auto ; width: 100%;">
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Owner :</div>
- <div class="panelcel" style="width: 25%">$owner</div>
- <div class="panelcel" style="width: 15%">Group : </div>
- <div class="panelcel" style="width: 25%"><select name="usergroup" class="general">$group</select>
- </div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Permissions :</div>
- <div class="panelcel" style="width: 55%">Group : $gpermissions &nbsp;&nbsp;&nbsp;&nbsp; Public : $wpermissions</div>
- <div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-Comment :<br>
-<textarea cols="150" rows="8" name="icomment" class="input">$icomment</textarea>
-</div>
-
-</div>
-
-<div name="adminpanel" class="fullpanel">
-Contents :<br>
-<textarea cols="150" rows="25" name="body" class="input">$body</textarea>
-</div>
-</form>
-', 'This is the style template', '');
-INSERT INTO content VALUES (92, '.administration/content', 'Content Administration', 0, '.admin', 'main', 1, '', '2008-06-15 18:15:04', 'admin', 'admin', '1010', '<script language="javascript" src="jquery.js"></script>
-<script language="javascript" type="text/javascript" src="../jscripts/tiny_mce/tiny_mce.js"></script>
-<script language="javascript" type="text/javascript" src="../jscripts/tiny_mce/tinymce_init.js"></script>
-
-<script type="text/javascript">
-var tinyMCEmode = false;
-var changed = false;
-var randomstring = "";
-$(document).ready(function(){
-  $(''#help'').hide();
-  $(''#preview'').hide();
- });
-
-function randomString() 
-{var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-  var string_length = 8;
-  randomstring = '''';
-  for (var i=0; i<string_length; i++) 
-  { var rnum = Math.floor(Math.random() * chars.length);
-     randomstring += chars.substring(rnum,rnum+1);
-   }
-}
-
-function toogleEditorMode(sEditorID) {
-    try {
-        if(tinyMCEmode) {
-            tinyMCEmode = false;
-            tinyMCE.execCommand("mceRemoveControl",tinyMCEmode,"body");
-            $(''#switch'').text(''Text'');
-        } else {
-           tinyMCEmode = true; 
-           tinyMCE.execCommand("mceAddControl", tinyMCEmode, "body");
-            $(''#switch'').text(''Visual'');
-        }
-    } catch(e) {
-        //error handling
-    }
-}
-</script>
-<div id="attributes" class="dialog" style="border: 1px solid; overflow: auto; height: 200px">
-<img border="0" align="right" valign="top" src="/images/delete.png" onclick="$(''#attributes'').hide();"><b>&nbsp;Custom Attributes</b><br>
-<div style="width: 590px; height: 1.75em" id="attrlist">&nbsp;</div>
-</div>
-
-<div class="dialog" id="tags" style="width:900px; height:140px">
-<img border="0" align="right" valign="top" src="/images/delete.png" onclick="$(''#tags'').hide(); return false;"><u>Usable tags:</u><br>&lt;?SPINE_Content?&gt;, &lt;?SPINE_Env?&gt;, &lt;?SPINE_Images?&gt;, &lt;?SPINE_Location?&gt;, &lt;?SPINE_Login?&gt;, &lt;?SPINE_Macro("<i>key</i>")?&gt;, 
-&lt;?SPINE_Message("<i>messagegroup</i>"[,"<i>id</i>"])?&gt;, &lt;?SPINE_Message_Body?&gt;, &lt;?SPINE_Message_Comments?&gt;, &lt;?SPINE_Message_Date?&gt;, 
-&lt;?SPINE_Message_DateTime?&gt;, &lt;?SPINE_Message_Group?&gt;, &lt;?SPINE_Message_Id?&gt;, &lt;?SPINE_Message_Owner?&gt;, &lt;?SPINE_Message_Parent_Id?&gt;,
-&lt;?SPINE_Message_Parent_Subject?&gt;, &lt;?SPINE_Message_Subject?&gt;, &lt;?SPINE_Message_Time?&gt;, &lt;?SPINE_Navbar("<i>navbarname</i>")?&gt;,
-&lt;?SPINE_Page?&gt; &lt;?SPINE_Referer?&gt;, &lt;?SPINE_Search?&gt;, &lt;?SPINE_Servername?&gt;, &lt;?SPINE_Stats("hits")?&gt;, &lt;?SPINE_Stats("modified")?&gt;,
-&lt;?SPINE_Title?&gt;, &lt;?SPINE_User?&gt;, &lt;?SPINE_Webmaster?&gt;, &lt;?SPINE_XMLChanges?&gt;</div>
-
-<form method="post" action="<?SPINE_Location?>admin/content/save/" name="editcontent">
-$error
-<div name="adminpanel" class="fullpanel" style="position: relative">
-<div class="preview" id="preview">
-</div>
-<div class="help" id="help">
-</div>
-<b>Content Edit: $filename $lock </b><br>
-<input value="Save" class="button" type="submit">
-<input type="button" value="Preview" onClick="$(''#preview'').load(''<?SPINE_Location?>$filename'').slideToggle(''slow''); return false;" class="button">
-<input value="Advanced" onclick="$(''#advanced'').toggle(); return false;" class="button" type="button">
-<input name="name" value="$filename" type="hidden">
-<a href="#" style="position:absolute; top:5px; right:5px;" onClick="$(''#help'').load(''.help-content'').slideToggle(''slow''); return false;">Help</a>
-</div>
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Size:</div>
- <div class="panelcel" style="width: 25%">$size bytes</div>
- <div class="panelcel" style="width: 15%">Last Modified: </div>
- <div class="panelcel" style="width: 25%">$lastmod</div>
- <div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Title:</div>
- <div class="panelcel" style="width: 25%"><input class="input" name="title" value="$title" size="25" type="text"></div>
- <div class="panelcel" style="width: 15%">Style: </div>
- <div class="panelcel" style="width: 25%"><select name="style" class="general">
-<option>Select Style $stylelist</select></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel" id="advanced" style="height: auto ; width: 100%;">
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Enter to &lt;br&gt;:</div>
- <div class="panelcel" style="width: 25%">$breaks</div>
- <div class="panelcel" style="width: 15%">Log Acces: </div>
- <div class="panelcel" style="width: 25%">$logging</div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Macros:</div>
- <div class="panelcel" style="width: 25%"><select name="macros" class="general">
-<option value="">none
-$macrolist
-</select></div>
- <div class="panelcel" style="width: 15%">Keywords:</div>
- <div class="panelcel" style="width: 25%"><input name="keywords" value="$keywords" size="30" class="input" type="text"></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Owner:</div>
- <div class="panelcel" style="width: 25%">$owner</div>
- <div class="panelcel" style="width: 15%">Group:</div>
- <div class="panelcel" style="width: 25%"><select name="usergroup" class="general">$group</select>
- </div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 15%">Permissions:</div>
- <div class="panelcel" style="width: 25%; height: auto">Group: $gpermissions<br>Public&nbsp;: $wpermissions</div>
- <div class="panelcel" style="width: 15%">Content-type:</div>
- <div class="panelcel" style="width: 25%"><input class="input" name="type" value="$type" size="25" type="text">&nbsp;<a href="#" onClick="document.editcontent.type.value=''$mimetype''; return false;">Find</a></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-Comment:<br>
-<textarea cols="150" rows="6" name="icomment" class="input">$icomment</textarea>
-</div>
-</div>
-<div name="adminpanel" class="fullpanel">
-Contents:&nbsp;&nbsp;&nbsp;<a href="#" onClick="$.post(''/spine/admin/attr/'', { name: encodeURI(''$filename'') },  function(data) { $(''#attrlist'').html(data); } ); $(''#attributes'').show(); return false;">Attributes</a>&nbsp;&nbsp;<a href="#" onClick="$(''#tags'').show(); return false;">Tags</a>&nbsp;&nbsp;Switch editor mode: <a href="#" id="switch" title="hide TinyMCE" onclick="toogleEditorMode(''body''); return false;">Visual</a><br>
-<textarea cols="150" id="body" rows="30" name="body" class="input"$disabled>$body</textarea><br>
-</div>
-</form>
-', 'I''m not sure what this is...', '');
-INSERT INTO content VALUES (93, '.administration/navbar', 'Navigation Bar Administration', 0, '.admin', 'main', 1, '', '2008-03-25 22:52:09', 'admin', 'admin', '0000', '<form method="post" action="<?SPINE_Location?>admin/navbar/save/">
-<div name="adminpanel" class="fullpanel">
-
-$error<b>Navigation Bar Edit : $filename</b><br>
-<input type="submit" value="Save" class="button">
-<input type="button" value="Advanced" onClick="o=document.getElementById(''advanced''); if(o.style.display==''inline''){o.style.display=''none'';}else{o.style.display=''inline'';}" class="button">
-<br><b>Settings :</b>
-</div>
-
-<div name="adminpanel" class="fullpanel" id="advanced" style="height: auto; width: 100%;">
- <div class="panelcel" style="width: 10%; height: auto">Owner:<br/>$owner</div>
- <div class="panelcel" style="width: 18%; height: auto">Usergroup:<br/><select name="usergroup" class="general">$usergroup</select></div>
- <div class="panelcel" style="width: 18%; height: auto">Group Permissions:<br/>$gpermissions</div>
- <div class="panelcel" style="width: 18%; height: auto">Public Permissions:<br/>$wpermissions</div>
- <div class="panelcel" style="width: 18%; height: auto">Modified:<br/>$modified</div>
- <div class="spacercel"></div>
-</div>
-
-<input type="hidden" name="name" value="$filename">
-<input type="hidden" name="action" value="settings">
-<div name="adminpanel" class="fullpanel" style="border: 1px; height: auto">
- <div class="panelcel" style="width: auto; padding-right: 2px; height: auto">Alignment:&nbsp;&nbsp;<br><select name="alignment">$alignment</select>&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; padding-right: 2px; height: auto">Positioning:&nbsp;&nbsp;<br><select name="positioning">$positioning</select>&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; padding-right: 2px; height: auto">Font:&nbsp;&nbsp;<br><input type="text" size="9" name="font" class="input" value="$font">&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; padding-right: 2px; height: auto">Size:&nbsp;&nbsp;<br><input type="text" size="3" name="size" class="input" value="$size">&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; padding-right: 2px; height: auto">Color:&nbsp;&nbsp;<br><input type="text" size="7" name="color" class="input" value="$color">&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; padding-right: 2px; height: auto">Style:&nbsp;&nbsp;<br><select name="style">$style</select>&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; padding-right: 2px; height: auto">Separator:&nbsp;&nbsp;<br><input type="text" size="7" name="separator" class="input" value="$separator">&nbsp;&nbsp;</div>
- <div class="spacercel"></div>
-</div> 
-
-</form>
-<div name="adminpanel" class="fullpanel"><hr width="95%"></div>
-
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 18%">URL:</div>
- <div class="panelcel" style="width: 18%">Image:</div>
- <div class="panelcel" style="width: 18%">Label:</div>
- <div class="panelcel" style="width: 18%">&nbsp;</div> 
- <div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel" style="height: auto">
-<form method="post" action="<?SPINE_Location?>admin/navbar/addbutton/" style="padding: 0; margin: 0; display: inline;">
-<input type="hidden" name="name" value="$filename">
-<input type="hidden" name="id" value="$navbar">
-<input type="hidden" name="position" value="$position">
- <div class="panelcel" style="width: 18%"><input type="text" size="25" name="link" class="input" value=""></div>
- <div class="panelcel" style="width: 18%"><input type="text" size="25" name="image" class="input" value=""></div>
- <div class="panelcel" style="width: 18%"><input type="text" size="25" name="label" class="input" value=""></div>
- <div class="panelcel" style="width: 18%"><input type="image" src="<?SPINE_Images?>save.png" alt="Save" style="padding: 0px"></div> 
- <div class="spacercel"></div>
-</form>
-</div>
-
-<!-- Button list -->
-
-$buttonlist
-
-<div name="adminpanel" class="fullpanel"><hr width="95%">Preview:<br /><?SPINE_Navbar("$filename")?></div>
-', '', '');
-INSERT INTO content VALUES (94, '.administration/general', 'Content Administration', 0, '.admin', 'main', 1, '', '2008-03-21 00:05:49', 'admin', 'admin', '0010', '
-<div name="adminpanel" class="fullpanel">
-<form method="post" action="<?SPINE_Location?>admin/$type/edit/">
-$error<font face="Verdana, Arial, Helvetica, sans-serif" size="2"> <b>Edit $label</b><br>
-&nbsp;&nbsp;<input type="submit" value="Edit" class="button">&nbsp;
-<select name="name" class="general">
-<option value="">Select one
-$list
-</select>
-</font>
-</form>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<hr width="95%">
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<form method="POST" name="theform" action="<?SPINE_Location?>admin/$type/remove/" onSubmit="return confirm(''You are about to delete ''+(document.theform.name.options[document.theform.name.selectedIndex].value)+''! Are you sure?'');">
-<font face="Verdana, Arial, Helvetica, sans-serif" size="2"> <b>Remove $label</b><br>
-&nbsp;&nbsp;<input type="submit" value="Remove" class="button">&nbsp;
-<select name="name" class="general">
-<option value="">Select one
-$list
-</select>
-</font>
-</form>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<hr width="95%">
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<form method="post" action="<?SPINE_Location?>admin/$type/copy/">
-<font face="Verdana, Arial, Helvetica, sans-serif" size="2"> <b>Copy $label</b><br>
-&nbsp;&nbsp;<input type="submit" value="Copy" class="button">&nbsp;
-<select name="name" class="general">
-<option value="">Select one
-$list
-</select>
-to
-<input type="text" name="target" class="input" size="23" value="Enter name">
-</font>
-</form>
-</div>
- 
-<div name="adminpanel" class="fullpanel">
-<hr width="95%">
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<form method="post" action="<?SPINE_Location?>admin/$type/new/">
-<font face="Verdana, Arial, Helvetica, sans-serif" size="2"> <b>New $label</b><br>
-&nbsp;&nbsp;<input type="submit" value="Create" class="button">&nbsp;
-<input type="text" name="name" class="input" size="23" value="Enter name"><br><br>
-</font>
-</form>
-</div>
-', 'This is the general admin template used for content and style (among others)', '');
-INSERT INTO content VALUES (95, '.administration/navbar-button', '', 0, '.admin', 'main', 1, '', '2008-03-27 23:42:54', 'admin', 'users', '1010', '<div name="adminpanel" class="fullpanel">
+INSERT INTO content VALUES (95, '.administration/navbar-button', '', 0, '.admin', 'main', 1, '', '2011-10-12 12:08:17', 'admin', 'users', '1111', '<div name="adminpanel" class="spine-fullpanel">
 <form method="post" action="<?SPINE_Location?>admin/navbar/editbutton/" style="padding: 0; margin: 0; display: inline;">
- <div class="panelcel" style="width: 18%"><input type="text" size="25" name="link" class="input" value="$link"></div>
- <div class="panelcel" style="width: 18%"><input type="text" size="25" name="image" class="input" value="$image"></div>
- <div class="panelcel" style="width: 18%"><input type="text" size="25" name="label" class="input" value="$label"></div>
- <div class="panelcel" style="width: 18%">
+ <div class="spine-panelcel" style="width: 18%"><input type="text" size="25" name="link" class="spine-input" value="$link"></div>
+ <div class="spine-panelcel" style="width: 18%"><input type="text" size="25" name="image" class="spine-input" value="$image"></div>
+ <div class="spine-panelcel" style="width: 18%"><input type="text" size="25" name="label" class="spine-input" value="$label"></div>
+ <div class="spine-panelcel" style="width: 18%">
  <input type="image" src="<?SPINE_Images?>save.png" alt="Save" name="save" style="padding: 0px">
 <input type="image" name="moveup"  src="<?SPINE_Images?>up.png">
 <input type="image" name="movedown"  src="<?SPINE_Images?>down.png">
@@ -4574,154 +4641,89 @@ INSERT INTO content VALUES (95, '.administration/navbar-button', '', 0, '.admin'
 <input type="hidden" name="color" value="$color">
 <input type="hidden" name="size" value="$size">
 <input type="hidden" name="style" value="$style">
- <div class="spacercel"></div>
+ <div class="spine-spacercel"></div>
 </div>
  
-<div name="adminpanel" class="fullpanel" id="buttonrow$buttonid" style="display:none">
- <div class="panelcel" style="width: auto; height: auto; padding-bottom: 4px">Target: <input type="text" size="25" name="target" class="input" value="$target">&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; height: auto; padding-bottom: 4px">Class: <input type="text" size="25" name="class" class="input" value="$class">&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; height: auto; padding-bottom: 4px">Border: <input type="text" size="2" name="border" class="input" value="$border">&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; height: auto; padding-bottom: 4px">Width: <input type="text" size="3" name="width" class="input" value="$width">&nbsp;&nbsp;</div>
- <div class="panelcel" style="width: auto; height: auto; padding-bottom: 4px">Height: <input type="text" size="3" name="height" class="input" value="$height">&nbsp;&nbsp;</div>
- <div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel" id="spine-buttonrow$buttonid" style="display:none">
+ <div class="spine-panelcel" style="width: auto; height: auto; padding-bottom: 4px">Target: <input type="text" size="25" name="target" class="spine-input" value="$target">&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; height: auto; padding-bottom: 4px">Class: <input type="text" size="25" name="class" class="spine-input" value="$class">&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; height: auto; padding-bottom: 4px">Border: <input type="text" size="2" name="border" class="spine-input" value="$border">&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; height: auto; padding-bottom: 4px">Width: <input type="text" size="3" name="width" class="spine-input" value="$width">&nbsp;&nbsp;</div>
+ <div class="spine-panelcel" style="width: auto; height: auto; padding-bottom: 4px">Height: <input type="text" size="3" name="height" class="spine-input" value="$height">&nbsp;&nbsp;</div>
+ <div class="spine-spacercel"></div>
 </div>
 </form>
 ', 'This content is used for navigation button structure', '');
-INSERT INTO content VALUES (96, '.administration/message', 'Message Administration', 0, '.admin', 'main', 1, '', '2008-03-22 18:02:09', 'admin', 'admin', '0000', '<div name="adminpanel" class="fullpanel">
-Edit Message group: $messagegroup&nbsp;&nbsp;&nbsp;<input type="button" value="Advanced" onclick="o=document.getElementById(''advanced''); if(o.style.display==''inline''){o.style.display=''none'';}else{o.style.display=''inline'';}" class="button">
-</div>
-
-<div name="adminpanel" class="fullpanel" id="advanced" style="height: auto ; width: 100%;">
-<form method="post" action="<?SPINE_Location?>admin/message/savegroup/" style="padding: 0; margin: 0; display: inline;">
-<input type="submit" value="Save" class="button">
-<input type="hidden" name="name" value="$messagegroup">
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 15%;">Public&nbsp;: $wpermissions</div>
-<div class="panelcel" style="width: 15%;">Group: $gpermissions</div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel style="height: auto"">
-<div class="panelcel" style="width: 25%;">Owner: $owner &nbsp; Usergroup : <select name="usergroup">$group</select></div>
-<div class="panelcel" style="width: 25%;">Message Style: $contentlist</div>
-<div class="spacercel"></div>
+INSERT INTO content VALUES (94, '.administration/general', 'Content Administration', 0, '.admin', 'main', 1, '', '2011-10-12 12:18:38', 'admin', 'admin', '1111', '<div name="adminpanel" class="spine-fullpanel">
+<form method="post" action="<?SPINE_Location?>admin/$type/edit/">
+$error<font face="Verdana, Arial, Helvetica, sans-serif" size="2"> <b>Edit $label</b><br>
+&nbsp;&nbsp;<input type="submit" value="Edit" class="spine-button">&nbsp;
+<select name="name" class="spine-general">
+<option value="">Select one
+$list
+</select>
+</font>
 </form>
 </div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<hr width="95%">
 </div>
 
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 25%"><b>Subject</b></div>
-<div class="panelcel" style="width: 15%"><b>Owner</b></div>
-<div class="panelcel" style="width: 15%"><b>Date</b></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-$messagedata
-</div>
-', 'This is the message template for the administration section.', '');
-INSERT INTO content VALUES (97, '.administration/macro', 'Macro Administration', 0, '.admin', 'main', 1, '', '2008-03-23 18:45:23', 'admin', 'admin', '0000', '<div name="adminpanel" class="fullpanel">
-<b>Macro edit: $name</b>
-</div>
-
-<div name="adminpanel" class="fullpanel">
- <div class="panelcel" style="width: 20%"><b>Key</b></div>
- <div class="panelcel" style="width: 20%"><b>Value</b></div>
-  <div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<form method="post" action="<?SPINE_Location?>admin/macro/new/" style="padding: 0; margin: 0; display: inline;">
-<input type="hidden" name="name" value="$name">
- <div class="panelcel" style="width: 20%"><input type="text" name="key" class="input" value="Macro Key" size="30"></div>
- <div class="panelcel" style="width: 20%"><input type="text" name="value" value="Macro Value" class="input" size="30"></div>
- <div class="panelcel" style="width: 12%"><input type="submit" value="create" class="button" name="action"></div>
- <div class="spacercel"></div></form>
-</div>
-
-<!-- Entry -->
+<div name="adminpanel" class="spine-fullpanel">
+<form method="POST" name="theform" action="<?SPINE_Location?>admin/$type/remove/" onSubmit="return confirm(''You are about to delete ''+(document.theform.name.options[document.theform.name.selectedIndex].value)+''! Are you sure?'');">
+<font face="Verdana, Arial, Helvetica, sans-serif" size="2"> <b>Remove $label</b><br>
+&nbsp;&nbsp;<input type="submit" value="Remove" class="spine-button">&nbsp;
+<select name="name" class="spine-general">
+<option value="">Select one
 $list
-<!-- Entry end -->
-
-', 'This is the template for macro administration', '');
-INSERT INTO content VALUES (98, '.administration/user', 'User Administration', 0, '.admin', 'main', 1, '', '2008-03-23 20:22:11', 'admin', 'admin', '0000', '<div name="adminpanel" class="fullpanel">
-$error<b>User Management</b>
+</select>
+</font>
+</form>
 </div>
 
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 20%"><b>Full Name</b></div>
-<div class="panelcel" style="width: 20%"><b>Login</b></div>
-<div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<hr width="95%">
 </div>
 
-<div name="adminpanel" class="fullpanel">
-<form method="post" action="<?SPINE_Location?>admin/user/new/" style="padding: 0; margin: 0; display: inline;">
-<div class="panelcel" style="width: 20%"><input type="text" name="fullname" class="input" value="Full Name" size="30"></div>
-<div class="panelcel" style="width: 20%"><input type="text" name="login" value="Login" class="input" size="30"></div>
-<div class="panelcel" style="width: 20%"><input type="submit" value="create" class="button" name="action"></div></form>
- <div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<form method="post" action="<?SPINE_Location?>admin/$type/copy/">
+<font face="Verdana, Arial, Helvetica, sans-serif" size="2"> <b>Copy $label</b><br>
+&nbsp;&nbsp;<input type="submit" value="Copy" class="spine-button">&nbsp;
+<select name="name" class="spine-general">
+<option value="">Select one
+$list
+</select>
+to
+<input type="text" name="target" class="spine-input" size="23" value="Enter name">
+</font>
+</form>
+</div>
+ 
+<div name="adminpanel" class="spine-fullpanel">
+<hr width="95%">
 </div>
 
-$userdata
-', 'This is the template for user administration', '');
-INSERT INTO content VALUES (99, '.administration/user-edit', 'User Administration', 0, '.admin', 'main', 1, '', '2008-03-23 20:41:42', 'admin', 'admin', '0000', '<div name="adminpanel" class="fullpanel">
-$error<b>User Management : $name</b>
+<div name="adminpanel" class="spine-fullpanel">
+<form method="post" action="<?SPINE_Location?>admin/$type/new/">
+<font face="Verdana, Arial, Helvetica, sans-serif" size="2"> <b>New $label</b><br>
+&nbsp;&nbsp;<input type="submit" value="Create" class="spine-button">&nbsp;
+<input type="text" name="name" class="spine-input" size="23" value="Enter name"><br><br>
+</font>
+</form>
 </div>
-<form method="post" action="<?SPINE_Location?>admin/user/save/" name="UserEdit$login" style="padding: 0; margin: 0; display: inline;">
-
-<div name="adminpanel" class="fullpanel">
-<input type="submit" value="Save" class="button">
-<input type="hidden" name="id" value="$id">
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 20%"><b>Full Name</b></div>
-<div class="panelcel" style="width: 20%"><b>Login</b></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 20%">Full Name [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#fullname'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]: </div>
-<div class="panelcel" style="width: 20%"><input type="text" class="input" name="name" value="$name" size="25"></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 20%">Login [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#login'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]:</div>
-<div class="panelcel" style="width: 20%"><input type="text" class="input" name="login" value="$login" size="25"></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 20%">E-Mail [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#email'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]:</div>
-<div class="panelcel" style="width: 20%"><input type="text" class="input" name="email" value="$email" size="25"></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 20%">Password [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#password'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]:</div>
-<div class="panelcel" style="width: 20%"><input type="password" class="input" name="password" value="$password" size="25"></div>
-<div class="spacercel"></div>
-</div>
-
-<div name="adminpanel" class="fullpanel" style="height: auto">
-<div class="panelcel" style="width: 20%">Groups [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#groups'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]:</div>
-<div class="panelcel" style="width: 20%">$usergroups</div>
-<div class="spacercel"></div>
-</div>
-', 'This is the admin page for the user profile.', '');
-INSERT INTO content VALUES (100, '.administration/usergroup', 'Usergroup Administration', 0, '.admin', 'main', 1, '', '2008-03-23 22:12:23', 'admin', 'admin', '0000', '<div name="adminpanel" class="fullpanel">
+', 'This is the general admin template used for content and style (among others)', '');
+INSERT INTO content VALUES (100, '.administration/usergroup', 'Usergroup Administration', 0, '.admin', 'main', 1, '', '2011-10-12 12:24:07', 'admin', 'admin', '1111', '<div name="adminpanel" class="spine-fullpanel">
 $error<b>Usergroup Management</b>
 </div>
 
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 20%"><b>Username</b></div>
-<div class="panelcel" style="width: 20%"><b>Usergroup</b></div>
-<div class="spacercel"></div>
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 20%"><b>Username</b></div>
+<div class="spine-panelcel" style="width: 20%"><b>Usergroup</b></div>
+<div class="spine-spacercel"></div>
 </div>
 
 $list', 'This bit is the general statistics administration template', '');
-INSERT INTO content VALUES (101, 'actiontest.html', 'TEST', 0, 'main', '', 1, '', '2008-04-12 01:26:53', 'admin', 'users', '1010', 'This is a test', 'This is where you put comments about this content', '');
 INSERT INTO content VALUES (102, '.administration/filetypes', 'Filetype Administration', 0, '.admin', 'main', 1, '', '2008-04-19 14:28:18', 'admin', 'admin', '0000', '<div name="adminpanel" class="fullpanel">
 $error
 <div class="panelcel" style="width: 10%"><b>File Extensions</b></div>
@@ -5195,6 +5197,72 @@ function toogleEditorMode(sEditorID) {
 </form>
 
 ', 'This is where you put comments about this content', '');
+INSERT INTO content VALUES (101, 'actiontest.html', 'TEST', 0, 'main', '', 1, '', '2011-10-10 14:03:15', 'admin', 'users', '1111', 'This is a test', 'This is where you put comments about this content', 'text/html');
+INSERT INTO content VALUES (98, '.administration/user', 'User Administration', 0, '.admin', 'main', 1, '', '2011-10-12 12:59:28', 'admin', 'admin', '1111', '<div name="adminpanel" class="spine-fullpanel">
+$error<b>User Management</b>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 20%"><b>Full Name</b></div>
+<div class="spine-panelcel" style="width: 20%"><b>Login</b></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<form method="post" action="<?SPINE_Location?>admin/user/new/" style="padding: 0; margin: 0; display: inline;">
+<div class="spine-panelcel" style="width: 20%"><input type="text" name="fullname" class="spine-input" value="Full Name" size="30"></div>
+<div class="spine-panelcel" style="width: 20%"><input type="text" name="login" value="Login" class="spine-input" size="30"></div>
+<div class="spine-panelcel" style="width: 20%"><input type="submit" value="create" class="spine-button" name="action"></div></form>
+ <div class="spine-spacercel"></div>
+</div>
+
+$userdata', 'This is the template for user administration', '');
+INSERT INTO content VALUES (99, '.administration/user-edit', 'User Administration', 0, '.admin', 'main', 1, '', '2011-10-12 12:22:07', 'admin', 'admin', '1111', '<div name="adminpanel" class="spine-fullpanel">
+$error<b>User Management : $name</b>
+</div>
+<form method="post" action="<?SPINE_Location?>admin/user/save/" name="UserEdit$login" style="padding: 0; margin: 0; display: inline;">
+
+<div name="adminpanel" class="spine-fullpanel">
+<input type="submit" value="Save" class="spine-button">
+<input type="hidden" name="id" value="$id">
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 20%"><b>Full Name</b></div>
+<div class="spine-panelcel" style="width: 20%"><b>Login</b></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 20%">Full Name [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#fullname'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]: </div>
+<div class="spine-panelcel" style="width: 20%"><input type="text" class="spine-input" name="name" value="$name" size="25"></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 20%">Login [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#login'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]:</div>
+<div class="spine-panelcel" style="width: 20%"><input type="text" class="spine-input" name="login" value="$login" size="25"></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 20%">E-Mail [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#email'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]:</div>
+<div class="spine-panelcel" style="width: 20%"><input type="text" class="spine-input" name="email" value="$email" size="25"></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 20%">Password [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#password'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]:</div>
+<div class="spine-panelcel" style="width: 20%"><input type="password" class="spine-input" name="password" value="$password" size="25"></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel" style="height: auto">
+<div class="spine-panelcel" style="width: 20%">Groups [<a href="#" target="Hint" onclick="window.open(''<?SPINE_Location?>hint_admin_user#groups'',''Hint'',''width=600,height=200,scrollbars=yes''); return false;">?</a>]:</div>
+<div class="spine-panelcel" style="width: 20%">$usergroups</div>
+<div class="spine-spacercel"></div>
+</div>
+k', 'This is the admin page for the user profile.', '');
 INSERT INTO content VALUES (105, 'coffee_n_cream.css', '', 0, 'blank', 'main', 1, '', '2008-04-22 22:48:07', 'admin', 'users', '1010', '/*#############################################################
 Name: Coffee N Cream
 Date: 2006-08-24
@@ -18822,159 +18890,6 @@ This tag is mapped to the XML Changes plugin. It will generate XML output of the
 INSERT INTO content VALUES (156, 'gallery.html', 'Picture Gallery', 0, 'main', '', 1, 'gallery plugin pictures', '2006-12-31 23:00:00', 'admin', 'users', '1010', '<?SPINE_ImageGallery("pictures")?>', 'ImageGallery plugin example', '');
 INSERT INTO content VALUES (157, 'wiki', 'STUB Content', 0, 'main', '', 1, '', '2006-12-31 23:00:00', 'admin', 'users', '1010', '<?SPINE_Wiki?><br><hr>
 <?SPINE_Stats("modified")?>', 'This is where you put comments about this content', '');
-INSERT INTO content VALUES (158, '_admin.css', '', 0, 'blank', '', 1, '', '2007-03-05 21:30:08', 'admin', 'users', '1010', '.smallbutton {
-      font-family: Verdana, Arial, Helvetica, sans-serif;
-      font-size: 12px;
-      color: #ffffff;
-      background-color: #9b9bff;
-      border: 1px solid #000000;
-      width: 50px
-      }
-
-.list {
-     font-family: Verdana, Arial, Helvetica, sans-serif;
-     font-size: 12px;
-     color: #000000;
-     border: 1px solid #000000;
-     width: auto;
-     font-variant: normal;
-}
-
-.general {
-     font-family: Verdana, Arial, Helvetica, sans-serif;
-     font-size: 12px;
-     color: #000000;
-     width: 150px;
-    z-index:2;
-    }
-
-table {
-     font-size : 12px;
-     font-family : Verdana,Helvetica,Arial,sans-serif;
-     border-spacing: 1px
-     }
-
-.selected {
-background-color: #cccccc;
-color: white;
-}
-
-.unselected {
-background-color: #fefefe;
-color: black;
-}
-
-div.dialog {
-        z-index: 99;
-        position: absolute;
-        top: 200px;
-        left: 150px;
-        width: 600px;
-        height: 80px;
-        display: none;
-        border: 2px solid #666;
-        background-color: #ddd;
-}
-
-a.info{
-    position:relative; /*this is the key*/
-    z-index:24; 
-    text-decoration:none;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 9px;
-    cursor: pointer;
-}
-
-a.info:hover{z-index:25; }
-
-a.info span{display: none}
-
-a.info:hover span{ 
-    display:block;
-    position:absolute;
-    top:2em; left:2em; width:35em;
-    border:1px solid #000000;
-    text-align: center;
-    background-color:#ffffff;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    z-index:1;
-}
-
-.panel100
-{ text-align: left;
-  width: 98%;
-  margin: 0px;
-  padding: 2px;
-  display: inline;
-}
-
-.panel20
-{ text-align: left;
-  width: 19%;
-  margin: 0px;
-  height: 1.75em;
-  padding: 1px;
-  float: left;
-  border: 1px solid;
-}
-
-.panel15
-{ text-align: left;
-  width: 12%;
-  margin: 0px;
-  height: 1.75em;
-  padding: 1px;
-  float: left;
-  border: 1px solid;
-}
-
-.panel15alt
-{ text-align: left;
-  width: 12%;
-  margin: 0px;
-  height: 3.4em;
-  padding: 1px;
-  float: left;
-  border: 1px solid;
-}
-
-.panel25
-{ text-align: left;
-  width: 22%;
-  margin: 0px;
-  height: 1.75em;
-  padding: 1px;
-  float: left;
-  border: 1px solid;
-}
-
-.panel35
-{ text-align: left;
-  width: 32%;
-  margin: 0px;
-  height: 1.75em;
-  padding: 1px;
-  float: left;
-  border: 1px solid;
-}
-
-.panel75
-{ text-align: left;
-  width: 74%;
-  margin: 0px;
-  padding: 1px;
-}
-
-#advanced { display: none; }
-
-.error 
-{ background: #ffdddd url(/images/exclamation.png) center no-repeat;
-  background-position: 15px 50%; /* x-pos y-pos */
-  text-align: left;
-  padding: 5px 20px 5px 45px;
-  border: 2px solid #ffbbbb;
-}', 'This is the SPINE CSS', 'text/css');
 INSERT INTO content VALUES (159, 'install.html', 'Installation Notes', 0, 'main', '', 1, '', '2006-12-31 23:00:00', 'admin', 'users', '1010', '<h2>Installation Notes for Spine v1.2</h2>
 <u>Requirements</u><br><br>
 Spine has very few dependencies.
@@ -19781,138 +19696,6 @@ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 END OF TERMS AND CONDITIONS
 </pre>', 'This is the GNU GPL License.', 'text/html');
-INSERT INTO content VALUES (168, 'spine.css', '', 0, 'blank', '', 1, '', '2007-02-22 23:18:32', 'admin', 'users', '1010', 'body, td, div, font {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 9pt;
-	color: #224466;
-}
-
-body {
-	background: #dddddd url(<?SPINE_Images?>spine4.jpg) repeat-x;
-	margin: 0;
-	padding: 0;
-}
-
-a {
-	color: #000000;
-	text-decoration: none;
-	border-bottom: 1px solid #000000;
-	position: relative;
-}
-
-a:hover {
-	background: #f3f3ff;
-	font-weight: bold;
-	color: #000000;
-	border: 2px ridge #446688;
-	margin: -4px;
-	padding: 2px;
-	z-index: 10;
-}
-
-#menu {
-	background: #dddddd url(<?SPINE_Images?>spine4.jpg) repeat-x;
-	border-bottom: 1px solid #000000;
-	padding-left: 1em;
-}
-
-#menu a {
-	font-weight: 500;
-	font-size: 8pt;
-	padding: 10px 5px;
-	color: #223355;
-	border: 0;
-	margin: 0;
-	position: relative;
-}
-
-#menu a:hover {
-}
-
-#footer {
-	padding: 0.5em;
-	padding-left: 2em;
-}
-
-h2 {
-	margin: 0;
-	padding: 1em;
-        padding-bottom: 0.6em;
-	font-size: 10pt;
-}
-
-#container {
-	margin-left: 1px;
-	padding: 1em;
-	padding-right: 3em;
-	background: #fff;
-	font-size: 9pt;
-	border-bottom: 1px solid #000;
-}
-
-#version {
-	font-size: 17pt;
-	color: #446677;
-	position: absolute;
-	top: 1em;
-	left: 100%;
-	margin-left: -150pt;
-}
-
-div.section-body {
-	margin: 1em 2em;
-}
-
-#content { line-height: 140%; }
-
-/* Front Page News */
-
-h2.news {
-	border-bottom: 1px solid #CCC;
-	padding-top: 1em;
-	padding-bottom: 0.4em;
-	font-size: 1.2em;
-	border-bottom: 1px solid #000;
-}
-
-div.newsdate {
-	text-align: right;
-	color: #444;
-	font-weight: bold;
-	font-size: 0.95em;
-}
-
-div.newsdate a:link	{ color: #666; text-decoration: none; }
-div.newsdate a:visited	{ color: #4462b7; text-decoration: none; }
-div.newsdate a:hover	{ color: #00C; text-decoration: underline; }
-div.newsdate a:active	{ color: #000; text-decoration: underline; }
-
-.button { 
-     font-family: Verdana, Arial, Helvetica, sans-serif; 
-     font-size: 8pt; 
-     color: #ffffff; 
-     background-color: #6590fd; 
-     border: 1px solid #000000; 
-     width: 70pt 
-}
- 
-.input {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-        font-size: 8pt; 
-	color: #000000;
-	border: 1px solid #000000;
-	width: auto;
-	font-variant: normal;
-}
-
-pre.block {
- background:  #DCFAEA;
- border: 1px solid #777777;
- margin: 1em 1.75em;
- padding: .25em;
- overflow: auto;
-}', 'This style is part of the default SPINE Installation.
-Created by Hendrik Van Belleghem ; Major Updates by eidolon', 'text/css');
 INSERT INTO content VALUES (169, 'login.html', '', 0, 'main', '', 1, '', '2006-12-31 23:00:00', 'admin', 'users', '1010', '<h2>Login</h2>
 <?SPINE_Login?>
 ', 'This is where you put comments about this content', '');
@@ -21159,6 +20942,363 @@ INSERT INTO content VALUES (136, 'transparentia.html', '', 0, 'transparentia', '
 <code>margin-bottom: 12px; font: normal 1.1em "Lucida Sans Unicode",serif; background: url(/images/transparentia_quote.gif) no-repeat; padding-left: 28px; color: #555;</code>
 <p>Eget feugiat est leo tempor quam. Ut quis neque convallis magna consequat molestie. Test. Test.</p>
 </div>', 'This is where you put comments about this content', '');
+INSERT INTO content VALUES (195, 'spine-v1.2.css', '', 0, 'blank', '', 1, '', '2011-10-12 11:57:23', 'admin', 'users', '1111', '.spine-body, .spine-td,.spine-div, .spine-font {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 9pt;
+    color: #224466;
+}
+
+.spine-body {
+    background: #dddddd url(<?SPINE_Images?>spine4.jpg) repeat-x;
+    margin: 0;
+    padding: 0;
+}
+
+.spine-a {
+    color: #000000;
+    text-decoration: none;
+    border-bottom: 1px solid #000000;
+    position: relative;
+}
+
+.spine-a:hover {
+    background: #f3f3ff;
+    font-weight: bold;
+    color: #000000;
+    border: 2px ridge #446688;
+    margin: -4px;
+    padding: 2px;
+    z-index: 10;
+}
+
+#spine-menu {
+    background: #dddddd url(<?SPINE_Images?>spine4.jpg) repeat-x;
+    border-bottom: 1px solid #000000;
+    padding-left: 1em;
+}
+
+#spine-menu a {
+    font-weight: 500;
+    font-size: 8pt;
+    padding: 10px 5px;
+    color: #223355;
+    border: 0;
+    margin: 0;
+    position: relative;
+}
+
+#spine-menu a:hover {
+}
+
+#spine-footer {
+    padding: 0.5em;
+    padding-left: 2em;
+}
+
+.spine-h2 {
+    margin: 0;
+    padding: 1em;
+        padding-bottom: 0.6em;
+	font-size: 10pt;
+}
+
+#spine-container {
+    margin-left: 1px;
+    padding: 1em;
+    padding-right: 3em;
+    background: #fff;
+    font-size: 9pt;
+    border-bottom: 1px solid #000;
+}
+
+#spine-version {
+    font-size: 17pt;
+    color: #446677;
+    position: absolute;
+    top: 1em;
+    left: 100%;
+    margin-left: -150pt;
+}
+
+div.spine-section-body {
+    margin: 1em 2em;
+}
+
+#spine-content { line-height: 140%; }
+
+/* Front Page News */
+
+h2.spine-news {
+    border-bottom: 1px solid #CCC;
+    padding-top: 1em;
+    padding-bottom: 0.4em;
+    font-size: 1.2em;
+    border-bottom: 1px solid #000;
+}
+
+div.spine-newsdate {
+    text-align: right;
+    color: #444;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+
+div.spine-newsdate a:link{ color: #666; text-decoration: none; }
+div.spine-newsdate a:visited{ color: #4462b7; text-decoration: none; }
+div.spine-newsdate a:hover{ color: #00C; text-decoration: underline; }
+div.spine-newsdate a:active{ color: #000; text-decoration: underline; }
+
+.spine-button { 
+     font-family: Verdana, Arial, Helvetica, sans-serif; 
+     font-size: 8pt; 
+     color: #ffffff; 
+     background-color: #6590fd; 
+     border: 1px solid #000000; 
+     width: 70pt 
+}
+ 
+.spine-input {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 8pt; 
+	color: #000000;
+	border: 1px solid #000000;
+	width: auto;
+	font-variant: normal;
+}
+
+.spine-pre.block {
+ background:  #DCFAEA;
+ border: 1px solid #777777;
+ margin: 1em 1.75em;
+ padding: .25em;
+ overflow: auto;
+}
+', 'This is where you put comments about this content', 'text/css');
+INSERT INTO content VALUES (194, '_admin-v1.2.css', '', 0, 'blank', '', 1, '', '2011-10-12 11:55:43', 'admin', 'users', '1111', '.spine-panelcel {
+        width:33%;
+        float:left;
+   }
+.spine-fullpanel {
+       padding:2px;
+       width:auto;
+  }
+
+.spine-spacercel {
+       clear:both;
+  }
+
+.spine-smallbutton {
+      font-family: Verdana, Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      color: #ffffff;
+      background-color: #9b9bff;
+      border: 1px solid #000000;
+      width: 50px
+      }
+
+.spine-list {
+     font-family: Verdana, Arial, Helvetica, sans-serif;
+     font-size: 12px;
+     color: #000000;
+     border: 1px solid #000000;
+     width: auto;
+     font-variant: normal;
+}
+
+.spine-general {
+     font-family: Verdana, Arial, Helvetica, sans-serif;
+     font-size: 12px;
+     color: #000000;
+     width: 150px;
+    z-index:2;
+    }
+
+.spine-table {
+     font-size : 12px;
+     font-family : Verdana,Helvetica,Arial,sans-serif;
+     border-spacing: 1px
+     }
+
+.spine-selected {
+background-color: #cccccc;
+color: white;
+}
+
+.spine-unselected {
+background-color: #fefefe;
+color: black;
+}
+
+div.spine-dialog {
+        z-index: 99;
+        position: absolute;
+        top: 200px;
+        left: 150px;
+        width: 600px;
+        height: 80px;
+        display: none;
+        border: 2px solid #666;
+        background-color: #ddd;
+}
+
+a.spine-info{
+    position:relative; /*this is the key*/
+    z-index:24; 
+    text-decoration:none;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    cursor: pointer;
+}
+
+a.spine-info:hover{z-index:25; }
+
+a.spine-info span{display: none}
+
+a.spine-info:hover span{ 
+    display:block;
+    position:absolute;
+    top:2em; left:2em; width:35em;
+    border:1px solid #000000;
+    text-align: center;
+    background-color:#ffffff;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    z-index:1;
+}
+
+
+.spine-panel100
+{ text-align: left;
+  width: 98%;
+  margin: 0px;
+  padding: 2px;
+  display: inline;
+}
+
+.spine-panel20
+{ text-align: left;
+  width: 19%;
+  margin: 0px;
+  height: 1.75em;
+  padding: 1px;
+  float: left;
+  border: 1px solid;
+}
+
+.spine-panel15
+{ text-align: left;
+  width: 12%;
+  margin: 0px;
+  height: 1.75em;
+  padding: 1px;
+  float: left;
+  border: 1px solid;
+}
+
+.spine-panel15alt
+{ text-align: left;
+  width: 12%;
+  margin: 0px;
+  height: 3.4em;
+  padding: 1px;
+  float: left;
+  border: 1px solid;
+}
+
+.spine-panel25
+{ text-align: left;
+  width: 22%;
+  margin: 0px;
+  height: 1.75em;
+  padding: 1px;
+  float: left;
+  border: 1px solid;
+}
+
+.spine-panel35
+{ text-align: left;
+  width: 32%;
+  margin: 0px;
+  height: 1.75em;
+  padding: 1px;
+  float: left;
+  border: 1px solid;
+}
+
+.spine-panel75
+{ text-align: left;
+  width: 74%;
+  margin: 0px;
+  padding: 1px;
+}
+
+#spine-advanced { display: none; }
+
+.spine-error 
+{ background: #ffdddd url(/images/exclamation.png) center no-repeat;
+  background-position: 15px 50%; /* x-pos y-pos */
+  text-align: left;
+  padding: 5px 20px 5px 45px;
+  border: 2px solid #ffbbbb;
+}', 'This is where you put comments about this content', 'text/css');
+INSERT INTO content VALUES (97, '.administration/macro', 'Macro Administration', 0, '.admin', 'main', 1, '', '2011-10-12 12:15:24', 'admin', 'admin', '1111', '<div name="adminpanel" class="fullpanel">
+<b>Macro edit: $name</b>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel" style="width:412px;">
+ <div class="spine-panelcel" style="width: 195px;"><b>Key</b></div>
+ <div class="spine-panelcel" style="width: 195px"><b>Value</b></div>
+  <div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div style="float:left;width:412px;">
+<form method="post" action="<?SPINE_Location?>admin/macro/new/" style="padding: 0; margin: 0; display: inline;">
+<input type="hidden" name="name" value="$name">
+ <div class="spine-panelcel" style="width: 195px"><input type="text" name="key" class="spine-input" value="Macro Key" size="30"></div>
+ <div class="spine-panelcel" style="width: 195px;"><input type="text" name="value" value="Macro Value" class="spine-input" size="30"></div>
+ <div class="spine-panelcel" style="width: 10px"><input type="submit" value="create" class="spine-button" name="action"></div>
+ <div class="spine-spacercel"></div></form>
+</div>
+</div>
+
+<div class="spine-spacercel"></div>
+
+<!-- Entry -->
+$list
+<!-- Entry end -->', 'This is the template for macro administration', '');
+INSERT INTO content VALUES (96, '.administration/message', 'Message Administration', 0, '.admin', 'main', 1, '', '2011-10-12 12:17:21', 'admin', 'admin', '1111', '<div name="adminpanel" class="fullpanel">
+Edit Message group: $messagegroup&nbsp;&nbsp;&nbsp;<input type="button" value="Advanced" onclick="o=document.getElementById(''spine-advanced''); if(o.style.display==''inline''){o.style.display=''none'';}else{o.style.display=''inline'';}" class="spine-button">
+</div>
+
+<div name="adminpanel" class="fullpanel" id="spine-advanced" style="height: auto ; width: 100%;">
+<form method="post" action="<?SPINE_Location?>admin/message/savegroup/" style="padding: 0; margin: 0; display: inline;">
+<input type="submit" value="Save" class="spine-button">
+<input type="hidden" name="name" value="$messagegroup">
+<div name="adminpanel" class="spine-fullpanel" style="background-color:orange;">
+<div class="spine-panelcel" >Public&nbsp;: $wpermissions</div>
+<div class="spine-panelcel" >Group: $gpermissions</div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 25%;">Owner: $owner &nbsp; Usergroup : <select name="usergroup">$group</select></div>
+<div class="spine-panelcel" style="width: 25%;">Message Style: $contentlist</div>
+<div class="spine-spacercel"></div>
+</form>
+</div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 25%"><b>Subject</b></div>
+<div class="spine-panelcel" style="width: 15%"><b>Owner</b></div>
+<div class="spine-panelcel" style="width: 15%"><b>Date</b></div>
+<div class="spine-spacercel"></div>
+</div>
+
+<div name="adminpanel" class="spine-fullpanel">
+$messagedata
+</div>', 'This is the message template for the administration section.', '');
 
 
 --
@@ -21168,6 +21308,8 @@ INSERT INTO content VALUES (136, 'transparentia.html', '', 0, 'transparentia', '
 INSERT INTO macro VALUES (1, 'main', 'SPINE_Version', '1.3 beta');
 INSERT INTO macro VALUES (2, 'foo', 'Macro KeyFoo', 'Macro ValueFoo');
 INSERT INTO macro VALUES (3, 'foobar', 'Macro Key', 'Macro ValueFoo');
+INSERT INTO macro VALUES (4, 'foobar', 'alpha', 'one');
+INSERT INTO macro VALUES (6, 'foo', 'NewKey', 'NewKey2');
 
 
 --
@@ -21508,7 +21650,6 @@ INSERT INTO navbarbuttons VALUES (160, 25, 5, 'docs.html', '', 'Documentation', 
 INSERT INTO navbarbuttons VALUES (161, 25, 6, 'developers.html', '', 'Developers', '', 0, '', '', '', '', '', '', '');
 INSERT INTO navbarbuttons VALUES (162, 25, 7, 'screenshots.html', '', 'Screenshots', '', 0, '', '', '', '', '', '', '');
 INSERT INTO navbarbuttons VALUES (163, 25, 8, 'login.html', '', 'Login', '', 0, '', '', '', '', '', '', '');
-INSERT INTO navbarbuttons VALUES (164, 27, 1, 'admin/tools/rename', '', 'Rename Content', '', 0, '', '', '', '', '', '', '');
 INSERT INTO navbarbuttons VALUES (165, 28, 2, 'install.html', '', 'Installation', '', 0, '', '', '', '', '', '', '');
 INSERT INTO navbarbuttons VALUES (166, 28, 1, 'index.html', '', 'About', '', 0, '', '', '', '', '', '', '');
 INSERT INTO navbarbuttons VALUES (167, 10, 5, 'admin/filetypes', '', 'Filetypes', '', 0, '', '', '', '', '', '', '');
@@ -21555,6 +21696,8 @@ INSERT INTO navbarbuttons VALUES (207, 33, 6, 'developers.html', '', 'Developers
 INSERT INTO navbarbuttons VALUES (208, 33, 7, 'screenshots.html', '', 'Screenshots', '', 0, '', '', '', '', '', '', '');
 INSERT INTO navbarbuttons VALUES (209, 33, 8, 'login.html', '', 'Login', '', 0, '', '', '', '', '', '', '');
 INSERT INTO navbarbuttons VALUES (210, 1, 1, 'admin/', '', 'Start', '', 0, '', '', '', '', '', '', '');
+INSERT INTO navbarbuttons VALUES (164, 27, 1, 'admin/tools/rename', '', 'Rename Content', '', 0, '', '', '', '', '', '', '');
+INSERT INTO navbarbuttons VALUES (211, 27, 2, 'foobie', '', 'foobar', '', 0, '', '', '', '', '', '', '');
 
 
 --
@@ -21582,7 +21725,6 @@ INSERT INTO navbars VALUES (22, 'littlehome', 'none', 'horizontal', '', '', '', 
 INSERT INTO navbars VALUES (23, 'ruthdocs', 'none', 'horizontal', '', '', '', 'normal', '<span> | </span></li><li>', '2006-12-27 17:02:33', 'admin', 'users', '1010');
 INSERT INTO navbars VALUES (24, 'foobar', 'none', 'vertical', '', '', '', 'normal', '', '2008-03-20 23:24:15', 'admin', 'users', '1010');
 INSERT INTO navbars VALUES (25, 'test', 'none', 'horizontal', '', '', '', 'normal', ' ', '2008-03-21 22:38:33', 'admin', 'users', '1010');
-INSERT INTO navbars VALUES (27, 'admin_tool', 'none', 'horizontal', '', '', '', 'normal', '', '2008-03-29 01:02:03', 'admin', 'users', '1010');
 INSERT INTO navbars VALUES (28, 'antique_modern_main', 'none', 'horizontal', '', '', '', 'normal', '</li><li>', '2008-04-22 21:52:43', 'admin', 'users', '1010');
 INSERT INTO navbars VALUES (29, 'coffee_docs', 'none', 'horizontal', '', '', '', 'normal', '</li><li>', '2008-04-22 22:58:10', 'admin', 'users', '1010');
 INSERT INTO navbars VALUES (30, 'naturalist_main', 'none', 'horizontal', '', '', '', 'normal', '</li><li>', '2008-04-22 23:27:47', 'admin', 'users', '1010');
@@ -21590,6 +21732,7 @@ INSERT INTO navbars VALUES (31, 'softgreen', 'none', 'horizontal', '', '', '', '
 INSERT INTO navbars VALUES (32, 'terrafirma', 'none', 'horizontal', '', '', '', 'normal', '', '2008-04-25 19:46:51', 'admin', 'users', '1010');
 INSERT INTO navbars VALUES (33, 'zenlike', 'none', 'horizontal', '', '', '', 'normal', '</li><li>', '2008-04-28 07:30:30', 'admin', 'users', '1010');
 INSERT INTO navbars VALUES (1, 'admin', 'none', 'horizontal', '', '', '', 'normal', '', '2011-09-13 08:55:16', 'admin', 'users', '1010');
+INSERT INTO navbars VALUES (27, 'admin_tool', 'none', 'horizontal', '', '', '', 'normal', '', '2011-10-10 14:55:16', 'admin', 'users', '1010');
 
 
 --
@@ -21746,43 +21889,6 @@ INSERT INTO style VALUES (6, 'eidogreen', 'eidogreen', '', '2006-12-31 23:00:00'
 </body>
 
 </html>', 'This style is contributed by jhtorsen (jhth@online.no)');
-INSERT INTO style VALUES (7, '.admin', '', '', '2008-04-29 23:23:40', 'admin', 'admin', '1010', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-<base href="http://<?SPINE_Servername?><?SPINE_Location?>">
-<script type="text/javascript" language="javascript" src="jquery.js"></script>
-<script type="text/javascript" language="javascript" src="spine.js"></script>
-<script type="text/javascript" language="javascript">
-$(document).ready(function(){ if (getCookie(''minimize'') == ''1'')
-{ $(''#logo'').hide(); $(''#version'').hide(); $(''#mini'').text(''[+]''); $(''body'').css(''background-image'',''url()''); } });
-</script>
-<title>S P I N E Administration - <?SPINE_Title?></title>
-
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" type="text/css" href="_admin.css" media="screen">
-<link rel="Stylesheet" href="spine.css" type="text/css" media="screen">
-</head>
-
-<body>
-<div id="version">Administration</div>
-<img id="logo" src="<?SPINE_Images?>spine.jpg" alt="" align="middle">
-<div id="menu">
-<?SPINE_Navbar("admin")?><a id="mini" href="#" OnClick="$(''#logo'').toggle(); $(''#version'').toggle();
-if ( $(''#mini'').text() == ''[-]'' ) { $(''#mini'').text(''[+]''); setCookie(''minimize'',''1''); } else { $(''#mini'').text(''[-]''); setCookie(''minimize'',''''); } if ($(''body'').css(''background-image'') == ''url(http://<?SPINE_Servername?>/images/spine4.jpg)'') { $(''body'').css(''background-image'',''url()''); } else 
-{ $(''body'').css(''background-image'',''url(http://<?SPINE_Servername?>/images/spine4.jpg)''); } return false;">[-]</a>
-</div>
-<div id="menu">
-<?SPINE_Navbar("admin_plugin")?>
-</div>
-<div id="container">
-<div id="content">
-<?SPINE_Content?>
-</div>
-</div>
-
-<div id="footer">Copyright 2006 - Hendrik Van Belleghem / SPINE Dev Team</div>
-
-</body></html>
-', '');
 INSERT INTO style VALUES (8, 'ruth', 'ruth', '', '2006-12-31 23:00:00', 'admin', 'users', '1010', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
@@ -22156,45 +22262,6 @@ INSERT INTO style VALUES (12, 'mintchocolate', '', '', '2007-02-22 23:49:46', 'a
 </div>
 </body>
 </html>', 'This design was made freely available on Open Source Web Design (http://www.oswd.org) by andrewstrojny (http://www.oswd.org/user/profile/id/9633).');
-INSERT INTO style VALUES (13, '.admin_plugin', '', '', '2008-04-29 23:25:08', 'admin', 'admin', '1010', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-<base href="http://<?SPINE_Servername?><?SPINE_Location?>">
-<script type="text/javascript" language="javascript" src="jquery.js"></script>
-<script type="text/javascript" language="javascript" src="spine.js"></script>
-<script type="text/javascript" language="javascript">
-$(document).ready(function(){ if (getCookie(''minimize'') == ''1'')
-{ $(''#logo'').hide(); $(''#version'').hide(); $(''#mini'').text(''[+]''); $(''body'').css(''background-image'',''url()''); } });
-</script>
-
-<title>S P I N E Administration - <?SPINE_Title?></title>
-
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" type="text/css" href="_admin.css" media="screen">
-<link rel="Stylesheet" href="spine.css" type="text/css" media="screen">
-</head>
-
-<body>
-<div id="version">Administration</div>
-<img id="logo" src="<?SPINE_Images?>spine.jpg" alt="" align="middle">
-<div id="menu">
-<?SPINE_Navbar("admin")?><a id="mini" href="#" OnClick="$(''#logo'').toggle(); $(''#version'').toggle();
-if ( $(''#mini'').text() == ''[-]'' ) { $(''#mini'').text(''[+]''); setCookie(''minimize'',''1''); } else { $(''#mini'').text(''[-]''); setCookie(''minimize'',''''); } if ($(''body'').css(''background-image'') == ''url(http://<?SPINE_Servername?>/images/spine4.jpg)'') { $(''body'').css(''background-image'',''url()''); } else 
-{ $(''body'').css(''background-image'',''url(http://<?SPINE_Servername?>/images/spine4.jpg)''); } return false;">[-]</a>
-</div>
-<div id="menu">
-<?SPINE_Navbar("admin_plugin")?>
-</div>
-
-<div id="container">
-<div id="content">
-<?SPINE_Content?>
-</div>
-</div>
-
-<div id="footer">Copyright 2006 - Hendrik Van Belleghem / SPINE Dev Team</div>
-
-</body></html>
-', '');
 INSERT INTO style VALUES (14, 'metro01', 'metro01', '', '2006-12-31 23:00:00', 'admin', 'users', '1010', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -23131,40 +23198,6 @@ INSERT INTO style VALUES (30, 'zenlike', 'STUB Style', '', '2008-04-28 07:34:31'
 
 </body>
 </html>', 'This is where you put comments about this style');
-INSERT INTO style VALUES (31, 'main', '', 'main', '2008-04-29 23:21:57', 'admin', 'users', '1010', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<base href="http://<?SPINE_Servername?><?SPINE_Location?>">
-<head>
-<script type="text/javascript" language="javascript" src="jquery.js"></script>
-<script type="text/javascript" language="javascript" src="spine.js"></script>
-<script type="text/javascript" language="javascript">
-$(document).ready(function(){ if (getCookie(''minimize'') == ''1'')
-{ $(''#logo'').hide(); $(''#version'').hide(); $(''#mini'').text(''[+]''); $(''body'').css(''background-image'',''url()''); } });
-</script>
-<title>S P I N E - <?SPINE_Title?> - The backbone for your website</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="Stylesheet" href="spine.css" type="text/css" media="screen"></head>
-
-<body>
-<div id="version">version <?SPINE_Macro("SPINE_Version")?></div>
-<img id="logo" src="<?SPINE_Images?>spine.jpg" alt="" align="middle">
-<div id="menu">
-<?SPINE_Navbar("main")?><a id="mini" href="#" OnClick="$(''#logo'').toggle(); $(''#version'').toggle();
-if ( $(''#mini'').text() == ''[-]'' ) { $(''#mini'').text(''[+]''); setCookie(''minimize'',''1''); } else { $(''#mini'').text(''[-]''); setCookie(''minimize'',''''); } if ($(''body'').css(''background-image'') == ''url(http://<?SPINE_Servername?>/images/spine4.jpg)'') { $(''body'').css(''background-image'',''url()''); } else 
-{ $(''body'').css(''background-image'',''url(http://<?SPINE_Servername?>/images/spine4.jpg)''); } return false;">[-]</a>
-</div>
-
-<div id="container">
-<div id="content">
-<?SPINE_Content?>
-</div>
-</div>
-<form action="search.html">
-<div id="footer">Copyright 2006 - Hendrik Van Belleghem / SPINE Dev Team <?SPINE_Stats("hits")?> visits - Search: <input type="text" name="keyword" class="input">&nbsp;<input type="submit" class="button" value="Search">
-</div></form>
-
-</body></html>', 'This style is part of the default SPINE Installation.
-Created by Hendrik Van Belleghem ; Major Updates by eidolon');
 INSERT INTO style VALUES (32, 'rss2', '', '', '2008-05-07 00:41:05', 'admin', 'users', '1010', '<?xml version="1.0"?>
 <?SPINE_Content?>
 ', 'This is an XML based stylesheet');
@@ -23202,6 +23235,114 @@ if ( $(''#mini'').text() == ''[-]'' ) { $(''#mini'').text(''[+]''); setCookie(''
 
 </body></html>', 'This style is part of the default SPINE Installation.
 Created by Hendrik Van Belleghem ; Major Updates by eidolon');
+INSERT INTO style VALUES (31, 'main', '', 'main', '2011-10-12 09:51:51', 'admin', 'users', '1111', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<base href="http://<?SPINE_Servername?><?SPINE_Location?>">
+<head>
+<script type="text/javascript" language="javascript" src="jquery.js"></script>
+<script type="text/javascript" language="javascript" src="spine.js"></script>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){ if (getCookie(''minimize'') == ''1'')
+{ $(''#logo'').hide(); $(''#version'').hide(); $(''#mini'').text(''[+]''); $(''body'').css(''background-image'',''url()''); } });
+</script>
+<title>S P I N E - <?SPINE_Title?> - The backbone for your website</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="Stylesheet" href="spine-v1.2.css" type="text/css" media="screen"></head>
+
+<body>
+<div id="version">version <?SPINE_Macro("SPINE_Version")?></div>
+<img id="logo" src="<?SPINE_Images?>spine.jpg" alt="" align="middle">
+<div id="menu">
+<?SPINE_Navbar("main")?><a id="mini" href="#" OnClick="$(''#logo'').toggle(); $(''#version'').toggle();
+if ( $(''#mini'').text() == ''[-]'' ) { $(''#mini'').text(''[+]''); setCookie(''minimize'',''1''); } else { $(''#mini'').text(''[-]''); setCookie(''minimize'',''''); } if ($(''body'').css(''background-image'') == ''url(http://<?SPINE_Servername?>/images/spine4.jpg)'') { $(''body'').css(''background-image'',''url()''); } else 
+{ $(''body'').css(''background-image'',''url(http://<?SPINE_Servername?>/images/spine4.jpg)''); } return false;">[-]</a>
+</div>
+
+<div id="container">
+<div id="content">
+<?SPINE_Content?>
+</div>
+</div>
+<form action="search.html">
+<div id="footer">Copyright 2006 - Hendrik Van Belleghem / SPINE Dev Team <?SPINE_Stats("hits")?> visits - Search: <input type="text" name="keyword" class="input">&nbsp;<input type="submit" class="button" value="Search">
+</div></form>
+
+</body></html>', 'This style is part of the default SPINE Installation.
+Created by Hendrik Van Belleghem ; Major Updates by eidolon');
+INSERT INTO style VALUES (13, '.admin_plugin', '', '', '2011-10-12 12:00:41', 'admin', 'admin', '1111', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<base href="http://<?SPINE_Servername?><?SPINE_Location?>">
+<script type="text/javascript" language="javascript" src="jquery.js"></script>
+<script type="text/javascript" language="javascript" src="spine.js"></script>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){ if (getCookie(''minimize'') == ''1'')
+{ $(''#logo'').hide(); $(''#version'').hide(); $(''#mini'').text(''[+]''); $(''body'').css(''background-image'',''url()''); } });
+</script>
+
+<title>S P I N E Administration - <?SPINE_Title?></title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="_admin-v1.2.css" media="screen">
+<link rel="Stylesheet" href="spine-v1.2.css" type="text/css" media="screen">
+</head>
+
+<body class="spine-body">
+<div id="spine-version">Administration</div>
+<img id="spine-logo" src="<?SPINE_Images?>spine.jpg" alt="" align="middle">
+<div id="spine-menu">
+<?SPINE_Navbar("admin")?><a id="mini" href="#" OnClick="$(''#logo'').toggle(); $(''#version'').toggle();
+if ( $(''#mini'').text() == ''[-]'' ) { $(''#mini'').text(''[+]''); setCookie(''minimize'',''1''); } else { $(''#mini'').text(''[-]''); setCookie(''minimize'',''''); } if ($(''body'').css(''background-image'') == ''url(http://<?SPINE_Servername?>/images/spine4.jpg)'') { $(''body'').css(''background-image'',''url()''); } else 
+{ $(''body'').css(''background-image'',''url(http://<?SPINE_Servername?>/images/spine4.jpg)''); } return false;">[-]</a>
+</div>
+<div id="spine-menu">
+<?SPINE_Navbar("admin_plugin")?>
+</div>
+
+<div id="spine-container">
+<div id="spine-content">
+<?SPINE_Content?>
+</div>
+</div>
+
+<div id="spine-footer">Copyright 2006, 2011 - Hendrik Van Belleghem / SPINE Dev Team</div>
+
+</body></html>', '');
+INSERT INTO style VALUES (7, '.admin', '', '', '2011-10-12 11:58:51', 'admin', 'admin', '1111', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<base href="http://<?SPINE_Servername?><?SPINE_Location?>">
+<script type="text/javascript" language="javascript" src="jquery.js"></script>
+<script type="text/javascript" language="javascript" src="spine.js"></script>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){ if (getCookie(''minimize'') == ''1'')
+{ $(''#logo'').hide(); $(''#spine-version'').hide(); $(''#mini'').text(''[+]''); $(''body'').css(''background-image'',''url()''); } });
+</script>
+<title>S P I N E Administration - <?SPINE_Title?></title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="_admin-v1.2.css" media="screen">
+<link rel="Stylesheet" href="spine-v1.2.css" type="text/css" media="screen">
+</head>
+
+<body class="spine-body">
+<div id="spine-version" class="spine-div">Administration</div>
+<img id="logo" src="<?SPINE_Images?>spine.jpg" alt="" align="middle">
+<div id="spine-menu" class="spine-div">
+<?SPINE_Navbar("admin")?><a class="spine-a" id="mini" href="#" OnClick="$(''#logo'').toggle(); $(''#spine-version'').toggle();
+if ( $(''#mini'').text() == ''[-]'' ) { $(''#mini'').text(''[+]''); setCookie(''minimize'',''1''); } else { $(''#mini'').text(''[-]''); setCookie(''minimize'',''''); } if ($(''body'').css(''background-image'') == ''url(http://<?SPINE_Servername?>/images/spine4.jpg)'') { $(''body'').css(''background-image'',''url()''); } else 
+{ $(''body'').css(''background-image'',''url(http://<?SPINE_Servername?>/images/spine4.jpg)''); } return false;">[-]</a>
+</div>
+<div id="spine-menu">
+<?SPINE_Navbar("admin_plugin")?>
+</div>
+<div id="spine-container">
+<div id="spine-content">
+<?SPINE_Content?>
+</div>
+</div>
+
+<div id="spine-footer">Copyright 2006, 2011 - Hendrik Van Belleghem / SPINE Dev Team</div>
+
+</body></html>', '');
 
 
 --
@@ -23210,6 +23351,7 @@ Created by Hendrik Van Belleghem ; Major Updates by eidolon');
 
 INSERT INTO usergroup VALUES (1, 'admin', 'admin');
 INSERT INTO usergroup VALUES (2, 'users', 'admin');
+INSERT INTO usergroup VALUES (3, 'users', 'test');
 
 
 --

@@ -244,34 +244,34 @@ sub handler
     my $datesort = $sort ne "date" ? "date" : "dater";
     my $sizesort = $sort ne "size" ? "size" : "sizer";
     my $filenamesort = $sort ne "filename" ? "filename" : "filenamer";
-    if ($error) { $error = qq(<p class="error">$error</p>); } 
+    if ($error) { $error = qq(<p class="spine-error">$error</p>); } 
     $list = <<"EOF";
-<div class="dialog" id="upload"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#upload').hide();"><br><form name="uploadform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Upload in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="upload"><input type="file" name="filename">&nbsp;<input type="submit" class="button" value="Upload"></form></div>
-<div class="dialog" id="createfolder"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#createfolder').hide();"><br><form name="createform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Create Folder in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="createfolder"><input type="hidden" name="filename" value=""><input type="text" name="foldername">&nbsp;<input type="submit" class="button" value="Create"></form></div>
-<div class="dialog" id="copy"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#copy').hide();"><br><form name="copyform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Copy <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="copy"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Copy" onClick='document.copyform.filename.value = document.myform.filename.value; return true;'></form></div>
-<div class="dialog" id="rename"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#rename').hide();"><br><form name="renameform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Rename <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="rename"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Rename" onClick='document.renameform.filename.value = document.myform.filename.value; return true;'></form></div>
-<div class="dialog" id="delete"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#delete').hide();"><br><form name="deleteform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Delete <input type="text" name="filefield" value="" disabled><input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="delete"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="button" value="Delete" onClick='document.deleteform.filename.value = document.myform.filename.value; return true;'></form></div>
+<div class="spine-dialog" id="upload"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#upload').hide();"><br><form name="uploadform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Upload in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="upload"><input type="file" name="filename">&nbsp;<input type="submit" class="spine-button" value="Upload"></form></div>
+<div class="spine-dialog" id="createfolder"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#createfolder').hide();"><br><form name="createform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Create Folder in path : $path&nbsp;&nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="createfolder"><input type="hidden" name="filename" value=""><input type="text" name="foldername">&nbsp;<input type="submit" class="spine-button" value="Create"></form></div>
+<div class="spine-dialog" id="copy"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#copy').hide();"><br><form name="copyform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Copy <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="copy"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="spine-button" value="Copy" onClick='document.copyform.filename.value = document.myform.filename.value; return true;'></form></div>
+<div class="spine-dialog" id="rename"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#rename').hide();"><br><form name="renameform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Rename <input type="text" name="filefield" value="" disabled>&nbsp; to &nbsp;<input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="rename"><input type="text" name="target"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="spine-button" value="Rename" onClick='document.renameform.filename.value = document.myform.filename.value; return true;'></form></div>
+<div class="spine-dialog" id="delete"><img border="0" align="right" valign="top" src="/images/delete.png" onclick="\$('#delete').hide();"><br><form name="deleteform" method="post" action="<?SPINE_Location?>admin/file" enctype="multipart/form-data">&nbsp;&nbsp;Delete <input type="text" name="filefield" value="" disabled><input type="hidden" name="path" value="$path"><input type="hidden" name="action" value="delete"><input type="hidden" name="filename" value="">&nbsp;<input type="submit" class="spine-button" value="Delete" onClick='document.deleteform.filename.value = document.myform.filename.value; return true;'></form></div>
 
 $error
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 30%"><form name="myform" method="post">Path : $path
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 30%"><form name="myform" method="post">Path : $path
 <input type="hidden" name="path" value="$path"><input type="hidden" name="filename" value=""></div>
-<div class="panelcel" style="width: 40%">
+<div class="spine-panelcel" style="width: 40%">
 <a href="#" onclick="\$('#createfolder').hide(); \$('#rename').hide(); \$('#copy').hide(); \$('#delete').hide(); \$('#upload').toggle(); return false;">Upload File</a>
 &nbsp;<a href="#" onclick="\$('#createfolder').toggle(); \$('#rename').hide(); \$('#copy').hide(); \$('#delete').hide(); \$('#upload').hide(); return false;">Create Folder</a>
 &nbsp;<a href="#" onclick="\$('#createfolder').hide(); \$('#rename').hide(); \$('#copy').hide(); \$('#delete').hide(); \$('#upload').toggle(); document.renameform.filefield.value = '$path/'+document.myform.filename.value; return false;">Rename</a>
 &nbsp;<a href="#" onclick="\$('#createfolder').hide(); \$('#rename').hide(); \$('#copy').toggle(); \$('#delete').hide(); \$('#upload').hide(); document.copyform.filefield.value = '$path/'+document.myform.filename.value; return false;">Copy</a>
 &nbsp;<a href="#" onclick="\$('#createfolder').hide(); \$('#rename').hide(); \$('#copy').hide(); \$('#delete').toggle(); \$('#upload').hide(); document.deleteform.filefield.value = '$path/'+document.myform.filename.value;return false;">Delete</a>
 </div>
-<div class="spacercel"></div>
+<div class="spine-spacercel"></div>
 </div>
 
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 35%">
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 35%">
 <a href="<?SPINE_Location?>admin/file/?path=$path&sort=$filenamesort">Filename</a></div>
-<div class="panelcel" style="width: 10%"><a href="<?SPINE_Location?>admin/file/?path=$path&sort=$sizesort">Size</a></div>
-<div class="panelcel" style="width: 20%"><a href="<?SPINE_Location?>admin/file/?path=$path&sort=$datesort">Date</a></div>
-<div class="spacercel"></div>
+<div class="spine-panelcel" style="width: 10%"><a href="<?SPINE_Location?>admin/file/?path=$path&sort=$sizesort">Size</a></div>
+<div class="spine-panelcel" style="width: 20%"><a href="<?SPINE_Location?>admin/file/?path=$path&sort=$datesort">Date</a></div>
+<div class="spine-spacercel"></div>
 </div>
 EOF
 
@@ -281,13 +281,13 @@ EOF
     $backdir =~ s/^(.*)\/.*$/$1/mx;
    $list .= 
 <<"EOF";
-<div name="adminpanel" class="fullpanel unselected">
-<div class="panelcel" style="width: 35%">
+<div name="adminpanel" class="spine-fullpanel unselected">
+<div class="spine-panelcel" style="width: 35%">
 <input type="radio" disabled>
 <a href="<?SPINE_Location?>admin/file/?path=$backdir"><img src="/images/folder.jpg" border="0"> ..</a></div>
-<div class="panelcel" style="width: 10%">-</div>
-<div class="panelcel" style="width: 20%">-</div>
-<div class="spacercel"></div>
+<div class="spine-panelcel" style="width: 10%">-</div>
+<div class="spine-panelcel" style="width: 20%">-</div>
+<div class="spine-spacercel"></div>
 </div>
 EOF
 
@@ -298,26 +298,26 @@ EOF
   { if ($files{$_}{type} eq "file.jpg") 
     { $list .= 
 <<"EOF";
-<div name="adminpanel" class="fullpanel">
-<div class="panelcel" style="width: 35%">
+<div name="adminpanel" class="spine-fullpanel">
+<div class="spine-panelcel" style="width: 35%">
 <input type="radio" name="radiobutton" onClick='document.myform.filename.value = "$_"; document.myform.radiobutton[$i].checked = true;' value="$_">
 <img src="/images/$files{$_}{type}" border="0"> $_</div>
-<div class="panelcel" style="width: 10%">$files{$_}{size}</div>
-<div class="panelcel" style="width: 20%">$files{$_}{localtime}</div>
-<div class="spacercel"></div>
+<div class="spine-panelcel" style="width: 10%">$files{$_}{size}</div>
+<div class="spine-panelcel" style="width: 20%">$files{$_}{localtime}</div>
+<div class="spine-spacercel"></div>
 </div>
 EOF
 
     } else
     {     $list .= 
 <<"EOF";
-<div name="adminpanel" class="fullpanel unselected">
-<div class="panelcel" style="width: 35%">
+<div name="adminpanel" class="spine-fullpanel unselected">
+<div class="spine-panelcel" style="width: 35%">
 <input type="radio" name="radiobutton" value="$i" disabled>
 <a href="<?SPINE_Location?>admin/file/?path=$path/$_"><img src="/images/$files{$_}{type}" border="0"> $_</a></div>
-<div class="panelcel" style="width: 10%">-</div>
-<div class="panelcel" style="width: 20%">$files{$_}{localtime}</div>
-<div class="spacercel"></div>
+<div class="spine-panelcel" style="width: 10%">-</div>
+<div class="spine-panelcel" style="width: 20%">$files{$_}{localtime}</div>
+<div class="spine-spacercel"></div>
 </div>
 EOF
  

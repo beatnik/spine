@@ -155,20 +155,20 @@ sub handler
   my $group = undef;
   my $user = undef;
   for(@users) { $user .= qq(<option>$_); }
-  $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/usergroup/new/" method="post" method="post">\n);
-  $list .= qq(<div class="panelcel" style="width: 20%"><select name="username">$user</select></div>\n);
-  $list .= qq(<div class="panelcel" style="width: 20%"><input type="text" name="usergroup" class="input" value="" size="30"></div\n);
-  $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Create" class="button" name="action"></div><div class="spacercel"></div></form></div>\n);
+  $list .= qq(<div name="adminpanel" class="spine-fullpanel"><form action="<?SPINE_Location?>admin/usergroup/new/" method="post" method="post">\n);
+  $list .= qq(<div class="spine-panelcel" style="width: 20%"><select name="username">$user</select></div>\n);
+  $list .= qq(<div class="spine-panelcel" style="width: 20%"><input type="text" name="usergroup" class="spine-input" value="" size="30"></div\n);
+  $list .= qq(<div class="spine-panelcel" style="width: 20%"><input type="submit" value="Create" class="spine-button" name="action"></div><div class="spine-spacercel"></div></form></div>\n);
   for(@groups)
   { my %hash = $_->tohash;
     my $group = undef;
     for(@groups) { my $sel = $hash{"usergroup"} eq $_ ? ' selected' : ''; next if !$_; $group .= qq(<option$sel>$_); }
-    $list .= qq(<div name="adminpanel" class="fullpanel"><form action="<?SPINE_Location?>admin/usergroup/remove/" method="post">\n);
+    $list .= qq(<div name="adminpanel" class="spine-fullpanel"><form action="<?SPINE_Location?>admin/usergroup/remove/" method="post">\n);
     $list .= qq(<input type="hidden" name="usergroup" value="$hash{usergroup}"><input type="hidden" name="username" value="$hash{username}"><input type="hidden" name="id" value="$hash{id}">\n);
-    $list .= qq(<div class="panelcel" style="width: 20%">$hash{username}</div><div class="panelcel" style="width: 20%">$hash{usergroup}</div>\n);
-    $list .= qq(<div class="panelcel" style="width: 20%"><input type="submit" value="Delete" class="button" name="action"></div><div class="spacercel"></div></form></div>\n);
+    $list .= qq(<div class="spine-panelcel" style="width: 20%">$hash{username}</div><div class="spine-panelcel" style="width: 20%">$hash{usergroup}</div>\n);
+    $list .= qq(<div class="spine-panelcel" style="width: 20%"><input type="submit" value="Delete" class="spine-button" name="action"></div><div class="spine-spacercel"></div></form></div>\n);
   }
-  if ($error) { $error = qq(<p class="error">$error</p>); }
+  if ($error) { $error = qq(<p class="spine-error">$error</p>); }
   $body =~ s/\$list/$list/gmx;
   $body =~ s/\$error/$error/gmx;
   $content->body($body);

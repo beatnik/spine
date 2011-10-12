@@ -313,7 +313,7 @@ sub handler
     $body =~ s/\$style/$stylelist/gmx if ref $edit_navbar;
     $body =~ s/\$separator/$separator/gmx;
     $body =~ s/\$position/$lastposition/gmx;
-    if ($ierror) { $ierror = qq(<p class="error">$ierror</p>); }    
+    if ($ierror) { $ierror = qq(<p class="spine-error">$ierror</p>); }    
     $body =~ s/\$error/$ierror/gmx;
     my $buttons = "";
     my $button_content = shift @{$content_dbi->get({name=>".administration/navbar-button", count=>1})};
@@ -373,7 +373,7 @@ sub handler
     $body =~ s/\$type/navbar/gmx;
     $body =~ s/\$label/navigation bar/gmx;
   } 
-  if ($error) { $error = qq(<p class="error">$error</p>); }
+  if ($error) { $error = qq(<p class="spine-error">$error</p>); }
   $body =~ s/\$error/$error/gmx;
   $content->body($body);
   return $content;

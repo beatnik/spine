@@ -198,21 +198,21 @@ sub handler
       $hash{macrovalue} =~ s/\"/&quot;/gmx;
  
       $list .=<<EOF;
-         <div name="adminpanel" class="_spine_fullpanel">
+         <div name="adminpanel" class="spine-fullpanel">
             <div style="float:left;width:412px;">
             <form action="<?SPINE_Location?>admin/macro/new" method="post">
             <input type="hidden" name="action" value="save" />
             <input type="hidden" name="name" value="$hash{'name'}" />
             <input type="hidden" name="id"   value="$hash{'id'}"  />
-            <div class="_spine_panelcel" style="width:195px">
-                 <input type="text" class="_spine_input" name="key" 
+            <div class="spine-panelcel" style="width:195px">
+                 <input type="text" class="spine-input" name="key" 
                       value="$hash{'macrokey'}" 
                       size="30" /></div>
-            <div class="_spine_panelcel" style="width:195px">
-                 <input type="text" class="_spine_input" name="value" 
+            <div class="spine-panelcel" style="width:195px">
+                 <input type="text" class="spine-input" name="value" 
                     value="$hash{'macrovalue'}" 
                     size="30"/></div>
-            <div class="_spine_panelcel" style="width:10px;background-color:orange;">
+            <div class="spine-panelcel" style="width:10px;background-color:orange;">
                  <input type="image" src="/images/save.png" alt="Save" name="action" style="padding:0px" />
                  </form></div>
             </div>
@@ -221,12 +221,12 @@ sub handler
                   method="post">
                  <input type="hidden" name="name" value="$hash{'name'}" />
                  <input type="hidden" name="id"   value="$hash{'id'}"   />
-                 <div class="_spine_panelcel" style="width:10px;background-color:pink;">
+                 <div class="spine-panelcel" style="width:10px;background-color:pink;">
                  <input type="image" src="/images/delete.png" alt="Delete"
                           name="action" style="padding:0px" /></div>
             </form>
             </div>
-            <div class="_spine_spacercel"></div>
+            <div class="spine-spacercel"></div>
          </div><!-- adminpanel -->
 
 EOF

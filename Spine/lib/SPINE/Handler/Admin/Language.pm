@@ -68,10 +68,10 @@ sub handler
   { $selected .= qq(<option value="$_">$_); }
   
   $body .= <<"EOF";
-<div name="adminpanel" class="fullpanel">\n
+<div name="adminpanel" class="spine-fullpanel">\n
 <form action="<?SPINE_Location?>admin/language/" method="post">\n
-<b>Change language</b><br><input type="submit" value="Load" class="button">&nbsp;<select name="lang">$selected</select>\n
-</form></div><div name="adminpanel" class="fullpanel"><hr width="95%"></div>\n
+<b>Change language</b><br><input type="submit" value="Load" class="spine-button">&nbsp;<select name="lang">$selected</select>\n
+</form></div><div name="adminpanel" class="spine-fullpanel"><hr width="95%"></div>\n
 EOF
 
   $lang ||= "en";
@@ -88,16 +88,16 @@ EOF
   for(@attributes)
   { my %hash = $_->tohash; 
   $body .= <<"EOF";
-<div name="adminpanel" class="fullpanel">
+<div name="adminpanel" class="spine-fullpanel">
 <form action="<?SPINE_Location?>admin/language/" method="post">
 <input type="hidden" name="id" value="$hash{id}">
 <input type="hidden" name="lang" value="$lang">
 <input type="hidden" name="attr" value="$hash{attr}">
-<div class="panelcel" style="padding-right: 2px"><input type="text" class="input" name="name" value="$hash{name}"></div>
-<div class="panelcel" style="padding-right: 2px"><input type="text" class="input" name="value" value="$hash{value}" size="60"></div>
-<div class="panelcel" style="padding-right: 2px"><input type="image" name="save" src="/images/save.png"></div>
-<div class="panelcel" style="padding-right: 2px"><input type="image" name="delete" src="/images/delete.png"></form></div>
-<div class="spacercel"></div>
+<div class="spine-panelcel" style="padding-right: 2px;width:195px"><input type="text" class="spine-input" name="name" value="$hash{name}"></div>
+<div class="spine-panelcel" style="padding-right: 2px;width:395px"><input type="text" class="spine-input" name="value" value="$hash{value}" size="60"></div>
+<div class="spine-panelcel" style="padding-right: 2px;width:25;x"><input type="image" name="save" src="/images/save.png"></div>
+<div class="spine-panelcel" style="padding-right: 2px;width:25px;"><input type="image" name="delete" src="/images/delete.png"></form></div>
+<div class="spine-spacercel"></div>
 </div>
 EOF
 
