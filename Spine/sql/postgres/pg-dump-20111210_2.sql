@@ -239,14 +239,14 @@ INSERT INTO attribute VALUES (106, 'mimetype', 'content', 'rss', 'application/rs
 INSERT INTO attribute VALUES (107, 'mimetype', 'content', 'xml', 'text/xml');
 INSERT INTO attribute VALUES (108, 'mimetype', 'content', 'htm', 'text/html');
 INSERT INTO attribute VALUES (109, 'mimetype', 'content', 'html', 'text/html');
-INSERT INTO attribute VALUES (249, 'stats', 'counter', 'index.html', '6');
 INSERT INTO attribute VALUES (245, 'stats', 'counter', 'plain.css', '1');
 INSERT INTO attribute VALUES (248, 'stats', 'counter', 'gscape.css', '1');
-INSERT INTO attribute VALUES (238, 'stats', 'counter', 'login.html', '8');
+INSERT INTO attribute VALUES (249, 'stats', 'counter', 'index.html', '9');
 INSERT INTO attribute VALUES (251, 'stats', 'counter', 'test.html', '18');
-INSERT INTO attribute VALUES (243, 'stats', 'counter', '_admin-v1.2.css', '751');
-INSERT INTO attribute VALUES (240, 'stats', 'counter', 'spine.js', '855');
+INSERT INTO attribute VALUES (238, 'stats', 'counter', 'login.html', '15');
+INSERT INTO attribute VALUES (243, 'stats', 'counter', '_admin-v1.2.css', '766');
 INSERT INTO attribute VALUES (246, 'stats', 'counter', 'littlehome.html', '2');
+INSERT INTO attribute VALUES (240, 'stats', 'counter', 'spine.js', '880');
 INSERT INTO attribute VALUES (242, 'stats', 'counter', '_admin.css', '83');
 INSERT INTO attribute VALUES (194, 'i18n', 'macroset_not_exists', 'en', 'This macroset does not exist!');
 INSERT INTO attribute VALUES (195, 'i18n', 'messagegroup_exists', 'en', 'This messagegroup already exists!');
@@ -294,8 +294,8 @@ INSERT INTO attribute VALUES (236, 'i18n', 'valid_perms', 'en', 'You do not have
 INSERT INTO attribute VALUES (237, 'i18n', 'view_stats', 'en', 'View statistics');
 INSERT INTO attribute VALUES (247, 'stats', 'counter', 'gscape.html', '4');
 INSERT INTO attribute VALUES (252, 'stats', 'counter', 'search.html', '2');
-INSERT INTO attribute VALUES (244, 'stats', 'counter', 'spine-v1.2.css', '752');
-INSERT INTO attribute VALUES (241, 'stats', 'counter', 'jquery.js', '1090');
+INSERT INTO attribute VALUES (241, 'stats', 'counter', 'jquery.js', '1117');
+INSERT INTO attribute VALUES (244, 'stats', 'counter', 'spine-v1.2.css', '777');
 INSERT INTO attribute VALUES (239, 'stats', 'counter', 'spine.css', '99');
 INSERT INTO attribute VALUES (250, 'stats', 'counter', 'toc.html', '2');
 
@@ -21745,7 +21745,7 @@ INSERT INTO navbars VALUES (27, 'admin_tool', 'none', 'horizontal', '', '', '', 
 -- Data for Name: session; Type: TABLE DATA; Schema: public; Owner: spineuser
 --
 
-INSERT INTO session VALUES ('QojOoKyRpJRhvsEQ1RveNIvur97N1RdmCbo78GMNWJEDsmT2ObK65i97FjoD1VW0', 'admin', '2011-09-13 16:18:17', NULL, '127.0.0.1');
+INSERT INTO session VALUES ('saGmKgPX6jR5sdlnGVcl1Kh15HY8PYJ3L3qtPEMOdXV6By15kGReCUrLc8G0aKiI', 'admin', '2011-10-12 14:19:30', NULL, '127.0.0.1');
 
 
 --
@@ -23235,7 +23235,7 @@ if ( $(''#mini'').text() == ''[-]'' ) { $(''#mini'').text(''[+]''); setCookie(''
 
 </body></html>', 'This style is part of the default SPINE Installation.
 Created by Hendrik Van Belleghem ; Major Updates by eidolon');
-INSERT INTO style VALUES (31, 'main', '', 'main', '2011-10-12 09:51:51', 'admin', 'users', '1111', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+INSERT INTO style VALUES (31, 'main', '', 'main', '2011-10-12 14:19:19', 'admin', 'users', '1111', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <base href="http://<?SPINE_Servername?><?SPINE_Location?>">
 <head>
@@ -23249,22 +23249,22 @@ $(document).ready(function(){ if (getCookie(''minimize'') == ''1'')
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="Stylesheet" href="spine-v1.2.css" type="text/css" media="screen"></head>
 
-<body>
-<div id="version">version <?SPINE_Macro("SPINE_Version")?></div>
-<img id="logo" src="<?SPINE_Images?>spine.jpg" alt="" align="middle">
-<div id="menu">
+<body class="spine-body">
+<div id="spine-version">version <?SPINE_Macro("SPINE_Version")?></div>
+<img id="spine-logo" src="<?SPINE_Images?>spine.jpg" alt="" align="middle">
+<div id="spine-menu">
 <?SPINE_Navbar("main")?><a id="mini" href="#" OnClick="$(''#logo'').toggle(); $(''#version'').toggle();
 if ( $(''#mini'').text() == ''[-]'' ) { $(''#mini'').text(''[+]''); setCookie(''minimize'',''1''); } else { $(''#mini'').text(''[-]''); setCookie(''minimize'',''''); } if ($(''body'').css(''background-image'') == ''url(http://<?SPINE_Servername?>/images/spine4.jpg)'') { $(''body'').css(''background-image'',''url()''); } else 
 { $(''body'').css(''background-image'',''url(http://<?SPINE_Servername?>/images/spine4.jpg)''); } return false;">[-]</a>
 </div>
 
-<div id="container">
-<div id="content">
+<div id="spine-container">
+<div id="spine-content">
 <?SPINE_Content?>
 </div>
 </div>
 <form action="search.html">
-<div id="footer">Copyright 2006 - Hendrik Van Belleghem / SPINE Dev Team <?SPINE_Stats("hits")?> visits - Search: <input type="text" name="keyword" class="input">&nbsp;<input type="submit" class="button" value="Search">
+<div id="spine-footer">Copyright 2006 - Hendrik Van Belleghem / SPINE Dev Team <?SPINE_Stats("hits")?> visits - Search: <input type="text" name="keyword" class="spine-input">&nbsp;<input type="submit" class="spine-button" value="Search">
 </div></form>
 
 </body></html>', 'This style is part of the default SPINE Installation.
@@ -23359,6 +23359,7 @@ INSERT INTO usergroup VALUES (3, 'users', 'test');
 --
 
 INSERT INTO users VALUES (1, 'admin', 'admin', '7a78797d9f65411e0cf7467a891cd7fa', 'Administrator', 'root@localhost');
+INSERT INTO users VALUES (3, 'users', 'test', 'd41d8cd98f00b204e9800998ecf8427e', 'test', '');
 
 
 --
