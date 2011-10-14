@@ -204,11 +204,10 @@ sub handler
          <form action="<?SPINE_Location?>admin/adminaccess/remove/" method="post">
         <input type="hidden" name="name" value="$hash{name}"><input type="hidden" name="id" value="$hash{id}">
         <input type="image" alt="Delete" src="/images/delete.png" name="action">
-        </div>
-        </form><div class="spine-spacercel"></div>
+        </form>
      </div>
+     <div class="spine-spacercel"></div>
 </div>
-
 EOF
 =head1
     $list .= qq(<div name="adminpanel" class="spine-fullpanel"><form action="<?SPINE_Location?>admin/adminaccess/save/" method="post">);
