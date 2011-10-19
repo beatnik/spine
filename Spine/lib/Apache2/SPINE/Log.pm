@@ -60,7 +60,8 @@ sub handler
   my $location = $r->location;
   $file =~ s/^$location\/?//mx;
   $file ||= $main;
-  $file =~ s/^(.*?)\/.*$/$1/mxg;
+  #modified by JL Oct-17-2011 since files can have / slashes
+  #$file =~ s/^(.*?)\/.*$/$1/mxg;
   my $in = $r->headers_in();
   my $content_dbi = SPINE::DBI::Content->new($dbh);
   my $content = shift @ { $content_dbi->get( { name => $file } ) };
@@ -68,7 +69,7 @@ sub handler
   if (!$content->logging) { return DONE; }
   my (@data) =
   #$name,$date,$useragent,$remoteaddr,$referer,$query) = 
-  ($file,$date,$in->{'User-Agent'},$req->connection->remote_host,$in->{"Referer"},scalar($r->args));
+  ($file,$date,$in->{'User-Agent'},$req->connection->remote_ip,$in->{"Referer"},scalar($r->args));
   my $add = "insert into statistics (name, sdate, useragent, remoteaddr, referer, query) values ( \'".join(qq(','),@data)."\')"; 
   my $sth = $dbh->prepare($add);
   $sth->execute();

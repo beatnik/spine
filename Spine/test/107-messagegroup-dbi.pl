@@ -24,72 +24,70 @@ ok(ref($message_dbi) eq "SPINE::DBI::Messagegroup","Return type: Content DBI obj
 
 # Read
 
-ok(ref($message_dbi->get({name=>"goof",count=>1})) eq "ARRAY","Return type: get returns array ref");
+ok(ref($message_dbi->get({name=>"news"})) eq "ARRAY","Return type: get returns array ref");
 
 # Read -- bad
 
-my $mess_content = shift @{$message_dbi->get({'name'=>"goof",count=>1})};
+my $mess_content = shift @{$message_dbi->get({'name'=>"somethingnonexistent",count=>1})};
 
 ok ((!$mess_content),"Nothing should be returned with a bad name.");
 
 
 # Read -- good
 
-$mess_content = shift @{$message_dbi->get({'name'=>"news",count=>1})};
+$mess_content = shift @{$message_dbi->get({name=>"news"})};
 
 ok (ref($mess_content) eq 'SPINE::Base::Messagegroup',"This time we have something " . ref($mess_content));
 
-ok ($mess_content->name() eq 'news', "Got the news from messagegroup object");
+ok ($mess_content->name() eq 'news', "Got a record from Messagegroup object");
 
-# Create message group
+# Create an adminaccess record
 
 $message_dbi->add(SPINE::Base::Messagegroup->new({
                                                    id=>0,
-                                                   name=>'attic50',
-                                                   content=>'.message',
+                                                   name=>'chookie',
                                                    owner=>'admin',
                                                    usergroup=>'admin',
-                                                   permissions=>'111111'
+                                                   permissions=>'1111',
+                                                   content=>'blabhlabh'
                                                    }));
 
 
+# Copy Messagegroup
 
+$mess_content = shift @{$message_dbi->get({'name'=>"chookie",count=>1})};
 
-# Copy message group
-
-$mess_content = shift @{$message_dbi->get({'name'=>"attic50",count=>1})};
-
-$mess_content->name('attic60');
+$mess_content->name('chookie2');
 
 $message_dbi->add($mess_content);
 
-my $mess_cont1 = shift @{$message_dbi->get({'name'=>"attic60",count=>1})};
+my $mess_cont1 = shift @{$message_dbi->get({'name'=>"chookie2",count=>1})};
 
-ok ($mess_cont1->name() eq 'attic60', "New element created.");
+ok ($mess_cont1->name() eq 'chookie2', "New element created.");
 
-# Update message group
+# Update Messagegroup group
 
-my $mess_cont2 = shift @{$message_dbi->get({'name'=>"attic60",count=>1})};
+my $mess_cont2 = shift @{$message_dbi->get({'name'=>"chookie2",count=>1})};
 
-$mess_cont2->usergroup('nobody');
+$mess_cont2->permissions('1011');
 
 $message_dbi->update($mess_cont2);
 
-my $mess_cont3 = shift @{$message_dbi->get({'name'=>"attic60",count=>1})};
+my $mess_cont3 = shift @{$message_dbi->get({'name'=>"chookie2",count=>1})};
 
-ok ($mess_cont3->usergroup() eq 'nobody', "User setting successfully changed.");
+ok ($mess_cont3->permissions() eq '1011', "User setting successfully changed.");
 
-# Delete message group
+# Delete Messagegroup group
 
 $message_dbi->remove($mess_content);
 
-my $mess_missing = shift @{$message_dbi->get({'name'=>"attic50",count=>1})};
+my $mess_missing = shift @{$message_dbi->get({'name'=>"chookie",count=>1})};
 
 ok ((!$mess_missing),"Remove worked ok.");
 
 $message_dbi->remove($mess_cont1);
 
-$mess_missing = shift @{$message_dbi->get({'name'=>"attic60",count=>1})};
+$mess_missing = shift @{$message_dbi->get({'name'=>"chookie2",count=>1})};
 
 ok ((!$mess_missing),"Remove worked ok.");
 

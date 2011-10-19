@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use Test::Simple tests=>10;
+use Test::Simple tests=>12;
 use DBI;
 use SPINE::DBI::Content;
 use Data::Dumper;
@@ -14,7 +14,8 @@ my $result = GetOptions ("dbistr=s"=>\$dbistr,
                          "password=s"=>\$psname);
 
 
-my $dbh = DBI->connect($dbistr||"dbi:mysql:dbname=test",$username||"spine",$psname||"spine") or die "Could not connect to Database:$!";
+my $dbh = DBI->connect($dbistr||$ENV{'dbistr'}||"dbi:mysql:dbname=test",$username||$ENV{'tusername'}||"spine",$psname||$ENV{'tpass'}||"spine") or die "Could not connect to Database:$!";
+
 my $content_dbi = SPINE::DBI::Content->new($dbh);
 ok(ref($content_dbi) eq "SPINE::DBI::Content","Return type: Content DBI object");
 ok(ref($content_dbi->get({name=>"index.html",count=>1})) eq "ARRAY","Return type: get returns array ref");

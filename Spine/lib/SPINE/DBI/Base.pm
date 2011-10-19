@@ -75,7 +75,7 @@ sub get
     delete($params{'sort'});
     $searchtype = $params{'searchtype'} || 'AND';
     delete($params{'searchtype'}); 
-    $count = $params{'count'};
+    $count = $params{'count'}||0;
     delete($params{'count'}); 
     $limit = $params{'limit'};
     delete($params{'limit'});

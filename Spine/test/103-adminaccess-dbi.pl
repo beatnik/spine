@@ -14,7 +14,7 @@ my $result = GetOptions ("dbistr=s"=>\$dbistr,
                          "password=s"=>\$psname);
 
 
-my $dbh = DBI->connect($dbistr||"dbi:mysql:dbname=test",$username||"spine",$psname||"spine") or die "Could not connect to Database:$!";
+my $dbh = DBI->connect($dbistr||$ENV{'dbistr'}||"dbi:mysql:dbname=test",$username||$ENV{'tusername'}||"spine",$psname||$ENV{'tpass'}||"spine") or die "Could not connect to Database:$!";
 
 my $message_dbi = SPINE::DBI::Adminaccess->new($dbh);
 
@@ -35,7 +35,7 @@ ok ((!$mess_content),"Nothing should be returned with a bad name.");
 
 # Read -- good
 
-my $mess_content = shift @{$message_dbi->get({'section'=>"navbar",count=>1})};
+$mess_content = shift @{$message_dbi->get({'section'=>"navbar",count=>1})};
 
 ok (ref($mess_content) eq 'SPINE::Base::Adminaccess',"This time we have something " . ref($mess_content));
 
@@ -87,7 +87,7 @@ ok ((!$mess_missing),"Remove worked ok.");
 
 $message_dbi->remove($mess_cont1);
 
-my $mess_missing = shift @{$message_dbi->get({'usergroup'=>"totallyfake2",count=>1})};
+$mess_missing = shift @{$message_dbi->get({'usergroup'=>"totallyfake2",count=>1})};
 
 ok ((!$mess_missing),"Remove worked ok.");
 
